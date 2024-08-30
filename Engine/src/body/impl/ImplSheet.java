@@ -120,11 +120,11 @@ public class ImplSheet implements Sheet,Serializable  {
         sheetVersion = sheetVersion + 1;
         graph.removeEntryEdges(currCoord);
         Cell cell = activeCells.get(currCoord);
-        cell.setOriginalValue(value);
 
         //why we need it?
         cell.setEffectiveValue(null);
         Expression currExpression = stringToExpression(value,currCoord);
+        cell.setOriginalValue(currExpression.expressionTOtoString());
         cell.setExpression(currExpression);
         cell.setLastVersionUpdate(sheetVersion);
         countUpdateCell++;
@@ -145,7 +145,7 @@ public class ImplSheet implements Sheet,Serializable  {
             Expression currExpression = stringToExpression(value,coord);
             currCell.setExpression(currExpression);
             currCell.setEffectiveValue(currCell.getExpression().evaluate());
-            currCell.setOriginalValue(currExpression.expressionTOtoString());
+            //currCell.setOriginalValue(currExpression.expressionTOtoString());
         }
     }
 
@@ -153,11 +153,6 @@ public class ImplSheet implements Sheet,Serializable  {
     public void updateCell(String cellId, String value) {
         updateCellDitels(cellId, value);
         updateCellEffectiveValue(cellId);
-    }
-
-    private Cell findUpdateCell(Cell prevCell){
-        Coordinate coord = new CoordinateImpl(prevCell.getId());
-        return activeCells.get(coord);
     }
 
     @Override
@@ -205,7 +200,6 @@ public class ImplSheet implements Sheet,Serializable  {
             return new Empty();
         }
         validInputBracket(input);
-        //if(!input.contains(",")){
         if(!(input.trim().charAt(0) == '{' && input.trim().charAt(input.trim().length()-1) == '}')){
             try{
                 Double.parseDouble(input);
@@ -330,16 +324,25 @@ public class ImplSheet implements Sheet,Serializable  {
 
     private boolean validInputCell(String input, Coordinate toCoordinate){
         if (input.length() >= 2 && input.charAt(0) >= 'A' && input.charAt(0) <= 'Z') {
-            String temp = input.substring(1);
+
             try {
                 Coordinate coordinate = new CoordinateImpl(input.toUpperCase());
-                if(coordinate.getRow() > row || coordinate.getColumn() > col){
-                    throw new IllegalArgumentException("Cell is out of bounds");
-                }
+
+                //check if the cell is valid
+                checkValidBounds(coordinate);
+
+                //check if we want to point on not existing cell
                 if(!activeCells.containsKey(coordinate)){
-                    throw new IllegalArgumentException("Cell is not exist");
+
+                    //creating empty cell and add to map
+                    Cell newCell = new ImplCell(input);
+                    newCell.setExpression(new Empty());
+                    activeCells.putIfAbsent(coordinate, newCell);
+
+                    //throw new IllegalArgumentException("Cell is not exist");
                 }
-                //check if create a circle
+
+                //check if adding the ref will create a circle
                 graph.addEdge(coordinate, toCoordinate);
                 if(graph.hasCycle()){
                     graph.removeEdge(coordinate, toCoordinate);

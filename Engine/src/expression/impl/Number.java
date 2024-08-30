@@ -56,7 +56,8 @@ public class Number implements Expression, EffectiveValue, Serializable{
 
     @Override
     public boolean isUndefined() {
-        throw new NumberFormatException("ERROR!, cant get a number to string function.");
+//        throw new NumberFormatException("ERROR!, cant get a number to string function.");
+        return false;
     }
 
     @Override
@@ -71,7 +72,7 @@ public class Number implements Expression, EffectiveValue, Serializable{
 
 
     public static boolean CheckIsNan(EffectiveValue e1, EffectiveValue e2){
-        return (e1.isNaN() || e2.isNaN() || e1.getCellType() == CellType.EMPTY ||  e2.getCellType() == CellType.EMPTY);
+        return (e1.isNaN() || e2.isNaN() || e1.getCellType() != CellType.NUMERIC ||  e2.getCellType() != CellType.NUMERIC);
     }
 
     public static boolean CheckIsNan(EffectiveValue e1){
