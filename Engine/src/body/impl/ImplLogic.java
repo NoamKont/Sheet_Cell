@@ -30,6 +30,16 @@ public class ImplLogic implements Logic,Serializable  {
         return new CellDTO(temp);
     }
 
+    @Override
+    public int getRowsNumber() {
+        return mainSheet.get(mainSheet.size() - 1).getRowCount();
+    }
+
+    @Override
+    public int getColumnsNumber() {
+        return mainSheet.get(mainSheet.size() - 1).getColumnCount();
+    }
+
 
     public void updateCell(String cellId, String value){
         Sheet newVersion = null;

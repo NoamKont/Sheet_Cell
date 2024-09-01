@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface Logic {
     CellDTO getCell(String cellID);
+    int getRowsNumber();
+    int getColumnsNumber();
     void updateCell(String cellId, String value);
     SheetDTO getSheet();
     void creatNewSheet(String path)throws JAXBException, FileNotFoundException, IOException;

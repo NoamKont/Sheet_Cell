@@ -292,7 +292,6 @@ public enum MainMenu implements Menu {
             System.out.println();
             for(int j = 0; j < currSheet.getThickness() - 1; j++){
                 System.out.print("  |");
-                //System.out.print(makeWidth(howManyDigits(currSheet.getRowCount())) + "|");
                 for (int K = 0; K < currSheet.getColumnCount(); K++) {
                     System.out.print(whiteSpace + "|");
                 }

@@ -105,12 +105,6 @@ public class ImplSheet implements Sheet,Serializable  {
         this.countUpdateCell = countUpdateCell;
     }
 
-    private void checkValidBounds(Coordinate coordinate) {
-        if(coordinate.getRow() > row || coordinate.getColumn() > col){
-            throw new IllegalArgumentException("Cell is out of bounds");
-        }
-    }
-
     @Override
     public void updateCellDitels(String cellId, String value){
         Coordinate currCoord = new CoordinateImpl(cellId);
@@ -160,30 +154,6 @@ public class ImplSheet implements Sheet,Serializable  {
             Cell cell= activeCells.get(coord);
             cell.setDependsOnHim(graph.getNeighbors(coord));
             cell.setDependsOnThem(graph.getSources(coord));
-    }
-
-    private void validInputBracket(String input){
-        if(input.charAt(0) == '{') {
-            if(!isValidBracket(input)){
-                throw new NumberFormatException("Invalid expression Bracket");
-            }
-        }
-    }
-
-    private boolean isValidBracket(String s) {
-
-        Stack<Character> stack = new Stack<>();
-        for (char c : s.toCharArray()) {
-            if (c == '{') {
-                stack.push(c);
-            } else if (c == '}') {
-                if (stack.isEmpty()) {
-                    return false;
-                }
-                stack.pop();
-            }
-        }
-        return stack.isEmpty();
     }
 
     private Expression stringToExpression(String input,Coordinate coordinate) {
@@ -322,6 +292,36 @@ public class ImplSheet implements Sheet,Serializable  {
         return countUpdateCell;
     }
 
+    private void checkValidBounds(Coordinate coordinate) {
+        if(coordinate.getRow() > row || coordinate.getColumn() > col){
+            throw new IllegalArgumentException("Cell is out of bounds");
+        }
+    }
+
+    private void validInputBracket(String input){
+        if(input.charAt(0) == '{') {
+            if(!isValidBracket(input)){
+                throw new NumberFormatException("Invalid expression Bracket");
+            }
+        }
+    }
+
+    private boolean isValidBracket(String s) {
+
+        Stack<Character> stack = new Stack<>();
+        for (char c : s.toCharArray()) {
+            if (c == '{') {
+                stack.push(c);
+            } else if (c == '}') {
+                if (stack.isEmpty()) {
+                    return false;
+                }
+                stack.pop();
+            }
+        }
+        return stack.isEmpty();
+    }
+
     private boolean validInputCell(String input, Coordinate toCoordinate){
         if (input.length() >= 2 && input.charAt(0) >= 'A' && input.charAt(0) <= 'Z') {
 
@@ -366,7 +366,5 @@ public class ImplSheet implements Sheet,Serializable  {
             default -> false;
         };
     }
-
-
 
 }
