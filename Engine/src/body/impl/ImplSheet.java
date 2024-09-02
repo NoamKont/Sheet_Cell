@@ -139,8 +139,12 @@ public class ImplSheet implements Sheet,Serializable  {
             Expression currExpression = stringToExpression(value,coord);
             currCell.setExpression(currExpression);
             currCell.setEffectiveValue(currCell.getExpression().evaluate());
-            //currCell.setOriginalValue(currExpression.expressionTOtoString());
         }
+    }
+
+    @Override
+    public boolean isCellExist(String cellID) {
+        return activeCells.containsKey(new CoordinateImpl(cellID));
     }
 
     @Override

@@ -20,4 +20,6 @@ public interface Sheet {
     void updateListsOfDependencies(Coordinate coord);
     void updateCellDitels(String cellId, String value);
     void updateCellEffectiveValue(String cellId);
+
+    boolean isCellExist(String cellID);
 }

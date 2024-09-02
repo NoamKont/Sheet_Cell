@@ -10,17 +10,23 @@ import dto.impl.ImplSheetDTO;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import jaxb.generated.STLCell;
-import jaxb.generated.STLSheet;
+
+//TODO important!!
+//import jaxb.generated.STLCell;
+//import jaxb.generated.STLSheet;
+
+import jaxb.generatedEx2.STLCell;
+import jaxb.generatedEx2.STLSheet;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class ImplLogic implements Logic,Serializable  {
 
     private List<Sheet> mainSheet = new ArrayList<>();
+
 
 
     public ImplLogic() { }
@@ -42,7 +48,7 @@ public class ImplLogic implements Logic,Serializable  {
 
 
     public void updateCell(String cellId, String value){
-        Sheet newVersion = null;
+        Sheet oldVersion = null;
         Sheet currentVersion = mainSheet.get(mainSheet.size() - 1);
 
         try {
@@ -56,11 +62,12 @@ public class ImplLogic implements Logic,Serializable  {
             ByteArrayInputStream byteInStream = new ByteArrayInputStream(byteOutStream.toByteArray());
             ObjectInputStream inStream = new ObjectInputStream(byteInStream);
 
-            newVersion = (Sheet) inStream.readObject();
-            newVersion.setUpdateCellCount(0);
-            newVersion.updateCell(cellId, value);
+            oldVersion = (Sheet) inStream.readObject();
 
-            mainSheet.add(newVersion);
+            mainSheet.add(mainSheet.indexOf(currentVersion), oldVersion);
+            currentVersion.setUpdateCellCount(0);
+            currentVersion.updateCell(cellId, value);
+
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -78,30 +85,54 @@ public class ImplLogic implements Logic,Serializable  {
         mainSheet.add(STLSheet2Sheet(res));
     }
 
+//    private Sheet STLSheet2Sheet(STLSheet stlSheet) {
+//        String name = stlSheet.getName();
+//        int thickness = stlSheet.getSTLLayout().getSTLSize().getRowsHeightUnits();
+//        int width = stlSheet.getSTLLayout().getSTLSize().getColumnWidthUnits();
+//        int row = stlSheet.getSTLLayout().getRows();
+//        int col = stlSheet.getSTLLayout().getColumns();
+//        Sheet res = new ImplSheet(name,thickness,width,row,col);
+//        List<STLCell> listofSTLCells = stlSheet.getSTLCells().getSTLCell();
+//        for (STLCell stlCell : listofSTLCells) {
+//            res.setVersion(0);
+//            String cellId = stlCell.getColumn() + String.valueOf(stlCell.getRow());
+//            Coordinate coordinate = new CoordinateImpl(cellId);
+//            res.updateCellDitels(cellId,stlCell.getSTLOriginalValue());
+//        }
+//        res.updateCellEffectiveValue("A3");
+//
+//        return res;
+//    }
+
     private Sheet STLSheet2Sheet(STLSheet stlSheet) {
         String name = stlSheet.getName();
         int thickness = stlSheet.getSTLLayout().getSTLSize().getRowsHeightUnits();
         int width = stlSheet.getSTLLayout().getSTLSize().getColumnWidthUnits();
         int row = stlSheet.getSTLLayout().getRows();
         int col = stlSheet.getSTLLayout().getColumns();
+        //TODO add Ranges!!
         Sheet res = new ImplSheet(name,thickness,width,row,col);
         List<STLCell> listofSTLCells = stlSheet.getSTLCells().getSTLCell();
+        String cellId = null;
         for (STLCell stlCell : listofSTLCells) {
             res.setVersion(0);
-            String cellId = stlCell.getColumn() + String.valueOf(stlCell.getRow());
-            Coordinate coordinate = new CoordinateImpl(cellId);
+            cellId = stlCell.getColumn() + String.valueOf(stlCell.getRow());
             res.updateCellDitels(cellId,stlCell.getSTLOriginalValue());
         }
-        res.updateCellEffectiveValue("A3");
+        res.updateCellEffectiveValue(cellId);
 
         return res;
     }
-
     private STLSheet creatGeneratedObject(InputStream path)throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance("jaxb.generated");
+        JAXBContext jc = JAXBContext.newInstance("jaxb.generatedEx2");
         Unmarshaller u = jc.createUnmarshaller();
         return (STLSheet) u.unmarshal(path);
     }
+//    private STLSheet creatGeneratedObject(InputStream path)throws JAXBException {
+//        JAXBContext jc = JAXBContext.newInstance("jaxb.generated");
+//        Unmarshaller u = jc.createUnmarshaller();
+//        return (STLSheet) u.unmarshal(path);
+//    }
     @Override
     public SheetDTO getSheet() {
         return new ImplSheetDTO(mainSheet.get(mainSheet.size() - 1));
@@ -140,6 +171,11 @@ public class ImplLogic implements Logic,Serializable  {
 
     public List<Sheet> getMainSheet() {
         return mainSheet;
+    }
+
+    @Override
+    public boolean isCellExist(String cellID) {
+        return mainSheet.get(mainSheet.size() - 1).isCellExist(cellID);
     }
 
     @Override

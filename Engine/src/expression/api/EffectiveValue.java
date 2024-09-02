@@ -1,5 +1,6 @@
 package expression.api;
 import expression.CellType;
+import javafx.beans.property.StringProperty;
 
 public interface EffectiveValue {
     CellType getCellType();

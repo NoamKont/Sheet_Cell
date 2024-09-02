@@ -19,5 +19,7 @@ public interface Logic {
     SheetDTO getSheetbyVersion(int version);
     String saveToFile(String name) throws IOException;
     void loadFromFile(String path) throws IOException, ClassNotFoundException;
+    //TODO change to List<SheetDTO>
     List<Sheet> getMainSheet();
+    boolean isCellExist(String cellID);
 }

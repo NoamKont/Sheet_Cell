@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane fx:id="bodyComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.AppController">
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <top>
+      <fx:include fx:id="headerComponent" maxHeight="200.0" minWidth="1000.0" source="Header/header.fxml" />
+   </top>
+</BorderPane>
