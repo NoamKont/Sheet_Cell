@@ -1,6 +1,7 @@
 package body;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Sheet {
     String getSheetName();
@@ -12,6 +13,7 @@ public interface Sheet {
     int getWidth();
     int getVersion();
     int getCountUpdateCell();
+    Map<Coordinate, Cell> getActiveCells();
 
     void setVersion(int version);
     void setUpdateCellCount(int countUpdateCell);

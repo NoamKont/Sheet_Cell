@@ -13,10 +13,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<ScrollPane fitToWidth="true" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.Header.HeaderComponentController">
+<ScrollPane fitToWidth="true" focusTraversable="false" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.Header.HeaderComponentController">
    <content>
-      <VBox alignment="CENTER">
+      <VBox alignment="CENTER" minWidth="1000.0" prefWidth="1000.0">
          <children>
             <GridPane>
               <columnConstraints>
@@ -33,10 +32,10 @@
               </rowConstraints>
                <children>
                   <Button mnemonicParsing="false" onAction="#clickedOnBtnUpload" text="upload xml" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  <Label fx:id="IdViewer" text="Cell ID" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                  <Label fx:id="IdViewer" focusTraversable="false" text="Cell ID" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                   <AnchorPane GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                      <children>
-                        <Label fx:id="originalValueViewer" layoutX="14.0" layoutY="6.0" text="Original Cell Value" />
+                        <Label fx:id="originalValueViewer" focusTraversable="false" layoutX="14.0" layoutY="6.0" text="Original Cell Value" />
                      </children>
                   </AnchorPane>
                   <TextField fx:id="actionLine" promptText="Action line" GridPane.columnIndex="2" GridPane.rowIndex="1" />

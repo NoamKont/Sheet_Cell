@@ -1,7 +1,9 @@
 package MainMenu;
 
 import MainMenu.Header.HeaderComponentController;
+import UIbody.UISheet;
 import body.Logic;
+import body.impl.CoordinateImpl;
 import body.impl.ImplLogic;
 import jakarta.xml.bind.JAXBException;
 import javafx.fxml.FXML;
@@ -16,8 +18,8 @@ import java.io.IOException;
 public class AppController {
     //dynamic sheet
     private GridPane mainSheet;
-
     private Logic logic = new ImplLogic();
+    private UISheet uiSheet = new UISheet();
 
     @FXML private ScrollPane headerComponent;
     @FXML private HeaderComponentController headerComponentController;
@@ -31,12 +33,11 @@ public class AppController {
         }
     }
 
-
     public void createSheet(String filePath) {
         // Create a Sheet
         try{
             logic.creatNewSheet(filePath);
-            System.out.println(filePath);
+            uiSheet.updateSheet(logic.getSheet()); //set the module
             createViewSheet();
             System.out.println("Sheet Created");
         }catch (JAXBException | IOException e){
@@ -45,40 +46,9 @@ public class AppController {
         }
 
     }
+    private void bindModuleToUI() {
 
-
-//    private void createViewSheet() {
-//        // Create a Sheet
-//        int rows = logic.getRowsNumber();
-//        int columns = logic.getColumnsNumber();
-//        mainSheet = new GridPane(rows,columns);
-//        mainSheet.setAlignment(javafx.geometry.Pos.CENTER);
-//        mainSheet.setGridLinesVisible(true);
-//        for (int row = 0; row < rows; row++) {
-//            for (int col = 0; col < columns; col++) {
-//                TextArea textArea = new TextArea();
-//                textArea.setPrefHeight(logic.getSheet().getThickness());
-//                textArea.setPrefWidth(logic.getSheet().getWidth());
-//                mainSheet.add(textArea, col, row); // Add the label to the grid at column `col` and row `row`
-//            }
-//        }
-//        mainSheet.getRowConstraints().forEach(row -> {
-//            row.setVgrow(Priority.SOMETIMES);
-//            row.setPrefHeight(logic.getSheet().getThickness());
-//        });
-//        mainSheet.getColumnConstraints().forEach(column -> {
-//            column.setHgrow(Priority.SOMETIMES);
-//            column.setPrefWidth(logic.getSheet().getWidth());
-//        });
-//
-//        ScrollPane scrollPane = new ScrollPane();
-//        scrollPane.fitToHeightProperty().set(true);
-//        scrollPane.fitToWidthProperty().set(true);
-//        scrollPane.setContent(mainSheet);
-//        bodyComponent.setCenter(scrollPane);
-//    }
-
-
+    }
     private void createViewSheet() {
 
             GridPane dynamicGrid = new GridPane();
@@ -132,10 +102,18 @@ public class AppController {
                     } else if (row > 0 && col > 0) {
                         String cellID = fromDotToCellID(row, col);
                         if (logic.isCellExist(cellID)) {
-                            Label label = new Label("exist");
-                            //label.setText(logic.getCell(cellID).getValue());
+                            Label label = new Label();
+                            label.textProperty().bind(uiSheet.getCell(new CoordinateImpl(cellID)).effectiveValueProperty());
                             label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                             label.setAlignment(javafx.geometry.Pos.CENTER);
+
+
+                            label.setFocusTraversable(true);
+                            // Set click event handler
+                            label.setOnMouseClicked(event -> {label.requestFocus();
+                                System.out.println("Label clicked: " + label.getText());
+                            });
+
                             AnchorPane.setTopAnchor(label, 0.0);
                             AnchorPane.setBottomAnchor(label, 0.0);
                             AnchorPane.setLeftAnchor(label, 0.0);
@@ -146,34 +124,21 @@ public class AppController {
                     dynamicGrid.add(anchorPane, col, row);
                 }
             }
-//            // Populate the GridPane with Labels
-//            for (int row = 0; row < numRows; row++) {
-//                for (int col = 0; col < numCols; col++) {
-//                    AnchorPane anchorPane = new AnchorPane();
-//
-//                    String cellID = fromDotToCellID(row, col);
-//                    if(logic.isCellExist(cellID)){
-//                        Label label = new Label("exist");
-//                        //label.setText(logic.getCell(cellID).getValue());
-//                        label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-//                        label.setAlignment(javafx.geometry.Pos.CENTER);
-//                        AnchorPane.setTopAnchor(label, 0.0);
-//                        AnchorPane.setBottomAnchor(label, 0.0);
-//                        AnchorPane.setLeftAnchor(label, 0.0);
-//                        AnchorPane.setRightAnchor(label, 0.0);
-//                        anchorPane.getChildren().add(label);
-//                    }
-//                    dynamicGrid.add(anchorPane, col, row);
-//                }
-//            }
+
             dynamicGrid.setAlignment(javafx.geometry.Pos.CENTER);
             dynamicGrid.setGridLinesVisible(true);
+
+            dynamicGrid.setMinHeight(Region.USE_PREF_SIZE);
+            dynamicGrid.setMinWidth(Region.USE_PREF_SIZE);
 
             ScrollPane scrollPane = new ScrollPane();
             scrollPane.fitToHeightProperty().set(true);
             scrollPane.fitToWidthProperty().set(true);
             scrollPane.setContent(dynamicGrid);
             bodyComponent.setCenter(scrollPane);
+
+            bodyComponent.setMinWidth(0);
+            bodyComponent.setMinHeight(0);
     }
 
     private String fromDotToCellID(int row, int col){

@@ -2,20 +2,18 @@ package dto;
 
 import body.Cell;
 import body.Coordinate;
+import dto.impl.CellDTO;
 import expression.api.EffectiveValue;
 
+import java.util.Map;
+
 public interface SheetDTO {
-    public String getSheetName();
-
-    public int getVersion();
-
-    public int getThickness();
-
-    public int getWidth();
-
-    public int getRowCount();
-
-    public int getColumnCount();
-
+    String getSheetName();
+    int getVersion();
+    int getThickness();
+    int getWidth();
+    int getRowCount();
+    int getColumnCount();
     EffectiveValue getEfectivevalueCell(Coordinate coordinate);
+    Map<Coordinate, CellDTO> getActiveCells();
 }

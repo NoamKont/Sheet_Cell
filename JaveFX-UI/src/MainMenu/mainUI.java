@@ -21,7 +21,7 @@ public class mainUI extends Application{
 
         Parent root = fxmlLoader.load(url.openStream());
 
-        Scene scene = new Scene(root, 1000, 400);
+        Scene scene = new Scene(root, 1010, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

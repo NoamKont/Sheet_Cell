@@ -7,6 +7,9 @@ import body.impl.ImplSheet;
 import expression.api.EffectiveValue;
 import body.Cell;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ImplSheetDTO implements SheetDTO {
     final private Sheet currSheet;
 
@@ -52,5 +55,23 @@ public class ImplSheetDTO implements SheetDTO {
             return null;
         }
         return cell.getEffectiveValue();
+    }
+
+    @Override
+    public Map<Coordinate, CellDTO> getActiveCells() {
+        Map<Coordinate, CellDTO> dtoMap = new HashMap<>();
+
+        for (Map.Entry<Coordinate, Cell> entry : currSheet.getActiveCells().entrySet()) {
+            Coordinate coordinate = entry.getKey();
+            Cell cell = entry.getValue();
+
+            // Create a CellDTO using the constructor that takes a Cell
+            CellDTO cellDTO = new CellDTO(cell);
+
+            // Put the new CellDTO into the new map with the same Coordinate key
+            dtoMap.put(coordinate, cellDTO);
+        }
+
+        return dtoMap;
     }
 }

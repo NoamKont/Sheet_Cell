@@ -296,6 +296,11 @@ public class ImplSheet implements Sheet,Serializable  {
         return countUpdateCell;
     }
 
+    @Override
+    public Map<Coordinate, Cell> getActiveCells() {
+        return activeCells;
+    }
+
     private void checkValidBounds(Coordinate coordinate) {
         if(coordinate.getRow() > row || coordinate.getColumn() > col){
             throw new IllegalArgumentException("Cell is out of bounds");
