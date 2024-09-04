@@ -1,6 +1,7 @@
 package MainMenu;
 
 import MainMenu.Header.HeaderComponentController;
+import UIbody.UICell;
 import UIbody.UISheet;
 import body.Logic;
 import body.impl.CoordinateImpl;
@@ -9,17 +10,17 @@ import jakarta.xml.bind.JAXBException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
-
 import java.io.IOException;
 
 
+
 public class AppController {
-    //dynamic sheet
+
     private GridPane mainSheet;
-    private Logic logic = new ImplLogic();
+    private final Logic logic = new ImplLogic();
     private UISheet uiSheet = new UISheet();
+    private final UICell selectedCell = new UICell();
 
     @FXML private ScrollPane headerComponent;
     @FXML private HeaderComponentController headerComponentController;
@@ -31,14 +32,17 @@ public class AppController {
         if(headerComponentController != null){
             headerComponentController.setMainController(this);
         }
+        bindModuleToUI();
     }
 
     public void createSheet(String filePath) {
         // Create a Sheet
         try{
             logic.creatNewSheet(filePath);
-            uiSheet.updateSheet(logic.getSheet()); //set the module
+            uiSheet = new UISheet(logic.getSheet()); //set the module
             createViewSheet();
+            //TODO add clear version menu!!!
+            headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
             System.out.println("Sheet Created");
         }catch (JAXBException | IOException e){
             e.printStackTrace();
@@ -46,9 +50,19 @@ public class AppController {
         }
 
     }
-    private void bindModuleToUI() {
 
+    public void updateCell(String input){
+        logic.updateCell(selectedCell.idProperty().getValue(), input);
+        uiSheet.updateSheet(logic.getSheet());
+        headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue()); //do not need addlistener instead in creat new Sheet
+        selectedCell.updateUICell(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
     }
+
+    private void bindModuleToUI() {
+        // Bind the UI to the module
+        headerComponentController.bindModuleToUI(selectedCell);
+    }
+
     private void createViewSheet() {
 
             GridPane dynamicGrid = new GridPane();
@@ -106,12 +120,11 @@ public class AppController {
                             label.textProperty().bind(uiSheet.getCell(new CoordinateImpl(cellID)).effectiveValueProperty());
                             label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                             label.setAlignment(javafx.geometry.Pos.CENTER);
-
-
                             label.setFocusTraversable(true);
                             // Set click event handler
                             label.setOnMouseClicked(event -> {label.requestFocus();
                                 System.out.println("Label clicked: " + label.getText());
+                                selectedCell.updateUICell(uiSheet.getCell(new CoordinateImpl(cellID)));
                             });
 
                             AnchorPane.setTopAnchor(label, 0.0);
@@ -144,4 +157,5 @@ public class AppController {
     private String fromDotToCellID(int row, int col){
         return String.valueOf((char)('A' + col - 1)) + (row);
     }
+
 }

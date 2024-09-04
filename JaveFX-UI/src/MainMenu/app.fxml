@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane fx:id="bodyComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" prefHeight="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.AppController">
@@ -11,7 +10,4 @@
    <top>
       <fx:include fx:id="headerComponent" source="Header/header.fxml" />
    </top>
-   <center>
-      <Label text="Label" BorderPane.alignment="CENTER" />
-   </center>
 </BorderPane>

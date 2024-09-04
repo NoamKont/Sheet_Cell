@@ -22,6 +22,15 @@ public class UICell {
         cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
         cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
     }
+    public void updateUICell(UICell uiCell){
+        id.setValue(uiCell.id.getValue());
+        lastVersionUpdate.setValue(uiCell.lastVersionUpdate.getValue());
+        originalValue.setValue(uiCell.originalValue.getValue());
+        effectiveValue.setValue(uiCell.effectiveValue.getValue());
+        cellsDependsOnThem.set(FXCollections.observableArrayList(uiCell.cellsDependsOnThem));
+        cellsDependsOnHim.set(FXCollections.observableArrayList(uiCell.cellsDependsOnHim));
+    }
+
     public UICell(){}
 
     public void updateUICell(CellDTO Cell) {
