@@ -14,7 +14,7 @@
 
 <ScrollPane fitToWidth="true" focusTraversable="false" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.Header.HeaderComponentController">
    <content>
-      <VBox alignment="CENTER" minWidth="1000.0" prefHeight="90.0" prefWidth="1000.0">
+      <VBox fx:id="headerVbox" alignment="CENTER" minWidth="1000.0" prefHeight="90.0" prefWidth="1000.0">
          <children>
             <GridPane>
               <columnConstraints>
@@ -30,14 +30,14 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" onAction="#clickedOnBtnUpload" text="upload xml" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <Button fx:id="uploadXmlBtn" mnemonicParsing="false" onAction="#clickedOnBtnUpload" text="upload xml" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                   <Label fx:id="IdViewer" focusTraversable="false" text="Cell ID" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                   <AnchorPane GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                      <children>
                         <Label fx:id="originalValueViewer" focusTraversable="false" layoutX="14.0" layoutY="6.0" text="Original Cell Value" />
                      </children>
                   </AnchorPane>
-                  <TextField fx:id="actionLine" promptText="Action line" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <TextField fx:id="actionLine" onAction="#updateValueBtnPressed" promptText="Action line" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <Button fx:id="updateValueBtn" disable="true" mnemonicParsing="false" onAction="#updateValueBtnPressed" text="Update value" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                   <Label fx:id="lastCellVersionUpdateViewer" focusTraversable="false" text="Last Cell Version" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                   <SplitMenuButton fx:id="versionSelectorMenu" mnemonicParsing="false" text="Version Selector" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />

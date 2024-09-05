@@ -3,16 +3,19 @@ package MainMenu;
 import MainMenu.Header.HeaderComponentController;
 import UIbody.UICell;
 import UIbody.UISheet;
+import body.Coordinate;
 import body.Logic;
 import body.impl.CoordinateImpl;
 import body.impl.ImplLogic;
 import jakarta.xml.bind.JAXBException;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import java.io.IOException;
 
+import static javafx.scene.paint.Color.*;
 
 
 public class AppController {
@@ -41,7 +44,8 @@ public class AppController {
             logic.creatNewSheet(filePath);
             uiSheet = new UISheet(logic.getSheet()); //set the module
             createViewSheet();
-            //TODO add clear version menu!!!
+            headerComponentController.newSheetHeader();
+            selectedCell.clearCell();
             headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
             System.out.println("Sheet Created");
         }catch (JAXBException | IOException e){
@@ -54,7 +58,7 @@ public class AppController {
     public void updateCell(String input){
         logic.updateCell(selectedCell.idProperty().getValue(), input);
         uiSheet.updateSheet(logic.getSheet());
-        headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue()); //do not need addlistener instead in creat new Sheet
+        headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
         selectedCell.updateUICell(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
     }
 
@@ -64,7 +68,6 @@ public class AppController {
     }
 
     private void createViewSheet() {
-
             GridPane dynamicGrid = new GridPane();
             //add '1' for the header
             int numRows = logic.getRowsNumber() + 1;
@@ -115,24 +118,31 @@ public class AppController {
                         anchorPane.getChildren().add(label);
                     } else if (row > 0 && col > 0) {
                         String cellID = fromDotToCellID(row, col);
-                        if (logic.isCellExist(cellID)) {
-                            Label label = new Label();
-                            label.textProperty().bind(uiSheet.getCell(new CoordinateImpl(cellID)).effectiveValueProperty());
-                            label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                            label.setAlignment(javafx.geometry.Pos.CENTER);
-                            label.setFocusTraversable(true);
-                            // Set click event handler
-                            label.setOnMouseClicked(event -> {label.requestFocus();
-                                System.out.println("Label clicked: " + label.getText());
-                                selectedCell.updateUICell(uiSheet.getCell(new CoordinateImpl(cellID)));
-                            });
+                        Label label = new Label();
+                        label.setId(cellID);
+                        Coordinate coordinate = new CoordinateImpl(cellID);
+                        label.textProperty().bind(uiSheet.getCell(coordinate).effectiveValueProperty());
+                        uiSheet.setCellLabel(coordinate, label);
+                        label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                        label.setAlignment(javafx.geometry.Pos.CENTER);
+                        label.setFocusTraversable(true);
+                        AnchorPane.setTopAnchor(label, 0.0);
+                        AnchorPane.setBottomAnchor(label, 0.0);
+                        AnchorPane.setLeftAnchor(label, 0.0);
+                        AnchorPane.setRightAnchor(label, 0.0);
+                        anchorPane.getChildren().add(label);
 
-                            AnchorPane.setTopAnchor(label, 0.0);
-                            AnchorPane.setBottomAnchor(label, 0.0);
-                            AnchorPane.setLeftAnchor(label, 0.0);
-                            AnchorPane.setRightAnchor(label, 0.0);
-                            anchorPane.getChildren().add(label);
-                        }
+                        // Set click event handler
+                        label.setOnMouseClicked(event -> {
+                            System.out.println("Label " + label.getId() +" clicked: " + label.getText());
+                            selectedCell.updateUICell(uiSheet.getCell(new CoordinateImpl(cellID)));
+                            label.setStyle(
+                                    "-fx-border-color: #91b2f0; " +     // Border color
+                                    "-fx-border-width: 3px; " +         // Border width
+                                    "-fx-border-style: solid; " +       // Border style (solid, dashed, dotted, etc.)
+                                    "-fx-border-radius: 2px;"           // Rounded corners (optional)
+                            );
+                        });
                     }
                     dynamicGrid.add(anchorPane, col, row);
                 }
@@ -154,8 +164,12 @@ public class AppController {
             bodyComponent.setMinHeight(0);
     }
 
+
     private String fromDotToCellID(int row, int col){
         return String.valueOf((char)('A' + col - 1)) + (row);
     }
 
+    public UISheet getUiSheet() {
+        return uiSheet;
+    }
 }

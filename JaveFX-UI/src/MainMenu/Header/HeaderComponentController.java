@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -19,6 +20,9 @@ import java.util.ResourceBundle;
 public class HeaderComponentController implements Initializable {
 
     private AppController mainController;
+
+    @FXML
+    private VBox headerVbox;
 
     @FXML
     private Label IdViewer;
@@ -41,6 +45,9 @@ public class HeaderComponentController implements Initializable {
     @FXML
     private SplitMenuButton versionSelectorMenu;
 
+    @FXML
+    private Button uploadXmlBtn;
+
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
@@ -55,6 +62,7 @@ public class HeaderComponentController implements Initializable {
             updateValueBtn.setDisable(false);
         });
     }
+
 
     @FXML
     private void clickedOnBtnUpload(ActionEvent event) {
@@ -83,7 +91,6 @@ public class HeaderComponentController implements Initializable {
     public void bindModuleToUI(UICell selectedCell) {
         IdViewer.textProperty().bind(selectedCell.idProperty());
         originalValueViewer.textProperty().bind(selectedCell.originalValueProperty());
-
         StringExpression sb = Bindings.concat("Last Update Version: ", selectedCell.lastVersionUpdateProperty());
         lastCellVersionUpdateViewer.textProperty().bind(sb);
     }
@@ -92,17 +99,9 @@ public class HeaderComponentController implements Initializable {
         versionSelectorMenu.getItems().add(new MenuItem("Version " + version.toString()));
     }
 
-//    public void setIdViewer(String CellID){
-//        IdViewer.setText(CellID);
-//    }
-//
-//    public void setOriginalValueViewer(String originalValue) {
-//        originalValueViewer.setText(originalValue);
-//    }
-//
-//    public void setLastCellVersionUpdateViewer(Integer lastCellVersionUpdate) {
-//        lastCellVersionUpdateViewer.setText(lastCellVersionUpdate.toString());
-//    }
+    public void newSheetHeader(){
+        versionSelectorMenu.getItems().clear();
+    }
 
 }
 

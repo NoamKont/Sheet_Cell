@@ -5,9 +5,9 @@ import body.Coordinate;
 import body.Sheet;
 import expression.api.EffectiveValue;
 import expression.api.Expression;
-import expression.impl.Empty;
+import expression.impl.*;
 import expression.impl.Number;
-import expression.impl.Str;
+import expression.impl.boolFunction.*;
 import expression.impl.numeric.*;
 import expression.impl.string.Concat;
 import expression.impl.string.Sub;
@@ -16,7 +16,6 @@ import expression.impl.system.REF;
 import java.io.Serializable;
 import java.security.PublicKey;
 import java.util.*;
-import expression.impl.Reference;
 
 public class ImplSheet implements Sheet,Serializable  {
 
@@ -179,6 +178,10 @@ public class ImplSheet implements Sheet,Serializable  {
                 Double.parseDouble(input);
                 return (new Number(input));
             }catch (NumberFormatException error){
+
+                if(input.toUpperCase().equals("TRUE") || input.toUpperCase().equals("FALSE")){
+                    return (new Bool(input));
+                }
                 return (new Str(input));
             }
         }
@@ -236,12 +239,18 @@ public class ImplSheet implements Sheet,Serializable  {
             case "MOD":
             case "POW":
             case "CONCAT":
+            case "EQUAL":
+            case "BIGGER":
+            case "LESS":
+            case "OR":
+            case "AND":
                 if (args.size() != 3){
                     res = false;
                     throw new NumberFormatException("Error: Incorrect number of arguments. Expected 2 arguments.");
                 }
                 break;
             case "REF":
+            case "NOT":
                 if (args.size() == 2){
                     args.set(0, "REF");
                     args.set(1, args.get(1).toUpperCase());
@@ -277,6 +286,13 @@ public class ImplSheet implements Sheet,Serializable  {
             case "CONCAT" -> new Concat(args.get(0), args.get(1));
             case "SUB" -> new Sub(args.get(0), args.get(1),args.get(2));
             case "REF" -> new REF(args.get(0), activeCells.get(refHelper(args.get(0), coordinate)));
+            case "EQUAL" -> new Equal(args.get(0), args.get(1));
+            case "BIGGER" -> new Bigger(args.get(0), args.get(1));
+            case "LESS" -> new Less(args.get(1), args.get(0));
+            case "OR" -> new Or(args.get(0), args.get(1));
+            case "AND" -> new And(args.get(0), args.get(1));
+            case "NOT" -> new Not(args.get(0));
+
             default -> throw new IllegalArgumentException("Unknown operator: " + operator);
         };
     }
@@ -347,8 +363,6 @@ public class ImplSheet implements Sheet,Serializable  {
                     Cell newCell = new ImplCell(input);
                     newCell.setExpression(new Empty());
                     activeCells.putIfAbsent(coordinate, newCell);
-
-                    //throw new IllegalArgumentException("Cell is not exist");
                 }
 
                 //check if adding the ref will create a circle
@@ -371,7 +385,7 @@ public class ImplSheet implements Sheet,Serializable  {
 
     private boolean isValidOperator(String operator){
         return switch (operator) {
-            case "PLUS", "MINUS", "TIMES", "DIVIDE", "MOD", "POW", "CONCAT", "ABS", "SUB", "REF" -> true;
+            case "PLUS", "MINUS", "TIMES", "DIVIDE", "MOD", "POW", "CONCAT", "ABS", "SUB", "REF","EQUAL","BIGGER","NOT","OR","AND","LESS","IF" -> true;
             default -> false;
         };
     }

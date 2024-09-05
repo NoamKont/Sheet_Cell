@@ -4,15 +4,12 @@ import expression.CellType;
 import expression.api.EffectiveValue;
 import expression.api.Expression;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 import java.io.Serializable;
 
 public class Number implements Expression, EffectiveValue, Serializable{
 
     private double num;
-    boolean isNan = false;
+    private boolean isNan = false;
 
     public Number(double num) {
         this.num = num;
@@ -60,6 +57,11 @@ public class Number implements Expression, EffectiveValue, Serializable{
     @Override
     public boolean isUndefined() {
 //        throw new NumberFormatException("ERROR!, cant get a number to string function.");
+        return false;
+    }
+
+    @Override
+    public boolean isUnknown() {
         return false;
     }
 

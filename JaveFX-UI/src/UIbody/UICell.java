@@ -4,6 +4,8 @@ import body.Coordinate;
 import dto.impl.CellDTO;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 
 public class UICell {
     private StringProperty id = new SimpleStringProperty();
@@ -12,6 +14,7 @@ public class UICell {
     private StringProperty effectiveValue = new SimpleStringProperty();
     private ListProperty<Coordinate> cellsDependsOnThem = new SimpleListProperty<>();
     private ListProperty<Coordinate> cellsDependsOnHim = new SimpleListProperty<>();
+    private Label cellLabel;
 
 
     public UICell(CellDTO Cell) {
@@ -22,6 +25,13 @@ public class UICell {
         cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
         cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
     }
+
+    public UICell(String id){
+        this.id.setValue(id);
+    }
+
+    public UICell(){}
+
     public void updateUICell(UICell uiCell){
         id.setValue(uiCell.id.getValue());
         lastVersionUpdate.setValue(uiCell.lastVersionUpdate.getValue());
@@ -29,9 +39,8 @@ public class UICell {
         effectiveValue.setValue(uiCell.effectiveValue.getValue());
         cellsDependsOnThem.set(FXCollections.observableArrayList(uiCell.cellsDependsOnThem));
         cellsDependsOnHim.set(FXCollections.observableArrayList(uiCell.cellsDependsOnHim));
+        cellLabel = uiCell.cellLabel;
     }
-
-    public UICell(){}
 
     public void updateUICell(CellDTO Cell) {
         id.setValue(Cell.getId());
@@ -40,6 +49,9 @@ public class UICell {
         effectiveValue.setValue(Cell.getOriginalEffectiveValue().toString());
         cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
         cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
+    }
+    public void setCellLabel(Label label){
+        cellLabel = label;
     }
     public StringProperty idProperty() {
         return id;
@@ -59,5 +71,15 @@ public class UICell {
     public ListProperty<Coordinate> cellsDependsOnHimProperty() {
         return cellsDependsOnHim;
     }
-
+    public Label getCellLabel(){
+        return cellLabel;
+    }
+    public void clearCell() {
+        id.setValue("");
+        lastVersionUpdate.setValue(0);
+        originalValue.setValue("");
+        effectiveValue.setValue("");
+        cellsDependsOnThem.set(FXCollections.observableArrayList());
+        cellsDependsOnHim.set(FXCollections.observableArrayList());
+    }
 }
