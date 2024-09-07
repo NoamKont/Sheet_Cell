@@ -23,4 +23,6 @@ public interface Logic {
     //TODO change to List<SheetDTO>
     List<Sheet> getMainSheet();
     boolean isCellExist(String cellID);
+
+    void addRangeToSheet(String rangeName,String topLeft, String bottomRight);
 }

@@ -23,6 +23,7 @@ public class ImplCell implements Cell,Serializable  {
 
     public ImplCell(String id) {
         Id = id;
+        coor = new CoordinateImpl(id);
         lastVersionUpdate = 1;
         originalValue = "";
     }

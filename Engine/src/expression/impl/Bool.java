@@ -6,7 +6,7 @@ import expression.api.Expression;
 
 import java.io.Serializable;
 
-public class Bool implements Expression, EffectiveValue, Serializable{
+public class Bool implements EffectiveValue, Serializable{
 
     private Boolean value;
     boolean isunknown = false;

@@ -1,4 +1,6 @@
 package MainMenu.SideBar.Command;
 
-public class CommandComponentController {
+
+public class CommandComponentController{
 }
+

@@ -1,6 +1,8 @@
 package MainMenu;
 
 import MainMenu.Header.HeaderComponentController;
+import MainMenu.SideBar.Command.CommandComponentController;
+import MainMenu.SideBar.Range.RangeComponentController;
 import UIbody.UICell;
 import UIbody.UISheet;
 import body.Coordinate;
@@ -9,11 +11,11 @@ import body.impl.CoordinateImpl;
 import body.impl.ImplLogic;
 import jakarta.xml.bind.JAXBException;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import java.io.IOException;
+
 
 import static javafx.scene.paint.Color.*;
 
@@ -28,12 +30,18 @@ public class AppController {
     @FXML private ScrollPane headerComponent;
     @FXML private HeaderComponentController headerComponentController;
 
+    @FXML private AnchorPane rangeComponent;
+    @FXML private RangeComponentController rangeComponentController;
+
+
+
     @FXML private BorderPane bodyComponent;
 
     @FXML
     public void initialize() {
-        if(headerComponentController != null){
+        if(headerComponentController != null && rangeComponentController != null){
             headerComponentController.setMainController(this);
+            rangeComponentController.setMainController(this);
         }
         bindModuleToUI();
     }
@@ -171,5 +179,10 @@ public class AppController {
 
     public UISheet getUiSheet() {
         return uiSheet;
+    }
+
+    public void addRangeToSheet(String rangeName, String topLeft, String bottomRight) {
+        logic.addRangeToSheet(rangeName,topLeft,bottomRight);
+        uiSheet.updateSheet(logic.getSheet());
     }
 }

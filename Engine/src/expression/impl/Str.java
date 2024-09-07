@@ -6,7 +6,7 @@ import expression.api.Expression;
 
 import java.io.Serializable;
 
-public class Str implements Expression, EffectiveValue,Serializable {
+public class Str implements EffectiveValue,Serializable {
 
     private String string;
     private boolean isUndifined = false;

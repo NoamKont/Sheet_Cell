@@ -7,7 +7,7 @@ import javafx.beans.property.StringProperty;
 
 import java.io.Serializable;
 
-public class Empty implements Expression, EffectiveValue, Serializable {
+public class Empty implements EffectiveValue, Serializable {
 
     @Override
     public CellType getCellType() {

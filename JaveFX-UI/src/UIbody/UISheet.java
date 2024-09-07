@@ -36,16 +36,6 @@ public class UISheet {
                 }
             }
         }
-//        for (Map.Entry<Coordinate, CellDTO> entry : sheetDTO.getActiveCells().entrySet()) {
-//            Coordinate coordinate = entry.getKey();
-//            CellDTO cell = entry.getValue();
-//
-//            // Create a UICell using the constructor that takes a CellDTO
-//            UICell uiCell = new UICell(cell);
-//
-//            // Put the new UICell into the new map with the same Coordinate key
-//            activeCells.put(coordinate, uiCell);
-//        }
     }
 
     public void updateSheet(SheetDTO sheetDTO) {

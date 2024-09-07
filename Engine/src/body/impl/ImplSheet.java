@@ -3,21 +3,23 @@ package body.impl;
 import body.Cell;
 import body.Coordinate;
 import body.Sheet;
-import expression.api.EffectiveValue;
+import expression.Range.api.Range;
+import expression.Range.impl.RangeImpl;
 import expression.api.Expression;
 import expression.impl.*;
 import expression.impl.Number;
 import expression.impl.boolFunction.*;
 import expression.impl.numeric.*;
+import expression.impl.numeric.Range.Average;
+import expression.impl.numeric.Range.Sum;
 import expression.impl.string.Concat;
 import expression.impl.string.Sub;
 import expression.impl.system.REF;
 
 import java.io.Serializable;
-import java.security.PublicKey;
 import java.util.*;
 
-public class ImplSheet implements Sheet,Serializable  {
+public class ImplSheet implements Sheet, Serializable  {
 
 
 
@@ -30,6 +32,8 @@ public class ImplSheet implements Sheet,Serializable  {
     private Map<Coordinate, Cell> activeCells = new HashMap<>();
     private Graph graph;
     private int countUpdateCell = 0;
+    private Map<String, Range> rangeMap = new HashMap<>();
+
 
     public ImplSheet(String sheetName, int thickness, int width, int row, int col) {
         if (row > 50 || col > 20 || row < 1 || col < 1) {
@@ -53,7 +57,11 @@ public class ImplSheet implements Sheet,Serializable  {
         Coordinate coordinate = new CoordinateImpl(cellID);
         checkValidBounds(coordinate);
         if(!activeCells.containsKey(coordinate)){
-            return new ImplCell(cellID);
+            Cell emptyCell = new ImplCell(cellID);
+            emptyCell.setExpression(new Empty());
+            emptyCell.setEffectiveValue(new Empty());
+            activeCells.putIfAbsent(coordinate, emptyCell);
+            return activeCells.get(coordinate);
         }
         else {
             updateListsOfDependencies(coordinate);
@@ -105,6 +113,12 @@ public class ImplSheet implements Sheet,Serializable  {
     }
 
     @Override
+    public void addRange(String rangeName, String topLeftCellId, String rightBottomCellId) {
+        Range range = new RangeImpl(rangeName, topLeftCellId, rightBottomCellId, this);
+        rangeMap.putIfAbsent(rangeName, range);
+    }
+
+    @Override
     public void updateCellDitels(String cellId, String value){
         Coordinate currCoord = new CoordinateImpl(cellId);
         checkValidBounds(currCoord);
@@ -115,7 +129,7 @@ public class ImplSheet implements Sheet,Serializable  {
         Cell cell = activeCells.get(currCoord);
 
         //why we need it?
-        cell.setEffectiveValue(null);
+        //cell.setEffectiveValue(null);
         Expression currExpression = stringToExpression(value,currCoord);
         cell.setOriginalValue(currExpression.expressionTOtoString());
         cell.setExpression(currExpression);
@@ -218,7 +232,7 @@ public class ImplSheet implements Sheet,Serializable  {
                 result.add(currentElement.toString()); // Add the last element
             }
             if(!isValidOperator(result.get(0).toUpperCase().trim())){
-                throw new NumberFormatException("Invalid Operator" + System.lineSeparator() + "The valid Operator are: PLUS, MINUS, TIMES, DIVIDE, MOD, POW, CONCAT, ABS, SUB, REF");
+                throw new NumberFormatException("Invalid Operator" + System.lineSeparator());// + "The valid Operator are: PLUS, MINUS, TIMES, DIVIDE, MOD, POW, CONCAT, ABS, SUB, REF");
             }
             isValidNumOfArgs(result);
             for(int i = 1; i < result.size(); i++) {
@@ -244,18 +258,21 @@ public class ImplSheet implements Sheet,Serializable  {
             case "LESS":
             case "OR":
             case "AND":
+            case "PERCENT":
                 if (args.size() != 3){
                     res = false;
                     throw new NumberFormatException("Error: Incorrect number of arguments. Expected 2 arguments.");
                 }
                 break;
             case "REF":
-            case "NOT":
                 if (args.size() == 2){
                     args.set(0, "REF");
                     args.set(1, args.get(1).toUpperCase());
                 }
             case "ABS":
+            case "AVERAGE":
+            case "NOT":
+            case "SUM":
                 if (args.size() != 2){
                     res = false;
                     throw new NumberFormatException("Error: Incorrect number of arguments. Expected 1 arguments.");
@@ -292,9 +309,26 @@ public class ImplSheet implements Sheet,Serializable  {
             case "OR" -> new Or(args.get(0), args.get(1));
             case "AND" -> new And(args.get(0), args.get(1));
             case "NOT" -> new Not(args.get(0));
-
+            case "PERCENT" -> new Percent(args.get(0), args.get(1));
+            //case "SUM" -> new Sum(rangeMap.get(args.get(0).expressionTOtoString().trim()));
+            case "SUM" -> new Sum(rangeHelper(args.get(0).expressionTOtoString(), coordinate));
+            case "AVERAGE" -> new Average(rangeHelper(args.get(0).expressionTOtoString(), coordinate));
+            //case "AVERAGE" -> new Average(rangeMap.get(args.get(0).expressionTOtoString().trim()));
             default -> throw new IllegalArgumentException("Unknown operator: " + operator);
         };
+    }
+
+    private Expression rangeHelper(String rangeName, Coordinate coordinate){
+        rangeName = rangeName.trim();
+        if(!rangeMap.containsKey(rangeName)){
+            return null;
+        }
+        else{
+            rangeMap.get(rangeName).getCells().
+                    forEach(cell -> {graph.addEdge(cell.getCoordinate(), coordinate);
+            });
+            return rangeMap.get(rangeName);
+        }
     }
 
     private Coordinate refHelper(Expression input, Coordinate toCoordinate){
@@ -315,6 +349,11 @@ public class ImplSheet implements Sheet,Serializable  {
     @Override
     public Map<Coordinate, Cell> getActiveCells() {
         return activeCells;
+    }
+
+    @Override
+    public Set<Cell> getRangeCells(String rangeName) {
+        return rangeMap.get(rangeName).getCells();
     }
 
     private void checkValidBounds(Coordinate coordinate) {
@@ -362,6 +401,7 @@ public class ImplSheet implements Sheet,Serializable  {
                     //creating empty cell and add to map
                     Cell newCell = new ImplCell(input);
                     newCell.setExpression(new Empty());
+                    newCell.setEffectiveValue(new Empty());
                     activeCells.putIfAbsent(coordinate, newCell);
                 }
 
@@ -385,7 +425,7 @@ public class ImplSheet implements Sheet,Serializable  {
 
     private boolean isValidOperator(String operator){
         return switch (operator) {
-            case "PLUS", "MINUS", "TIMES", "DIVIDE", "MOD", "POW", "CONCAT", "ABS", "SUB", "REF","EQUAL","BIGGER","NOT","OR","AND","LESS","IF" -> true;
+            case "PLUS", "MINUS", "TIMES", "DIVIDE", "MOD", "POW", "CONCAT", "ABS", "SUB", "REF","EQUAL","BIGGER","NOT","OR","AND","LESS","IF","PERCENT","SUM","AVERAGE" -> true;
             default -> false;
         };
     }

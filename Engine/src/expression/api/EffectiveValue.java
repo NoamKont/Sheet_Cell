@@ -1,8 +1,8 @@
 package expression.api;
 import expression.CellType;
-import javafx.beans.property.StringProperty;
 
-public interface EffectiveValue {
+
+public interface EffectiveValue extends Expression {
     CellType getCellType();
     Object getValue();
     String toString();

@@ -6,7 +6,7 @@ import expression.api.Expression;
 
 import java.io.Serializable;
 
-public class Number implements Expression, EffectiveValue, Serializable{
+public class Number implements EffectiveValue, Serializable{
 
     private double num;
     private boolean isNan = false;

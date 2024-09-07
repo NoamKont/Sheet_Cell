@@ -9,7 +9,7 @@ import javafx.beans.property.StringProperty;
 
 import java.io.Serializable;
 
-public class Reference implements Expression, EffectiveValue,Serializable {
+public class Reference implements EffectiveValue,Serializable {
 
     private Cell cell;
 
