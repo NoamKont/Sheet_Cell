@@ -47,6 +47,9 @@ public class UICell {
         lastVersionUpdate.setValue(Cell.getLastVersionUpdate());
         originalValue.setValue(Cell.getOriginalValue());
         effectiveValue.setValue(Cell.getOriginalEffectiveValue().toString());
+        if((Cell.getOriginalEffectiveValue() != null)){
+            System.out.println("entered to null");
+        }
         cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
         cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
     }

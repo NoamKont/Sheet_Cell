@@ -68,6 +68,8 @@ public class HeaderComponentController implements Initializable {
     private void clickedOnBtnUpload(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("XML Files", "*.xml"));
 
         //TODO change before submit
         fileChooser.setInitialDirectory(new File("C:\\Users\\Noam\\Downloads\\Ex2 example"));

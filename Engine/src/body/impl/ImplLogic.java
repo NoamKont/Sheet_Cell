@@ -179,6 +179,11 @@ public class ImplLogic implements Logic,Serializable  {
     }
 
     @Override
+    public void addRangeToSheet(String rangeName, String topLeft, String bottomRight) {
+        mainSheet.get(mainSheet.size() - 1).addRange(rangeName, topLeft, bottomRight);
+    }
+
+    @Override
     public void loadFromFile(String path) throws IOException,  ClassNotFoundException{
 
         // Step 2: Deserialize the object from the file

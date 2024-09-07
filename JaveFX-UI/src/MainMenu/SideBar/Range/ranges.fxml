@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane prefWidth="200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.SideBar.Range.RangeComponentController">
+   <children>
+      <VBox alignment="CENTER" layoutX="99.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="2.0">
+         <children>
+            <TextField fx:id="Name" layoutX="10.0" layoutY="80.0" maxWidth="100.0" promptText="Name" />
+            <TextField fx:id="TopLeft" maxWidth="100.0" promptText="TopLeft" />
+            <TextField fx:id="BottomRight" maxWidth="100.0" promptText="BottomRight" />
+         </children>
+      </VBox>
+      <Button fx:id="addRange" layoutX="100.0" layoutY="87.5" mnemonicParsing="false" onAction="#addRangeToSheet" text="add new Range" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0" />
+   </children>
+</AnchorPane>
