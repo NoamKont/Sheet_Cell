@@ -58,10 +58,11 @@ public class ImplSheet implements Sheet, Serializable  {
         checkValidBounds(coordinate);
         if(!activeCells.containsKey(coordinate)){
             Cell emptyCell = new ImplCell(cellID);
-            emptyCell.setExpression(new Empty());
-            emptyCell.setEffectiveValue(new Empty());
+//            emptyCell.setExpression(new Empty());
+//            emptyCell.setEffectiveValue(new Empty());
             activeCells.putIfAbsent(coordinate, emptyCell);
-            return activeCells.get(coordinate);
+            return emptyCell;
+            //return activeCells.get(coordinate);
         }
         else {
             updateListsOfDependencies(coordinate);
@@ -349,6 +350,11 @@ public class ImplSheet implements Sheet, Serializable  {
     @Override
     public Map<Coordinate, Cell> getActiveCells() {
         return activeCells;
+    }
+
+    @Override
+    public Map<String, Range> getAllRanges() {
+        return rangeMap;
     }
 
     @Override

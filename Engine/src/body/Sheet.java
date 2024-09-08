@@ -1,5 +1,7 @@
 package body;
 
+import expression.Range.api.Range;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,6 +17,7 @@ public interface Sheet {
     int getVersion();
     int getCountUpdateCell();
     Map<Coordinate, Cell> getActiveCells();
+    Map<String, Range> getAllRanges();
     Set<Cell> getRangeCells(String rangeName);
 
     void setVersion(int version);

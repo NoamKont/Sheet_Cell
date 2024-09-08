@@ -47,12 +47,25 @@ public class UICell {
         lastVersionUpdate.setValue(Cell.getLastVersionUpdate());
         originalValue.setValue(Cell.getOriginalValue());
         effectiveValue.setValue(Cell.getOriginalEffectiveValue().toString());
-        if((Cell.getOriginalEffectiveValue() != null)){
-            System.out.println("entered to null");
+
+
+        if(Cell.getCellsDependsOnThem() == null){
+            cellsDependsOnThem = new SimpleListProperty<>();
         }
-        cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
-        cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
+        else{
+            cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
+        }
+        if(Cell.getCellsDependsOnHim() == null){
+            cellsDependsOnHim = new SimpleListProperty<>();
+        }
+        else{
+            cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
+
+        }
+//        cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
+//        cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
     }
+
     public void setCellLabel(Label label){
         cellLabel = label;
     }

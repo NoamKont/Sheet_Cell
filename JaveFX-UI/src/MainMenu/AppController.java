@@ -26,6 +26,7 @@ public class AppController {
     private final Logic logic = new ImplLogic();
     private UISheet uiSheet = new UISheet();
     private final UICell selectedCell = new UICell();
+    private String selectedRange;
 
     @FXML private ScrollPane headerComponent;
     @FXML private HeaderComponentController headerComponentController;
@@ -73,6 +74,7 @@ public class AppController {
     private void bindModuleToUI() {
         // Bind the UI to the module
         headerComponentController.bindModuleToUI(selectedCell);
+        rangeComponentController.bindModuleToUI(uiSheet);
     }
 
     private void createViewSheet() {
@@ -184,5 +186,10 @@ public class AppController {
     public void addRangeToSheet(String rangeName, String topLeft, String bottomRight) {
         logic.addRangeToSheet(rangeName,topLeft,bottomRight);
         uiSheet.updateSheet(logic.getSheet());
+    }
+
+    public void setSelectedRange(String newValue) {
+        selectedRange = newValue;
+        System.out.println("Selected Range: " + selectedRange);
     }
 }

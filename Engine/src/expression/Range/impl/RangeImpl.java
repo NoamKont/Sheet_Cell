@@ -65,7 +65,9 @@ public class RangeImpl implements Range, Serializable{
 
         if(topLeftCellColumn.equals(rightBottomCellColumn)) {
             for(int i = Integer.parseInt(topLeftCellRow); i <= Integer.parseInt(rightBottomCellRow); i++) {
-                rangeCells.add(sheet.getCell(topLeftCellColumn + i));
+                Cell c = sheet.getCell(topLeftCellColumn + i);
+                rangeCells.add(c);
+                //rangeCells.add(sheet.getCell(topLeftCellColumn + i));
             }
         }
         else if(topLeftCellRow.equals(rightBottomCellRow)) {

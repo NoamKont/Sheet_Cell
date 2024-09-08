@@ -4,11 +4,14 @@ import body.Coordinate;
 import body.Sheet;
 import dto.SheetDTO;
 import body.impl.ImplSheet;
+import expression.Range.api.Range;
 import expression.api.EffectiveValue;
 import body.Cell;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class ImplSheetDTO implements SheetDTO {
     final private Sheet currSheet;
@@ -74,4 +77,10 @@ public class ImplSheetDTO implements SheetDTO {
 
         return dtoMap;
     }
+
+    @Override
+    public Map<String, Range> getAllRanges() {
+        return currSheet.getAllRanges();
+    }
+
 }

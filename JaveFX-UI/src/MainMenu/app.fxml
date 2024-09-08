@@ -15,9 +15,9 @@
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <AnchorPane prefHeight="254.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <AnchorPane layoutY="308.0" prefHeight="254.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+            <AnchorPane layoutY="308.0" maxHeight="325.0" maxWidth="-Infinity" prefHeight="325.0" prefWidth="203.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
                <children>
-                  <fx:include fx:id="rangeComponent" source="SideBar/Range/ranges.fxml" />
+                  <fx:include fx:id="rangeComponent" source="SideBar/Range/ranges.fxml" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" />
                </children>
             </AnchorPane>
          </children>

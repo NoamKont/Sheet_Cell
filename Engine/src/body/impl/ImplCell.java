@@ -4,6 +4,7 @@ import body.Cell;
 import body.Coordinate;
 import expression.api.EffectiveValue;
 import expression.api.Expression;
+import expression.impl.Empty;
 import expression.impl.Number;
 
 import java.io.Serializable;
@@ -26,12 +27,14 @@ public class ImplCell implements Cell,Serializable  {
         coor = new CoordinateImpl(id);
         lastVersionUpdate = 1;
         originalValue = "";
+        expression = new Empty();
+        effectiveValue = new Empty();
     }
-
-    public ImplCell(double num){
-        Number number = new Number(num);
-        effectiveValue = number;
-    }
+//
+//    public ImplCell(double num){
+//        Number number = new Number(num);
+//        effectiveValue = number;
+//    }
 
     @Override
     public String getId() {
@@ -78,11 +81,15 @@ public class ImplCell implements Cell,Serializable  {
     @Override
     public void setDependsOnThem(List<Coordinate> dependsOnThem) {
         this.cellsDependsOnThem = dependsOnThem;
+//        cellsDependsOnThem.clear();
+//        cellsDependsOnThem.addAll(dependsOnThem);
     }
 
     @Override
     public void setDependsOnHim(List<Coordinate> dependsOnHim) {
         this.cellsDependsOnHim = dependsOnHim;
+//        cellsDependsOnHim.clear();
+//        cellsDependsOnHim.addAll(dependsOnHim);
     }
 
     @Override

@@ -1,11 +1,11 @@
 package dto;
 
-import body.Cell;
 import body.Coordinate;
 import dto.impl.CellDTO;
 import expression.api.EffectiveValue;
-
+import expression.Range.api.Range;
 import java.util.Map;
+
 
 public interface SheetDTO {
     String getSheetName();
@@ -16,4 +16,5 @@ public interface SheetDTO {
     int getColumnCount();
     EffectiveValue getEfectivevalueCell(Coordinate coordinate);
     Map<Coordinate, CellDTO> getActiveCells();
+    Map<String, Range> getAllRanges();
 }
