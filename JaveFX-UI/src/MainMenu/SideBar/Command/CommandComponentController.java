@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,7 +27,7 @@ public class CommandComponentController implements Initializable {
     private Spinner<Integer> thicknessSpinner;
 
     @FXML
-    private Spinner<Integer> wideSpinner;
+    private Spinner<Integer> widthSpinner;
 
     @FXML
     private ComboBox<String> alignmentBox;
@@ -40,6 +41,13 @@ public class CommandComponentController implements Initializable {
                 FXCollections.observableArrayList( "Left", "Center", "Right" );
         alignmentBox.setItems(options);
 
+//        // column width picker
+//        widthSpinner.valueProperty()
+//                .addListener((observable, oldValue, newValue) -> mainController.changeWidth(newValue));
+//
+//        SpinnerValueFactory<Integer> widthValueFactory =
+//                new SpinnerValueFactory.IntegerSpinnerValueFactory(50, 200, 100, 1);
+//        widthSpinner.setValueFactory(widthValueFactory);
     }
 
     public void setMainController(AppController mainController) {

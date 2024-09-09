@@ -4,7 +4,6 @@ import body.Coordinate;
 import dto.impl.CellDTO;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 public class UICell {
@@ -15,8 +14,8 @@ public class UICell {
     private ListProperty<Coordinate> cellsDependsOnThem = new SimpleListProperty<>();
     private ListProperty<Coordinate> cellsDependsOnHim = new SimpleListProperty<>();
     private ObjectProperty<Label> cellLabel = new SimpleObjectProperty<>();
-    private UIRow row;
-    private UIColumn column;
+    private UIGridPart row;
+    private UIGridPart column;
 
 
 
@@ -97,16 +96,16 @@ public class UICell {
         return cellLabel;
     }
 
-    public void setRow(UIRow row) {
+    public void setRow(UIGridPart row) {
         this.row = row;
     }
-    public void setColumn(UIColumn column) {
+    public void setColumn(UIGridPart column) {
         this.column = column;
     }
-    public UIRow getRow() {
+    public UIGridPart getRow() {
         return row;
     }
-    public UIColumn getColumn() {
+    public UIGridPart getColumn() {
         return column;
     }
 

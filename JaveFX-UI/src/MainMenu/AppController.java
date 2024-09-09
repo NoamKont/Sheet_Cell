@@ -4,8 +4,7 @@ import MainMenu.Header.HeaderComponentController;
 import MainMenu.SideBar.Command.CommandComponentController;
 import MainMenu.SideBar.Range.RangeComponentController;
 import UIbody.UICell;
-import UIbody.UIColumn;
-import UIbody.UIRow;
+import UIbody.UIGridPart;
 import UIbody.UISheet;
 import body.Coordinate;
 import body.Logic;
@@ -30,8 +29,8 @@ public class AppController {
     private UISheet uiSheet = new UISheet();
     private final UICell selectedCell = new UICell();
     private String selectedRange;
-    private ObjectProperty<UIRow> selectedRow = new SimpleObjectProperty<>();
-    private ObjectProperty<UIColumn> selectedColumn = new SimpleObjectProperty<>();
+    private ObjectProperty<UIGridPart> selectedRowOrColumn = new SimpleObjectProperty<>();
+
 
 
     @FXML private ScrollPane headerComponent;
@@ -63,17 +62,13 @@ public class AppController {
                 newSelectedLabel.setId("selected-cell");
             }
         });
-        selectedRow.addListener((observableValue, oldRow, newRow) -> {
-            if (newRow != null) {
-                commandComponentController.getChosenColumnRow().setText(newRow.getName());
-            }
-        });
-        selectedColumn.addListener((observableValue, oldColumn, newColumn) -> {
-            if (newColumn != null) {
-                commandComponentController.getChosenColumnRow().setText(newColumn.getName());
-            }
-        });
 
+        selectedRowOrColumn.addListener((observableValue, oldValue, newValue) -> {
+            if (newValue != null) {
+                commandComponentController.getChosenColumnRow().setText(newValue.getName());
+
+            }
+        });
     }
 
     public void createSheet(String filePath) {
@@ -115,6 +110,7 @@ public class AppController {
             // Add RowConstraints and ColumnConstraints
             for (int i = 0; i < numRows; i++) {
                RowConstraints row = new RowConstraints();
+
                row.setPrefHeight(logic.getSheet().getThickness());
                row.setMinHeight(Region.USE_PREF_SIZE);
                row.setMaxHeight(Region.USE_PREF_SIZE);
@@ -138,21 +134,21 @@ public class AppController {
                     if (row == 0 && col > 0) {
                         // Top row (column headers)
                         Label label = new Label(Character.toString((char) ('A' + col - 1))); // "A", "B", "C", ...
-
+                        uiSheet.getColumn(label.getText()).setColumnConstraints(dynamicGrid.getColumnConstraints().get(col));
                         // Set click event handler
                         label.setOnMouseClicked(event -> {
                             System.out.println("Label " + label.getText() +" clicked: " + label.getText());
-                            selectedColumn.set(uiSheet.getColumn(label.getText()));
+                            selectedRowOrColumn.set(uiSheet.getColumn(label.getText()));
                         });
                         setHeaderLable(anchorPane, label);
                     } else if (col == 0 && row > 0) {
                         // First column (row headers)
                         Label label = new Label(Integer.toString(row)); // "1", "2", "3", ..
-
+                        uiSheet.getRow(label.getText()).setRowConstraints(dynamicGrid.getRowConstraints().get(row));
                         // Set click event handler
                         label.setOnMouseClicked(event -> {
                             System.out.println("Label " + label.getText() +" clicked: " + label.getText());
-                            selectedRow.set(uiSheet.getRow(label.getText()));
+                            selectedRowOrColumn.set(uiSheet.getRow(label.getText()));
                         });
                         setHeaderLable(anchorPane, label);
                     } else if (row > 0 && col > 0) {
@@ -227,6 +223,10 @@ public class AppController {
     }
 
     public void alignCells(Pos pos) {
+        selectedRowOrColumn.get().alignCells(pos);
+    }
 
+    public void changeWidth(Integer newValue) {
+        selectedRowOrColumn.get().setWidth(newValue);
     }
 }

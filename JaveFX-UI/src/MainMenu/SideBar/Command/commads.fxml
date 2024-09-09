@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.SideBar.Command.CommandComponentController">
    <children>
       <VBox alignment="CENTER" prefHeight="250.0" prefWidth="200.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -18,7 +17,7 @@
             <ComboBox fx:id="alignmentBox" onAction="#alignmentSelectionListener" prefWidth="150.0" />
             <HBox spacing="10.0">
                <children>
-                  <Spinner fx:id="wideSpinner" editable="true" />
+                  <Spinner fx:id="widthSpinner" editable="true" />
                   <Spinner fx:id="thicknessSpinner" editable="true" />
                </children>
             </HBox>
