@@ -11,20 +11,18 @@ import java.util.Set;
 
 public class UIGridPart {
 
-    Boolean isRow;
+    private BooleanProperty isRow = new SimpleBooleanProperty();
     private final StringProperty name = new SimpleStringProperty();
     private IntegerProperty width = new SimpleIntegerProperty();
     private IntegerProperty thickness = new SimpleIntegerProperty();
     Set<UICell> cells = new HashSet<>();
     private ObjectProperty<Label> rowLabel = new SimpleObjectProperty<>();
-    private ColumnConstraints columnConstraints = null;
-    private RowConstraints rowConstraints = null;
 
     UIGridPart(String name, Integer width, Integer thickness, Boolean isRow) {
         this.name.set(name);
         this.width.setValue(width);
         this.thickness.setValue(thickness);
-        this.isRow = isRow;
+        this.isRow.set(isRow);
     }
     public void setWidth(Integer width) {
         this.width.set(width);
@@ -54,6 +52,14 @@ public class UIGridPart {
         return thickness;
     }
 
+    public BooleanProperty isRowProperty() {
+        return isRow;
+    }
+
+    public boolean getIsRow() {
+        return isRow.get();
+    }
+
     public String getName() {
         return name.get();
     }
@@ -80,12 +86,5 @@ public class UIGridPart {
             cell.getCellLabel().setAlignment(pos);
         }
     }
-    public void setRowConstraints(RowConstraints rowConstraints) {
-        this.rowConstraints = rowConstraints;
-        this.rowConstraints.prefHeightProperty().bind(this.thickness);
-    }
-    public void setColumnConstraints(ColumnConstraints columnConstraints) {
-        this.columnConstraints = columnConstraints;
-        this.columnConstraints.prefWidthProperty().bind(this.width);
-    }
+
 }

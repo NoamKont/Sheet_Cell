@@ -63,10 +63,32 @@ public class AppController {
             }
         });
 
+
+
         selectedRowOrColumn.addListener((observableValue, oldValue, newValue) -> {
             if (newValue != null) {
-                commandComponentController.getChosenColumnRow().setText(newValue.getName());
-
+                String title;
+                if(newValue.getIsRow()){
+                    title = "Row: " + newValue.getName();
+                }
+                else{
+                    title = "Column: " + newValue.getName();
+                }
+                commandComponentController.getChosenColumnRow().setText(title);
+                commandComponentController.getWidthSpinner().getValueFactory().setValue(newValue.getWidth());
+                commandComponentController.getThicknessSpinner().getValueFactory().setValue(newValue.getThickness());
+                commandComponentController.getWidthSpinner().setDisable(newValue.getIsRow());
+                commandComponentController.getThicknessSpinner().setDisable(!newValue.getIsRow());
+            }
+        });
+        commandComponentController.getWidthSpinner().valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (selectedRowOrColumn.get() != null) {
+                changeWidth(newValue);
+            }
+        });
+        commandComponentController.getThicknessSpinner().valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (selectedRowOrColumn.get() != null) {
+                changeThickness(newValue);
             }
         });
     }
@@ -134,7 +156,7 @@ public class AppController {
                     if (row == 0 && col > 0) {
                         // Top row (column headers)
                         Label label = new Label(Character.toString((char) ('A' + col - 1))); // "A", "B", "C", ...
-                        uiSheet.getColumn(label.getText()).setColumnConstraints(dynamicGrid.getColumnConstraints().get(col));
+                        dynamicGrid.getColumnConstraints().get(col).prefWidthProperty().bind(uiSheet.getColumn(label.getText()).widthProperty());
                         // Set click event handler
                         label.setOnMouseClicked(event -> {
                             System.out.println("Label " + label.getText() +" clicked: " + label.getText());
@@ -144,7 +166,7 @@ public class AppController {
                     } else if (col == 0 && row > 0) {
                         // First column (row headers)
                         Label label = new Label(Integer.toString(row)); // "1", "2", "3", ..
-                        uiSheet.getRow(label.getText()).setRowConstraints(dynamicGrid.getRowConstraints().get(row));
+                        dynamicGrid.getRowConstraints().get(row).prefHeightProperty().bind(uiSheet.getRow(label.getText()).thicknessProperty());
                         // Set click event handler
                         label.setOnMouseClicked(event -> {
                             System.out.println("Label " + label.getText() +" clicked: " + label.getText());
@@ -228,5 +250,8 @@ public class AppController {
 
     public void changeWidth(Integer newValue) {
         selectedRowOrColumn.get().setWidth(newValue);
+    }
+    public void changeThickness(Integer newValue) {
+        selectedRowOrColumn.get().setThickness(newValue);
     }
 }

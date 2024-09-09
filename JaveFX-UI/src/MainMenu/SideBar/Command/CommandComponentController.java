@@ -41,13 +41,15 @@ public class CommandComponentController implements Initializable {
                 FXCollections.observableArrayList( "Left", "Center", "Right" );
         alignmentBox.setItems(options);
 
-//        // column width picker
-//        widthSpinner.valueProperty()
-//                .addListener((observable, oldValue, newValue) -> mainController.changeWidth(newValue));
-//
-//        SpinnerValueFactory<Integer> widthValueFactory =
-//                new SpinnerValueFactory.IntegerSpinnerValueFactory(50, 200, 100, 1);
-//        widthSpinner.setValueFactory(widthValueFactory);
+
+        SpinnerValueFactory<Integer> widthValueFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 200);
+        widthSpinner.setValueFactory(widthValueFactory);
+
+        SpinnerValueFactory<Integer> thicknessValueFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 200);
+        thicknessSpinner.setValueFactory(thicknessValueFactory);
+
     }
 
     public void setMainController(AppController mainController) {
@@ -71,6 +73,12 @@ public class CommandComponentController implements Initializable {
     }
     public Text getChosenColumnRow() {
         return chosenColumnRow;
+    }
+    public Spinner<Integer> getThicknessSpinner() {
+        return thicknessSpinner;
+    }
+    public Spinner<Integer> getWidthSpinner() {
+        return widthSpinner;
     }
 }
 
