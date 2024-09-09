@@ -4,20 +4,23 @@ import MainMenu.Header.HeaderComponentController;
 import MainMenu.SideBar.Command.CommandComponentController;
 import MainMenu.SideBar.Range.RangeComponentController;
 import UIbody.UICell;
+import UIbody.UIColumn;
+import UIbody.UIRow;
 import UIbody.UISheet;
 import body.Coordinate;
 import body.Logic;
 import body.impl.CoordinateImpl;
 import body.impl.ImplLogic;
 import jakarta.xml.bind.JAXBException;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import java.io.IOException;
 
-
-import static javafx.scene.paint.Color.*;
 
 
 public class AppController {
@@ -27,6 +30,9 @@ public class AppController {
     private UISheet uiSheet = new UISheet();
     private final UICell selectedCell = new UICell();
     private String selectedRange;
+    private ObjectProperty<UIRow> selectedRow = new SimpleObjectProperty<>();
+    private ObjectProperty<UIColumn> selectedColumn = new SimpleObjectProperty<>();
+
 
     @FXML private ScrollPane headerComponent;
     @FXML private HeaderComponentController headerComponentController;
@@ -34,17 +40,40 @@ public class AppController {
     @FXML private AnchorPane rangeComponent;
     @FXML private RangeComponentController rangeComponentController;
 
+    @FXML private AnchorPane commandComponent;
+    @FXML private CommandComponentController commandComponentController;
+
 
 
     @FXML private BorderPane bodyComponent;
 
     @FXML
     public void initialize() {
-        if(headerComponentController != null && rangeComponentController != null){
+        if(headerComponentController != null && rangeComponentController != null && commandComponentController != null){
             headerComponentController.setMainController(this);
             rangeComponentController.setMainController(this);
+            commandComponentController.setMainController(this);
         }
         bindModuleToUI();
+        selectedCell.cellLabelProperty().addListener((observableValue, oldLabelSelection, newSelectedLabel) -> {
+            if (oldLabelSelection != null) {
+                oldLabelSelection.setId(null);
+            }
+            if (newSelectedLabel != null) {
+                newSelectedLabel.setId("selected-cell");
+            }
+        });
+        selectedRow.addListener((observableValue, oldRow, newRow) -> {
+            if (newRow != null) {
+                commandComponentController.getChosenColumnRow().setText(newRow.getName());
+            }
+        });
+        selectedColumn.addListener((observableValue, oldColumn, newColumn) -> {
+            if (newColumn != null) {
+                commandComponentController.getChosenColumnRow().setText(newColumn.getName());
+            }
+        });
+
     }
 
     public void createSheet(String filePath) {
@@ -101,41 +130,40 @@ public class AppController {
                 col.setHgrow(javafx.scene.layout.Priority.ALWAYS);
                 dynamicGrid.getColumnConstraints().add(col);
             }
+
             // Populate the GridPane with Labels and Headers
             for (int row = 0; row < numRows; row++) {
                 for (int col = 0; col < numCols; col++) {
                     AnchorPane anchorPane = new AnchorPane();
-
                     if (row == 0 && col > 0) {
                         // Top row (column headers)
                         Label label = new Label(Character.toString((char) ('A' + col - 1))); // "A", "B", "C", ...
-                        label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                        label.setAlignment(javafx.geometry.Pos.CENTER);
-                        AnchorPane.setTopAnchor(label, 0.0);
-                        AnchorPane.setBottomAnchor(label, 0.0);
-                        AnchorPane.setLeftAnchor(label, 0.0);
-                        AnchorPane.setRightAnchor(label, 0.0);
-                        anchorPane.getChildren().add(label);
+
+                        // Set click event handler
+                        label.setOnMouseClicked(event -> {
+                            System.out.println("Label " + label.getText() +" clicked: " + label.getText());
+                            selectedColumn.set(uiSheet.getColumn(label.getText()));
+                        });
+                        setHeaderLable(anchorPane, label);
                     } else if (col == 0 && row > 0) {
                         // First column (row headers)
-                        Label label = new Label(Integer.toString(row)); // "1", "2", "3", ...
-                        label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                        label.setAlignment(javafx.geometry.Pos.CENTER);
-                        AnchorPane.setTopAnchor(label, 0.0);
-                        AnchorPane.setBottomAnchor(label, 0.0);
-                        AnchorPane.setLeftAnchor(label, 0.0);
-                        AnchorPane.setRightAnchor(label, 0.0);
-                        anchorPane.getChildren().add(label);
+                        Label label = new Label(Integer.toString(row)); // "1", "2", "3", ..
+
+                        // Set click event handler
+                        label.setOnMouseClicked(event -> {
+                            System.out.println("Label " + label.getText() +" clicked: " + label.getText());
+                            selectedRow.set(uiSheet.getRow(label.getText()));
+                        });
+                        setHeaderLable(anchorPane, label);
                     } else if (row > 0 && col > 0) {
                         String cellID = fromDotToCellID(row, col);
                         Label label = new Label();
-                        label.setId(cellID);
+                        label.getStyleClass().add("single-cell");
                         Coordinate coordinate = new CoordinateImpl(cellID);
                         label.textProperty().bind(uiSheet.getCell(coordinate).effectiveValueProperty());
                         uiSheet.setCellLabel(coordinate, label);
                         label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                         label.setAlignment(javafx.geometry.Pos.CENTER);
-                        label.setFocusTraversable(true);
                         AnchorPane.setTopAnchor(label, 0.0);
                         AnchorPane.setBottomAnchor(label, 0.0);
                         AnchorPane.setLeftAnchor(label, 0.0);
@@ -146,12 +174,6 @@ public class AppController {
                         label.setOnMouseClicked(event -> {
                             System.out.println("Label " + label.getId() +" clicked: " + label.getText());
                             selectedCell.updateUICell(uiSheet.getCell(new CoordinateImpl(cellID)));
-                            label.setStyle(
-                                    "-fx-border-color: #91b2f0; " +     // Border color
-                                    "-fx-border-width: 3px; " +         // Border width
-                                    "-fx-border-style: solid; " +       // Border style (solid, dashed, dotted, etc.)
-                                    "-fx-border-radius: 2px;"           // Rounded corners (optional)
-                            );
                         });
                     }
                     dynamicGrid.add(anchorPane, col, row);
@@ -174,6 +196,17 @@ public class AppController {
             bodyComponent.setMinHeight(0);
     }
 
+    private void setHeaderLable(AnchorPane anchorPane, Label label) {
+        label.getStyleClass().add("headers-cell");
+        label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        label.setAlignment(Pos.CENTER);
+        AnchorPane.setTopAnchor(label, 0.0);
+        AnchorPane.setBottomAnchor(label, 0.0);
+        AnchorPane.setLeftAnchor(label, 0.0);
+        AnchorPane.setRightAnchor(label, 0.0);
+        anchorPane.getChildren().add(label);
+    }
+
 
     private String fromDotToCellID(int row, int col){
         return String.valueOf((char)('A' + col - 1)) + (row);
@@ -191,5 +224,9 @@ public class AppController {
     public void setSelectedRange(String newValue) {
         selectedRange = newValue;
         System.out.println("Selected Range: " + selectedRange);
+    }
+
+    public void alignCells(Pos pos) {
+
     }
 }

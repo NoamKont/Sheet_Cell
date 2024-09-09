@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 
 
 public class RangeComponentController implements Initializable {
+
     private AppController mainController;
 
     @FXML

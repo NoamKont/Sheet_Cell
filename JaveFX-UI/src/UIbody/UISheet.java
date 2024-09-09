@@ -20,6 +20,10 @@ public class UISheet {
     private IntegerProperty width = new SimpleIntegerProperty();;
     private Map<Coordinate, UICell> activeCells = new HashMap<>();
     private ListProperty<String> rangeCells =  new SimpleListProperty<>(FXCollections.observableArrayList());
+    private Map<String, UIRow> rows = new HashMap<>();
+    private Map<String, UIColumn> columns = new HashMap<>();
+
+
 
     public UISheet(){}
 
@@ -34,13 +38,25 @@ public class UISheet {
             }
         }
         for(int i = 1; i <= sheetDTO.getRowCount(); i++){
+            rows.putIfAbsent(String.valueOf(i), new UIRow(String.valueOf(i), width.getValue(), thickness.getValue()));
             for(int j = 1; j <= sheetDTO.getColumnCount(); j++){
+                columns.putIfAbsent(String.valueOf((char)('A' + j - 1)), new UIColumn(String.valueOf((char)('A' + j - 1)), width.getValue(), thickness.getValue()));
                 Coordinate coordinate = new CoordinateImpl(i, j);
+
                 if(sheetDTO.getActiveCells().containsKey(coordinate)){
-                    activeCells.put(coordinate, new UICell(sheetDTO.getActiveCells().get(coordinate)));
+                    UICell cell = new UICell(sheetDTO.getActiveCells().get(coordinate));
+                    activeCells.put(coordinate, cell);
+                    //activeCells.put(coordinate, new UICell(sheetDTO.getActiveCells().get(coordinate)));
+                    rows.get(String.valueOf(i)).addCell(cell);
+                    columns.get(String.valueOf((char)('A' + j - 1))).addCell(cell);
+
                 }
                 else{
-                    activeCells.put(coordinate, new UICell(String.valueOf((char)('A' + j - 1)) + (i)));
+                    UICell cell = new UICell(String.valueOf((char)('A' + j - 1)) + (i));
+                    activeCells.put(coordinate, cell);
+                    //activeCells.put(coordinate, new UICell(String.valueOf((char)('A' + j - 1)) + (i)));
+                    rows.get(String.valueOf(i)).addCell(cell);
+                    columns.get(String.valueOf((char)('A' + j - 1))).addCell(cell);
                 }
             }
         }
@@ -82,4 +98,13 @@ public class UISheet {
     public ListProperty<String> rangeCellsProperty() {
         return rangeCells;
     }
+
+
+    public UIRow getRow(String text) {
+        return rows.get(text);
+    }
+    public UIColumn getColumn(String text) {
+        return columns.get(text);
+    }
 }
+

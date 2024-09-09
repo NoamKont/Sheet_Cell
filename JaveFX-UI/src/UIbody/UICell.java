@@ -14,7 +14,10 @@ public class UICell {
     private StringProperty effectiveValue = new SimpleStringProperty();
     private ListProperty<Coordinate> cellsDependsOnThem = new SimpleListProperty<>();
     private ListProperty<Coordinate> cellsDependsOnHim = new SimpleListProperty<>();
-    private Label cellLabel;
+    private ObjectProperty<Label> cellLabel = new SimpleObjectProperty<>();
+    private UIRow row;
+    private UIColumn column;
+
 
 
     public UICell(CellDTO Cell) {
@@ -39,7 +42,7 @@ public class UICell {
         effectiveValue.setValue(uiCell.effectiveValue.getValue());
         cellsDependsOnThem.set(FXCollections.observableArrayList(uiCell.cellsDependsOnThem));
         cellsDependsOnHim.set(FXCollections.observableArrayList(uiCell.cellsDependsOnHim));
-        cellLabel = uiCell.cellLabel;
+        cellLabel.set(uiCell.cellLabel.get());
     }
 
     public void updateUICell(CellDTO Cell) {
@@ -67,7 +70,7 @@ public class UICell {
     }
 
     public void setCellLabel(Label label){
-        cellLabel = label;
+        cellLabel.set(label);
     }
     public StringProperty idProperty() {
         return id;
@@ -88,8 +91,25 @@ public class UICell {
         return cellsDependsOnHim;
     }
     public Label getCellLabel(){
+        return cellLabel.get();
+    }
+    public ObjectProperty<Label> cellLabelProperty() {
         return cellLabel;
     }
+
+    public void setRow(UIRow row) {
+        this.row = row;
+    }
+    public void setColumn(UIColumn column) {
+        this.column = column;
+    }
+    public UIRow getRow() {
+        return row;
+    }
+    public UIColumn getColumn() {
+        return column;
+    }
+
     public void clearCell() {
         id.setValue("");
         lastVersionUpdate.setValue(0);
