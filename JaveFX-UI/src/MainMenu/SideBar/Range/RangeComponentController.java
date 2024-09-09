@@ -65,10 +65,10 @@ public class RangeComponentController implements Initializable {
 
     public void bindModuleToUI(UISheet uiSheet) {
             uiSheet.rangeCellsProperty().addListener((observable, oldValue, newValue) -> {
-            rangeListView.getItems().clear();
-            rangeListView.getItems().addAll(newValue);
+                rangeListView.getItems().clear();
+                rangeListView.getItems().addAll(newValue);
 
-        });
+            });
     }
 
     @Override

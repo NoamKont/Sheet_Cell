@@ -50,7 +50,6 @@ public class UICell {
         originalValue.setValue(Cell.getOriginalValue());
         effectiveValue.setValue(Cell.getOriginalEffectiveValue().toString());
 
-
         if(Cell.getCellsDependsOnThem() == null){
             cellsDependsOnThem = new SimpleListProperty<>();
         }
@@ -64,8 +63,6 @@ public class UICell {
             cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
 
         }
-//        cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
-//        cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
     }
 
     public void setCellLabel(Label label){

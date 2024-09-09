@@ -21,6 +21,7 @@ import jaxb.generatedEx2.STLSheet;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import body.Coordinate;
 
 
 public class ImplLogic implements Logic,Serializable  {
@@ -118,11 +119,12 @@ public class ImplLogic implements Logic,Serializable  {
             res.setVersion(0);
             cellId = stlCell.getColumn() + String.valueOf(stlCell.getRow());
             res.updateCellDitels(cellId,stlCell.getSTLOriginalValue());
+            res.updateListsOfDependencies(new CoordinateImpl(cellId));
         }
         res.updateCellEffectiveValue(cellId);
-
         return res;
     }
+
     private STLSheet creatGeneratedObject(InputStream path)throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance("jaxb.generatedEx2");
         Unmarshaller u = jc.createUnmarshaller();

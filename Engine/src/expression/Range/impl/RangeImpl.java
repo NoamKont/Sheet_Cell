@@ -44,12 +44,28 @@ public class RangeImpl implements Range, Serializable{
     public Boolean isRangeValid(String topLeftCellId, String rightBottomCellId) {
         int sheetRowCount = sheet.getRowCount();
         int sheetColumnCount = sheet.getColumnCount();
+        checkValidCoordinate(topLeftCellId);
+        checkValidCoordinate(rightBottomCellId);
+
         Coordinate leftCoordinate = new CoordinateImpl(topLeftCellId);
         Coordinate rightCoordinate = new CoordinateImpl(rightBottomCellId);
         if(leftCoordinate.getRow() > sheetRowCount || leftCoordinate.getColumn() > sheetColumnCount || rightCoordinate.getRow() > sheetRowCount || rightCoordinate.getColumn() > sheetColumnCount){
             return false;
         }
         return true;
+    }
+
+    private void checkValidCoordinate(String cellId) {
+        if(cellId.length() >= 2 ){
+            char column = cellId.charAt(0);
+            if(column < 'A' || column > 'Z'){
+                throw new IllegalArgumentException("Invalid cell id");
+            }
+        }
+        else{
+            throw new IllegalArgumentException("Invalid cell id");
+        }
+
     }
 
     @Override
@@ -86,7 +102,6 @@ public class RangeImpl implements Range, Serializable{
 
     }
 
-
     @Override
     public EffectiveValue evaluate() {
         return this;
@@ -106,7 +121,6 @@ public class RangeImpl implements Range, Serializable{
     public CellType getCellType() {
         return CellType.NUMERIC;
     }
-
 
     @Override
     public Object getValue() {

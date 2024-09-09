@@ -13,6 +13,7 @@ import body.impl.ImplLogic;
 import jakarta.xml.bind.JAXBException;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -28,8 +29,8 @@ public class AppController {
     private final Logic logic = new ImplLogic();
     private UISheet uiSheet = new UISheet();
     private final UICell selectedCell = new UICell();
-    private String selectedRange;
     private ObjectProperty<UIGridPart> selectedRowOrColumn = new SimpleObjectProperty<>();
+    private StringProperty selectedRange;
 
 
 
@@ -54,6 +55,7 @@ public class AppController {
             commandComponentController.setMainController(this);
         }
         bindModuleToUI();
+
         selectedCell.cellLabelProperty().addListener((observableValue, oldLabelSelection, newSelectedLabel) -> {
             if (oldLabelSelection != null) {
                 oldLabelSelection.setId(null);
@@ -62,8 +64,6 @@ public class AppController {
                 newSelectedLabel.setId("selected-cell");
             }
         });
-
-
 
         selectedRowOrColumn.addListener((observableValue, oldValue, newValue) -> {
             if (newValue != null) {
@@ -93,6 +93,8 @@ public class AppController {
         });
     }
 
+
+
     public void createSheet(String filePath) {
         // Create a Sheet
         try{
@@ -101,6 +103,7 @@ public class AppController {
             createViewSheet();
             headerComponentController.newSheetHeader();
             selectedCell.clearCell();
+
             headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
             System.out.println("Sheet Created");
         }catch (JAXBException | IOException e){
@@ -120,7 +123,7 @@ public class AppController {
     private void bindModuleToUI() {
         // Bind the UI to the module
         headerComponentController.bindModuleToUI(selectedCell);
-        rangeComponentController.bindModuleToUI(uiSheet);
+        //rangeComponentController.bindModuleToUI(uiSheet);
     }
 
     private void createViewSheet() {
@@ -240,8 +243,8 @@ public class AppController {
     }
 
     public void setSelectedRange(String newValue) {
-        selectedRange = newValue;
-        System.out.println("Selected Range: " + selectedRange);
+        selectedRange.set(newValue);
+        System.out.println("Selected Range: " + selectedRange.get());
     }
 
     public void alignCells(Pos pos) {

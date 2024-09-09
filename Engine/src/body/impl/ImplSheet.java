@@ -58,11 +58,8 @@ public class ImplSheet implements Sheet, Serializable  {
         checkValidBounds(coordinate);
         if(!activeCells.containsKey(coordinate)){
             Cell emptyCell = new ImplCell(cellID);
-//            emptyCell.setExpression(new Empty());
-//            emptyCell.setEffectiveValue(new Empty());
             activeCells.putIfAbsent(coordinate, emptyCell);
             return emptyCell;
-            //return activeCells.get(coordinate);
         }
         else {
             updateListsOfDependencies(coordinate);
