@@ -32,4 +32,6 @@ public interface Sheet {
     void updateCellEffectiveValue(String cellId);
 
     boolean isCellExist(String cellID);
+
+    Sheet sortSheet(String topLeft, String bottomRight, String... columns);
 }

@@ -181,6 +181,11 @@ public class ImplLogic implements Logic,Serializable  {
     }
 
     @Override
+    public SheetDTO sortSheet(String topLeft, String bottomRight, String... columns) {
+        return new ImplSheetDTO(mainSheet.get(mainSheet.size() - 1).sortSheet(topLeft, bottomRight, columns));
+    }
+
+    @Override
     public void addRangeToSheet(String rangeName, String topLeft, String bottomRight) {
         mainSheet.get(mainSheet.size() - 1).addRange(rangeName, topLeft, bottomRight);
     }
@@ -200,6 +205,7 @@ public class ImplLogic implements Logic,Serializable  {
     public void deleteRange(String rangeName) {
         mainSheet.get(mainSheet.size() - 1).deleteRange(rangeName);
     }
+
 
 }
 

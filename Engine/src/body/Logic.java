@@ -23,6 +23,7 @@ public interface Logic {
     //TODO change to List<SheetDTO>
     List<Sheet> getMainSheet();
     boolean isCellExist(String cellID);
+    SheetDTO sortSheet(String topLeft, String bottomRight, String... columns);
 
     void addRangeToSheet(String rangeName,String topLeft, String bottomRight);
 }

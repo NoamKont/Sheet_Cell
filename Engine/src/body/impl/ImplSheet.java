@@ -16,7 +16,7 @@ import expression.impl.string.Concat;
 import expression.impl.string.Sub;
 import expression.impl.system.REF;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 public class ImplSheet implements Sheet, Serializable  {
@@ -189,6 +189,40 @@ public class ImplSheet implements Sheet, Serializable  {
         return activeCells.containsKey(new CoordinateImpl(cellID));
     }
 
+    @Override
+    public Sheet sortSheet(String topLeft, String bottomRight, String... columns) {
+        Sheet sortedSheet = null;
+        try {
+            ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
+            ObjectOutputStream outStream = new ObjectOutputStream(byteOutStream);
+            outStream.writeObject(this);
+            outStream.flush();
+
+            // Step 2: Deserialize the byte array into a new object
+            ByteArrayInputStream byteInStream = new ByteArrayInputStream(byteOutStream.toByteArray());
+            ObjectInputStream inStream = new ObjectInputStream(byteInStream);
+
+            sortedSheet = (Sheet) inStream.readObject();
+
+
+            Coordinate topLeftCoord = new CoordinateImpl(topLeft);
+            Coordinate bottomRightCoord = new CoordinateImpl(bottomRight);
+            checkValidBounds(topLeftCoord);
+            checkValidBounds(bottomRightCoord);
+            Range range = new RangeImpl("range", topLeft, bottomRight, this);
+
+            for (String column : columns) {
+                List<Cell> cellsInColumn = new ArrayList<>();
+                range.getCells().stream().filter(cell -> cell.getCoordinate().getColumn() == Integer.parseInt(column)).forEach(cellsInColumn::add);
+                cellsInColumn.sort(Comparator.comparingDouble(cell -> (Double) cell.getEffectiveValue().getValue()));
+
+            }
+
+        }catch(IOException | ClassNotFoundException e){
+                e.printStackTrace();
+            }
+        return sortedSheet;
+    }
     @Override
     public void updateCell(String cellId, String value) {
         updateCellDitels(cellId, value);
@@ -392,7 +426,7 @@ public class ImplSheet implements Sheet, Serializable  {
 
     private void checkValidBounds(Coordinate coordinate) {
         if(coordinate.getRow() > row || coordinate.getColumn() > col){
-            throw new IllegalArgumentException("Cell is out of bounds");
+            throw new IllegalArgumentException("Cell: " + coordinate.toString() + " is out of bounds");
         }
     }
 
