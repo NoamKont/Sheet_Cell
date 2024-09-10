@@ -44,7 +44,8 @@ public class RangeComponentController implements Initializable {
         try{
             mainController.addRangeToSheet(rangeNameBox.getText(),TopLeft.getText(), BottomRight.getText());
             System.out.println("Add Range " + rangeNameBox.getText());
-            rangeListView.getItems().add(rangeNameBox.getText());
+            //TODO: maybe delete this line if add listener will work
+            //rangeListView.getItems().add(rangeNameBox.getText());
 
         }catch (Exception e){
             System.out.println("Error: " + e.getMessage());
@@ -61,9 +62,18 @@ public class RangeComponentController implements Initializable {
         rangeListView.getSelectionModel().clearSelection();
         mainController.setSelectedRange(null);
     }
+
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
+
+    @FXML
+    void deleteRangeAction(ActionEvent event) {
+        mainController.deleteRangeFromSheet(rangeListView.getSelectionModel().getSelectedItem());
+        //TODO: maybe delete this line if add listener will work
+        //rangeListView.getItems().remove(rangeListView.getSelectionModel().getSelectedItem());
+    }
+
 
 //    public void bindModuleToUI(UISheet uiSheet) {
 //            uiSheet.rangeCellsProperty().addListener((observable, oldValue, newValue) -> {
@@ -86,5 +96,17 @@ public class RangeComponentController implements Initializable {
 
         });
 
+    }
+
+    public void addRangeToList(String key) {
+        rangeListView.getItems().add(key);
+    }
+
+    public void deleteRangeFromList(String key) {
+        rangeListView.getItems().remove(key);
+    }
+
+    public ListView<String> getRangeListView(){
+        return rangeListView;
     }
 }

@@ -15,13 +15,14 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import java.io.IOException;
-
+import java.util.Set;
 
 
 public class AppController {
@@ -60,24 +61,38 @@ public class AppController {
         //bind the selected cell to the UI Header component
         bindModuleToUI();
 
+        selectedCell.cellsDependsOnThemProperty().addListener((observableValue, oldList, newList) -> {
+            if(newList != null){
+                newList.stream().forEach(coordinate -> {
+                    uiSheet.getCell(coordinate).getCellLabel().getStyleClass().add("depends-on-cell");
+                });
+            }
+            if(oldList != null){
+                oldList.stream().forEach(coordinate -> {
+                    uiSheet.getCell(coordinate).getCellLabel().getStyleClass().remove("depends-on-cell");
+                });
+            }
+        });
+
+        selectedCell.cellsDependsOnHimProperty().addListener((observableValue, oldList, newList) -> {
+            if(newList != null){
+                newList.stream().forEach(coordinate -> {
+                    uiSheet.getCell(coordinate).getCellLabel().getStyleClass().add("influence-on-cell");
+                });
+            }
+            if(oldList != null){
+                oldList.stream().forEach(coordinate -> {
+                    uiSheet.getCell(coordinate).getCellLabel().getStyleClass().remove("influence-on-cell");
+                });
+            }
+        });
+
         //listener for the selected cell dependency list  and style of selected cell CSS
         selectedCellProperty.addListener((observableValue, oldCell, newCell) -> {
             if (newCell != null) {
-                newCell.cellsDependsOnThemProperty().forEach(coordinate -> {
-                    uiSheet.getCell(coordinate).getCellLabel().getStyleClass().add("depends-on-cell");
-                });
-                newCell.cellsDependsOnHimProperty().forEach(coordinate -> {
-                    uiSheet.getCell(coordinate).getCellLabel().getStyleClass().add("influence-on-cell");
-                });
                 newCell.getCellLabel().setId("selected-cell");
             }
             if(oldCell != null){
-                oldCell.cellsDependsOnThemProperty().forEach(coordinate -> {
-                    uiSheet.getCell(coordinate).getCellLabel().getStyleClass().remove("depends-on-cell");
-                });
-                oldCell.cellsDependsOnHimProperty().forEach(coordinate -> {
-                    uiSheet.getCell(coordinate).getCellLabel().getStyleClass().remove("influence-on-cell");
-                });
                 oldCell.getCellLabel().setId(null);
             }
         });
@@ -126,6 +141,21 @@ public class AppController {
                 changeThickness(newValue);
             }
         });
+
+//        uiSheet.rangeMapProperty().addListener((MapChangeListener.Change<? extends String, ? extends Set<Coordinate>> change) -> {
+//            if (change.wasAdded()) {
+//                rangeComponentController.addRangeToList(change.getKey());
+//                System.out.println("Added: " + change.getKey() + " -> " + change.getValueAdded());
+//            }
+//            if (change.wasRemoved()) {
+//                rangeComponentController.deleteRangeFromList(change.getKey());
+//                System.out.println("Removed: " + change.getKey() + " -> " + change.getValueRemoved());
+//            }
+//        });
+
+
+
+
     }
 
 
@@ -294,7 +324,12 @@ public class AppController {
     public void changeWidth(Integer newValue) {
         selectedRowOrColumn.get().setWidth(newValue);
     }
+
     public void changeThickness(Integer newValue) {
         selectedRowOrColumn.get().setThickness(newValue);
+    }
+
+    public void deleteRangeFromSheet(String selectedItem) {
+        logic.deleteRange(selectedItem);
     }
 }

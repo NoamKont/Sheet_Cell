@@ -1,7 +1,6 @@
 package UIbody;
 
 
-import body.Cell;
 import body.Coordinate;
 import body.impl.CoordinateImpl;
 import dto.SheetDTO;
@@ -19,9 +18,10 @@ public class UISheet {
 
     private IntegerProperty sheetVersion = new SimpleIntegerProperty();
     private IntegerProperty thickness = new SimpleIntegerProperty();;
-    private IntegerProperty width = new SimpleIntegerProperty();;
+    private IntegerProperty width = new SimpleIntegerProperty();
     private Map<Coordinate, UICell> activeCells = new HashMap<>();
-    private MapProperty<String, Set<Coordinate>> rangeCells =  new SimpleMapProperty<>(FXCollections.observableHashMap());
+    private ListProperty<String> rangeNames = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private MapProperty<String, Set<Coordinate>> ranges =  new SimpleMapProperty<>(FXCollections.observableHashMap());
     private Map<String, UIGridPart> rows = new HashMap<>();
     private Map<String, UIGridPart> columns = new HashMap<>();
 
@@ -35,8 +35,10 @@ public class UISheet {
         sheetVersion.setValue(sheetDTO.getVersion());
 
         for (Map.Entry<String, Range> entry : sheetDTO.getAllRanges().entrySet()) {
-            if(!rangeCells.containsKey(entry.getKey())){
-                rangeCells.put(entry.getKey(), entry.getValue().getCellCoordinates());
+            if(!ranges.containsKey(entry.getKey())){
+                ranges.put(entry.getKey(), entry.getValue().getCellCoordinates());
+                //test
+                rangeNames.add(entry.getKey());
             }
         }
         for(int i = 1; i <= sheetDTO.getRowCount(); i++){
@@ -68,10 +70,12 @@ public class UISheet {
         thickness.setValue(sheetDTO.getThickness());
         width.setValue(sheetDTO.getWidth());
         sheetVersion.setValue(sheetDTO.getVersion());
-        //add only the name of the range
+        //add the range as entry
         for (Map.Entry<String, Range> entry : sheetDTO.getAllRanges().entrySet()) {
-            if(!rangeCells.containsKey(entry.getKey())){
-                rangeCells.put(entry.getKey(), entry.getValue().getCellCoordinates());
+            if(!ranges.containsKey(entry.getKey())){
+                ranges.put(entry.getKey(), entry.getValue().getCellCoordinates());
+                //test
+                rangeNames.add(entry.getKey());
             }
         }
         //update all the cells that active by engine
@@ -99,12 +103,15 @@ public class UISheet {
     }
 
     public MapProperty<String, Set<Coordinate>> rangeMapProperty() {
-        return rangeCells;
+        return ranges;
+    }
+    public ListProperty<String> rangeNamesProperty() {
+        return rangeNames;
     }
 
     public Set<Coordinate> getCoordinatesOfRange(String rangeName) {
-        if(rangeCells.containsKey(rangeName)){
-            return rangeCells.get(rangeName);
+        if(ranges.containsKey(rangeName)){
+            return ranges.get(rangeName);
         }
         else{
             return null;

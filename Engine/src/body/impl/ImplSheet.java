@@ -133,7 +133,6 @@ public class ImplSheet implements Sheet, Serializable  {
                     RangeImpl range = (RangeImpl) unaryExpression.getExpression();
                     if (range.getRangeName().equals(rangeName)) {
                         cells = cells + cell.getCoordinate().toString() + " ";
-
                     }
                 }
             }

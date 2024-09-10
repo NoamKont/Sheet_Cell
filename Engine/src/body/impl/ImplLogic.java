@@ -196,5 +196,10 @@ public class ImplLogic implements Logic,Serializable  {
         fileInStream.close();
     }
 
+    @Override
+    public void deleteRange(String rangeName) {
+        mainSheet.get(mainSheet.size() - 1).deleteRange(rangeName);
+    }
+
 }
 
