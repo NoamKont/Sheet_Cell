@@ -13,6 +13,7 @@ import body.impl.ImplLogic;
 import jakarta.xml.bind.JAXBException;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -29,8 +30,9 @@ public class AppController {
     private final Logic logic = new ImplLogic();
     private UISheet uiSheet = new UISheet();
     private final UICell selectedCell = new UICell();
+    private ObjectProperty<UICell> selectedCellProperty = new SimpleObjectProperty<>();
     private ObjectProperty<UIGridPart> selectedRowOrColumn = new SimpleObjectProperty<>();
-    private StringProperty selectedRange;
+    private StringProperty selectedRange = new SimpleStringProperty();
 
 
 
@@ -54,17 +56,48 @@ public class AppController {
             rangeComponentController.setMainController(this);
             commandComponentController.setMainController(this);
         }
+
+        //bind the selected cell to the UI Header component
         bindModuleToUI();
 
-        selectedCell.cellLabelProperty().addListener((observableValue, oldLabelSelection, newSelectedLabel) -> {
-            if (oldLabelSelection != null) {
-                oldLabelSelection.setId(null);
+        //listener for the selected cell dependency list  and style of selected cell CSS
+        selectedCellProperty.addListener((observableValue, oldCell, newCell) -> {
+            if (newCell != null) {
+                newCell.cellsDependsOnThemProperty().forEach(coordinate -> {
+                    uiSheet.getCell(coordinate).getCellLabel().getStyleClass().add("depends-on-cell");
+                });
+                newCell.cellsDependsOnHimProperty().forEach(coordinate -> {
+                    uiSheet.getCell(coordinate).getCellLabel().getStyleClass().add("influence-on-cell");
+                });
+                newCell.getCellLabel().setId("selected-cell");
             }
-            if (newSelectedLabel != null) {
-                newSelectedLabel.setId("selected-cell");
+            if(oldCell != null){
+                oldCell.cellsDependsOnThemProperty().forEach(coordinate -> {
+                    uiSheet.getCell(coordinate).getCellLabel().getStyleClass().remove("depends-on-cell");
+                });
+                oldCell.cellsDependsOnHimProperty().forEach(coordinate -> {
+                    uiSheet.getCell(coordinate).getCellLabel().getStyleClass().remove("influence-on-cell");
+                });
+                oldCell.getCellLabel().setId(null);
             }
         });
 
+        //listener for the selected range and style of selected range CSS
+        selectedRange.addListener((observableValue, oldValue, newValue) -> {
+            if (newValue != null) {
+                uiSheet.getCoordinatesOfRange(newValue).forEach(coordinate -> {
+                    uiSheet.getCell(coordinate).getCellLabel().getStyleClass().add("selected-range");
+                });
+                System.out.println("Selected Range: " + newValue);
+            }
+            if(oldValue != null){
+                uiSheet.getCoordinatesOfRange(oldValue).forEach(coordinate -> {
+                    uiSheet.getCell(coordinate).getCellLabel().getStyleClass().remove("selected-range");
+                });
+            }
+        });
+
+        //listener for the selected row or column and update the command component
         selectedRowOrColumn.addListener((observableValue, oldValue, newValue) -> {
             if (newValue != null) {
                 String title;
@@ -81,6 +114,8 @@ public class AppController {
                 commandComponentController.getThicknessSpinner().setDisable(!newValue.getIsRow());
             }
         });
+
+        //listener for the width and thickness of the selected row or column and change the width or thickness
         commandComponentController.getWidthSpinner().valueProperty().addListener((observableValue, oldValue, newValue) -> {
             if (selectedRowOrColumn.get() != null) {
                 changeWidth(newValue);
@@ -117,7 +152,10 @@ public class AppController {
         logic.updateCell(selectedCell.idProperty().getValue(), input);
         uiSheet.updateSheet(logic.getSheet());
         headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
-        selectedCell.updateUICell(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
+        selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
+        selectedCell.updateUICell(selectedCellProperty.get());
+        //selectedCell.updateUICell(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
+
     }
 
     private void bindModuleToUI() {
@@ -194,7 +232,9 @@ public class AppController {
                         // Set click event handler
                         label.setOnMouseClicked(event -> {
                             System.out.println("Label " + label.getId() +" clicked: " + label.getText());
-                            selectedCell.updateUICell(uiSheet.getCell(new CoordinateImpl(cellID)));
+                            selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(cellID)));
+                            selectedCell.updateUICell(selectedCellProperty.get());
+                            //selectedCell.updateUICell(uiSheet.getCell(new CoordinateImpl(cellID)));
                         });
                     }
                     dynamicGrid.add(anchorPane, col, row);

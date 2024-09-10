@@ -80,6 +80,7 @@ public class UICell {
     public StringProperty effectiveValueProperty() {
         return effectiveValue;
     }
+
     public ListProperty<Coordinate> cellsDependsOnThemProperty() {
         return cellsDependsOnThem;
     }

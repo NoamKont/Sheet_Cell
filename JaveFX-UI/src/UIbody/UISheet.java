@@ -1,6 +1,7 @@
 package UIbody;
 
 
+import body.Cell;
 import body.Coordinate;
 import body.impl.CoordinateImpl;
 import dto.SheetDTO;
@@ -12,6 +13,7 @@ import javafx.scene.control.Label;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class UISheet {
 
@@ -19,7 +21,7 @@ public class UISheet {
     private IntegerProperty thickness = new SimpleIntegerProperty();;
     private IntegerProperty width = new SimpleIntegerProperty();;
     private Map<Coordinate, UICell> activeCells = new HashMap<>();
-    private ListProperty<String> rangeCells =  new SimpleListProperty<>(FXCollections.observableArrayList());
+    private MapProperty<String, Set<Coordinate>> rangeCells =  new SimpleMapProperty<>(FXCollections.observableHashMap());
     private Map<String, UIGridPart> rows = new HashMap<>();
     private Map<String, UIGridPart> columns = new HashMap<>();
 
@@ -33,8 +35,8 @@ public class UISheet {
         sheetVersion.setValue(sheetDTO.getVersion());
 
         for (Map.Entry<String, Range> entry : sheetDTO.getAllRanges().entrySet()) {
-            if(!rangeCells.contains(entry.getKey())){
-                rangeCells.add(entry.getKey());
+            if(!rangeCells.containsKey(entry.getKey())){
+                rangeCells.put(entry.getKey(), entry.getValue().getCellCoordinates());
             }
         }
         for(int i = 1; i <= sheetDTO.getRowCount(); i++){
@@ -68,8 +70,8 @@ public class UISheet {
         sheetVersion.setValue(sheetDTO.getVersion());
         //add only the name of the range
         for (Map.Entry<String, Range> entry : sheetDTO.getAllRanges().entrySet()) {
-            if(!rangeCells.contains(entry.getKey())){
-                rangeCells.add(entry.getKey());
+            if(!rangeCells.containsKey(entry.getKey())){
+                rangeCells.put(entry.getKey(), entry.getValue().getCellCoordinates());
             }
         }
         //update all the cells that active by engine
@@ -96,10 +98,18 @@ public class UISheet {
         return width;
     }
 
-    public ListProperty<String> rangeCellsProperty() {
+    public MapProperty<String, Set<Coordinate>> rangeMapProperty() {
         return rangeCells;
     }
 
+    public Set<Coordinate> getCoordinatesOfRange(String rangeName) {
+        if(rangeCells.containsKey(rangeName)){
+            return rangeCells.get(rangeName);
+        }
+        else{
+            return null;
+        }
+    }
 
     public UIGridPart getRow(String text) {
         return rows.get(text);

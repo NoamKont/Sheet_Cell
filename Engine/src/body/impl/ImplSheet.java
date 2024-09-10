@@ -117,6 +117,37 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
+    public void deleteRange(String rangeName) {
+        if(checkIfCanRemoveRange(rangeName)){
+            rangeMap.remove(rangeName);
+        }
+    }
+
+    private boolean checkIfCanRemoveRange(String rangeName) {
+        String cells = "";
+        for (Map.Entry<Coordinate, Cell> entry : activeCells.entrySet()) {
+            Cell cell = entry.getValue();
+            if(cell.getExpression() instanceof UnaryExpression){
+                UnaryExpression unaryExpression = (UnaryExpression) cell.getExpression();
+                if(unaryExpression.getExpression() instanceof RangeImpl) {
+                    RangeImpl range = (RangeImpl) unaryExpression.getExpression();
+                    if (range.getRangeName().equals(rangeName)) {
+                        cells = cells + cell.getCoordinate().toString() + " ";
+
+                    }
+                }
+            }
+        }
+        if (cells.isEmpty() || cells.isBlank()) {
+            return true;
+        }
+        else{
+            throw new IllegalArgumentException("Can't remove the range! cells : " + cells + "depends on it");
+        }
+    }
+
+
+    @Override
     public void updateCellDitels(String cellId, String value){
         Coordinate currCoord = new CoordinateImpl(cellId);
         checkValidBounds(currCoord);
@@ -150,6 +181,7 @@ public class ImplSheet implements Sheet, Serializable  {
             Expression currExpression = stringToExpression(value,coord);
             currCell.setExpression(currExpression);
             currCell.setEffectiveValue(currCell.getExpression().evaluate());
+            updateListsOfDependencies(coord);
         }
     }
 
@@ -166,7 +198,7 @@ public class ImplSheet implements Sheet, Serializable  {
 
     @Override
     public void updateListsOfDependencies(Coordinate coord) {
-            Cell cell= activeCells.get(coord);
+            Cell cell = activeCells.get(coord);
             cell.setDependsOnHim(graph.getNeighbors(coord));
             cell.setDependsOnThem(graph.getSources(coord));
     }

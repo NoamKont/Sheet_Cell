@@ -4,7 +4,6 @@ import expression.CellType;
 import expression.Range.api.Range;
 import expression.api.EffectiveValue;
 import expression.api.Expression;
-import expression.impl.BinaryExpression;
 import expression.impl.Number;
 import expression.impl.UnaryExpression;
 

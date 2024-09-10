@@ -32,14 +32,17 @@ public class RangeImpl implements Range, Serializable{
         }
 
     }
+
     @Override
     public String getRangeName() {
         return this.rangeName;
     }
+
     @Override
     public void setRangeName(String rangeName) {
         this.rangeName = rangeName;
     }
+
     @Override
     public Boolean isRangeValid(String topLeftCellId, String rightBottomCellId) {
         int sheetRowCount = sheet.getRowCount();
@@ -71,6 +74,15 @@ public class RangeImpl implements Range, Serializable{
     @Override
     public Set<Cell> getCells() {
         return rangeCells;
+    }
+
+    @Override
+    public Set<Coordinate> getCellCoordinates() {
+        Set<Coordinate> res = new HashSet<>();
+        for (Cell c : rangeCells) {
+            res.add(c.getCoordinate());
+        }
+        return res;
     }
 
     private void setRangeCells() {

@@ -2,6 +2,7 @@ package MainMenu.SideBar.Range;
 
 import MainMenu.AppController;
 import UIbody.UISheet;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -58,18 +59,19 @@ public class RangeComponentController implements Initializable {
     @FXML
     void clearOptionChoosen(ActionEvent event) {
         rangeListView.getSelectionModel().clearSelection();
+        mainController.setSelectedRange(null);
     }
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
 
-    public void bindModuleToUI(UISheet uiSheet) {
-            uiSheet.rangeCellsProperty().addListener((observable, oldValue, newValue) -> {
-                rangeListView.getItems().clear();
-                rangeListView.getItems().addAll(newValue);
-
-            });
-    }
+//    public void bindModuleToUI(UISheet uiSheet) {
+//            uiSheet.rangeCellsProperty().addListener((observable, oldValue, newValue) -> {
+//                rangeListView.getItems().clear();
+//                rangeListView.getItems().addAll(newValue);
+//
+//            });
+//    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

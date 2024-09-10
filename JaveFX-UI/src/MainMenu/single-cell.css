@@ -20,16 +20,26 @@
     -fx-border-radius: 2px;
 }
 
-.single-cell.depends-on-cell {
-    -fx-effect: dropshadow(gaussian, rgba(0,255,0,0.75), 2, 0.5, 0, 0);
+
+.depends-on-cell {
+    -fx-border-color: rgba(255, 145, 0, 0.75);
     -fx-border-style: dotted;
     -fx-border-width: 3px;
-    -fx-border-color: rgba(0,255,0,0.75);
+    -fx-border-radius: 2px;
 }
 
-.single-cell.influence-on-cell {
-    -fx-effect: dropshadow(gaussian, rgba(255, 0, 161, 0.75), 2, 0.5, 0, 0);
+.influence-on-cell {
+    -fx-border-radius: 2px;
     -fx-border-style: dotted;
     -fx-border-width: 3px;
     -fx-border-color: rgba(255, 0, 161, 0.75);
+}
+
+
+.selected-range {
+    -fx-border-color: #00FF00BF;
+    -fx-border-width: 3px;
+    -fx-border-style: dotted;
+    -fx-border-radius: 2px;
+
 }

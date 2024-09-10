@@ -1,6 +1,7 @@
 package expression.Range.api;
 
 import body.Cell;
+import body.Coordinate;
 import expression.api.EffectiveValue;
 import expression.api.Expression;
 
@@ -11,4 +12,5 @@ public interface Range extends EffectiveValue {
     void setRangeName(String rangeName);
     Boolean isRangeValid(String topLeftCellId, String rightBottomCellId);
     Set<Cell> getCells();
+    Set<Coordinate> getCellCoordinates();
 }
