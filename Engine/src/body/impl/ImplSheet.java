@@ -191,38 +191,68 @@ public class ImplSheet implements Sheet, Serializable  {
 
     @Override
     public Sheet sortSheet(String topLeft, String bottomRight, String... columns) {
-        Sheet sortedSheet = null;
-        try {
-            ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
-            ObjectOutputStream outStream = new ObjectOutputStream(byteOutStream);
-            outStream.writeObject(this);
-            outStream.flush();
+            //Sheet sortedSheet = (Sheet) copyWithSerialization(this);
+            Sheet sortedSheet = new ImplSheet(sheetName, thickness, width, row, col);
 
-            // Step 2: Deserialize the byte array into a new object
-            ByteArrayInputStream byteInStream = new ByteArrayInputStream(byteOutStream.toByteArray());
-            ObjectInputStream inStream = new ObjectInputStream(byteInStream);
-
-            sortedSheet = (Sheet) inStream.readObject();
-
-
+            List<List<Cell>> rows = new ArrayList<>();
             Coordinate topLeftCoord = new CoordinateImpl(topLeft);
             Coordinate bottomRightCoord = new CoordinateImpl(bottomRight);
             checkValidBounds(topLeftCoord);
             checkValidBounds(bottomRightCoord);
-            Range range = new RangeImpl("range", topLeft, bottomRight, this);
 
-            for (String column : columns) {
-                List<Cell> cellsInColumn = new ArrayList<>();
-                range.getCells().stream().filter(cell -> cell.getCoordinate().getColumn() == Integer.parseInt(column)).forEach(cellsInColumn::add);
-                cellsInColumn.sort(Comparator.comparingDouble(cell -> (Double) cell.getEffectiveValue().getValue()));
 
+            for(int row = topLeftCoord.getRow() ; row <= bottomRightCoord.getRow(); row++){
+                List<Cell> cellsInRow = new ArrayList<>();
+                for(int col = topLeftCoord.getColumn(); col <= bottomRightCoord.getColumn(); col++){
+                    Coordinate currCoord = new CoordinateImpl(row,col);
+                    if(activeCells.containsKey(currCoord)){
+                        cellsInRow.add(activeCells.get(currCoord));
+                    }
+                    else{
+                        Cell emptyCell = new ImplCell(currCoord.toString());
+                        cellsInRow.add(emptyCell);
+                    }
+                }
+                rows.add(cellsInRow);
             }
 
-        }catch(IOException | ClassNotFoundException e){
-                e.printStackTrace();
+            List<Integer> sortColumns = new ArrayList<>();
+            Arrays.stream(columns).mapToInt(column -> column.charAt(0) + 1 - 'A' - topLeftCoord.getColumn()).forEach(sortColumns::add);
+
+            rows.sort((row1, row2) -> compareRows(row1, row2, sortColumns));
+
+            Map<Coordinate, Cell> sortedActiveCells = sortedSheet.getActiveCells();
+            int currentRow = topLeftCoord.getRow();
+            for (List<Cell> row : rows) {
+                int currentCol = topLeftCoord.getColumn();
+                for (Cell cell: row) {
+                    Coordinate newCoord = new CoordinateImpl(currentRow, currentCol);
+                    sortedActiveCells.put(newCoord, cell);
+                    currentCol++;
+                }
+                currentRow++;
             }
+            for(Cell cell : activeCells.values()){
+                if(!sortedActiveCells.containsKey(cell.getCoordinate())){
+                    sortedActiveCells.put(cell.getCoordinate(), cell);
+                }
+            }
+
         return sortedSheet;
     }
+
+    private int compareRows(List<Cell> row1, List<Cell> row2, List<Integer> sortColumns) {
+        for (Integer colIndex : sortColumns) {
+            Double value1 = (Double) row1.get(colIndex).getEffectiveValue().getValue();
+            Double value2 = (Double) row2.get(colIndex).getEffectiveValue().getValue();
+            int cmp = Double.compare(value1, value2);
+            if (cmp != 0) {
+                return cmp; // Return comparison result if the values are different
+            }
+        }
+        return 0; // Rows are equal if all compared columns have the same values
+    }
+
     @Override
     public void updateCell(String cellId, String value) {
         updateCellDitels(cellId, value);
@@ -496,6 +526,23 @@ public class ImplSheet implements Sheet, Serializable  {
             case "PLUS", "MINUS", "TIMES", "DIVIDE", "MOD", "POW", "CONCAT", "ABS", "SUB", "REF","EQUAL","BIGGER","NOT","OR","AND","LESS","IF","PERCENT","SUM","AVERAGE" -> true;
             default -> false;
         };
+    }
+
+    public static Object copyWithSerialization(Object object) {
+        try {
+            ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
+            ObjectOutputStream outStream = new ObjectOutputStream(byteOutStream);
+            outStream.writeObject(object);
+            outStream.flush();
+
+            ByteArrayInputStream byteInStream = new ByteArrayInputStream(byteOutStream.toByteArray());
+            ObjectInputStream inStream = new ObjectInputStream(byteInStream);
+
+            return inStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

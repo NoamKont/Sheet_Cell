@@ -193,6 +193,28 @@ public enum MainMenu implements Menu {
             }
         }
     },
+    SORTSHEET{
+        @Override
+        public void invoke(Logic logic) {
+            System.out.println();
+            System.out.println("Please enter the range you want to sort (e.g. A1:B5): ");
+            Scanner scanner = new Scanner(System.in);
+            String range = scanner.nextLine();
+            String[] rangeSplit = range.split(":");
+            System.out.println("PLease enter the column you want to sort by (e.g. A,B,C): ");
+            String columns = scanner.nextLine();
+            if(rangeSplit.length != 2){
+                System.out.println("ERROR! Please enter a valid range (e.g. A1:B5): ");
+                return;
+            }
+            try {
+                SheetDTO sheet = logic.sortSheet(rangeSplit[0], rangeSplit[1], columns.split(","));
+                printSheet(sheet);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    } ,
     LOADFROMSAVEDFILE{
         @Override
         public void invoke(Logic logic) {
@@ -232,6 +254,7 @@ public enum MainMenu implements Menu {
         System.out.println("6) Save your Sheet to file");
         System.out.println("7) Upload an existing Sheet");
         System.out.println("8) Exit");
+        System.out.println("9) Sort Sheet");
     }
 
     public static MainMenu parser (int option){
@@ -252,6 +275,8 @@ public enum MainMenu implements Menu {
                 return LOADFROMSAVEDFILE;
             case 8:
                 exit(0);
+            case 9:
+                return SORTSHEET;
 
             default:
                 throw new IllegalArgumentException("Invalid option was pressed, only 1-8 numbers. Please try again.");
