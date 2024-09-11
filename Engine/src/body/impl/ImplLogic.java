@@ -186,6 +186,11 @@ public class ImplLogic implements Logic,Serializable  {
     }
 
     @Override
+    public SheetDTO filterSheet(String topLeft, String bottomRight, List<String> value, List<String> columns) {
+        return new ImplSheetDTO(mainSheet.get(mainSheet.size() - 1).filterSheet(topLeft, bottomRight,value, columns));
+    }
+
+    @Override
     public void addRangeToSheet(String rangeName, String topLeft, String bottomRight) {
         mainSheet.get(mainSheet.size() - 1).addRange(rangeName, topLeft, bottomRight);
     }

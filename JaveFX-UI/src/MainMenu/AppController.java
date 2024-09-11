@@ -18,9 +18,12 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.Set;
 
@@ -194,93 +197,97 @@ public class AppController {
         //rangeComponentController.bindModuleToUI(uiSheet);
     }
 
-    private void createViewSheet() {
-            GridPane dynamicGrid = new GridPane();
-            //add '1' for the header
-            int numRows = logic.getRowsNumber() + 1;
-            int numCols = logic.getColumnsNumber()+ 1;
+    public ScrollPane creatSheetComponent(UISheet uiSheet) {
+        GridPane dynamicGrid = new GridPane();
+        //add '1' for the header
+        int numRows = logic.getRowsNumber() + 1;
+        int numCols = logic.getColumnsNumber()+ 1;
 
-            // Add RowConstraints and ColumnConstraints
-            for (int i = 0; i < numRows; i++) {
-               RowConstraints row = new RowConstraints();
+        // Add RowConstraints and ColumnConstraints
+        for (int i = 0; i < numRows; i++) {
+            RowConstraints row = new RowConstraints();
 
-               row.setPrefHeight(logic.getSheet().getThickness());
-               row.setMinHeight(Region.USE_PREF_SIZE);
-               row.setMaxHeight(Region.USE_PREF_SIZE);
-                row.setVgrow(javafx.scene.layout.Priority.ALWAYS);
-                dynamicGrid.getRowConstraints().add(row);
-            }
+            row.setPrefHeight(logic.getSheet().getThickness());
+            row.setMinHeight(Region.USE_PREF_SIZE);
+            row.setMaxHeight(Region.USE_PREF_SIZE);
+            row.setVgrow(javafx.scene.layout.Priority.ALWAYS);
+            dynamicGrid.getRowConstraints().add(row);
+        }
 
-            for (int i = 0; i < numCols; i++) {
-                ColumnConstraints col = new ColumnConstraints();
-                col.setPrefWidth(logic.getSheet().getWidth());
-                col.setMinWidth(Region.USE_PREF_SIZE);
-                col.setMaxWidth(Region.USE_PREF_SIZE);
-                col.setHgrow(javafx.scene.layout.Priority.ALWAYS);
-                dynamicGrid.getColumnConstraints().add(col);
-            }
+        for (int i = 0; i < numCols; i++) {
+            ColumnConstraints col = new ColumnConstraints();
+            col.setPrefWidth(logic.getSheet().getWidth());
+            col.setMinWidth(Region.USE_PREF_SIZE);
+            col.setMaxWidth(Region.USE_PREF_SIZE);
+            col.setHgrow(javafx.scene.layout.Priority.ALWAYS);
+            dynamicGrid.getColumnConstraints().add(col);
+        }
 
-            // Populate the GridPane with Labels and Headers
-            for (int row = 0; row < numRows; row++) {
-                for (int col = 0; col < numCols; col++) {
-                    AnchorPane anchorPane = new AnchorPane();
-                    if (row == 0 && col > 0) {
-                        // Top row (column headers)
-                        Label label = new Label(Character.toString((char) ('A' + col - 1))); // "A", "B", "C", ...
-                        dynamicGrid.getColumnConstraints().get(col).prefWidthProperty().bind(uiSheet.getColumn(label.getText()).widthProperty());
-                        // Set click event handler
-                        label.setOnMouseClicked(event -> {
-                            System.out.println("Label " + label.getText() +" clicked: " + label.getText());
-                            selectedRowOrColumn.set(uiSheet.getColumn(label.getText()));
-                        });
-                        setHeaderLable(anchorPane, label);
-                    } else if (col == 0 && row > 0) {
-                        // First column (row headers)
-                        Label label = new Label(Integer.toString(row)); // "1", "2", "3", ..
-                        dynamicGrid.getRowConstraints().get(row).prefHeightProperty().bind(uiSheet.getRow(label.getText()).thicknessProperty());
-                        // Set click event handler
-                        label.setOnMouseClicked(event -> {
-                            System.out.println("Label " + label.getText() +" clicked: " + label.getText());
-                            selectedRowOrColumn.set(uiSheet.getRow(label.getText()));
-                        });
-                        setHeaderLable(anchorPane, label);
-                    } else if (row > 0 && col > 0) {
-                        String cellID = fromDotToCellID(row, col);
-                        Label label = new Label();
-                        label.getStyleClass().add("single-cell");
-                        Coordinate coordinate = new CoordinateImpl(cellID);
-                        label.textProperty().bind(uiSheet.getCell(coordinate).effectiveValueProperty());
-                        uiSheet.setCellLabel(coordinate, label);
-                        label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                        label.setAlignment(javafx.geometry.Pos.CENTER);
-                        AnchorPane.setTopAnchor(label, 0.0);
-                        AnchorPane.setBottomAnchor(label, 0.0);
-                        AnchorPane.setLeftAnchor(label, 0.0);
-                        AnchorPane.setRightAnchor(label, 0.0);
-                        anchorPane.getChildren().add(label);
+        // Populate the GridPane with Labels and Headers
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                AnchorPane anchorPane = new AnchorPane();
+                if (row == 0 && col > 0) {
+                    // Top row (column headers)
+                    Label label = new Label(Character.toString((char) ('A' + col - 1))); // "A", "B", "C", ...
+                    dynamicGrid.getColumnConstraints().get(col).prefWidthProperty().bind(uiSheet.getColumn(label.getText()).widthProperty());
+                    // Set click event handler
+                    label.setOnMouseClicked(event -> {
+                        System.out.println("Label " + label.getText() +" clicked: " + label.getText());
+                        selectedRowOrColumn.set(uiSheet.getColumn(label.getText()));
+                    });
+                    setHeaderLable(anchorPane, label);
+                } else if (col == 0 && row > 0) {
+                    // First column (row headers)
+                    Label label = new Label(Integer.toString(row)); // "1", "2", "3", ..
+                    dynamicGrid.getRowConstraints().get(row).prefHeightProperty().bind(uiSheet.getRow(label.getText()).thicknessProperty());
+                    // Set click event handler
+                    label.setOnMouseClicked(event -> {
+                        System.out.println("Label " + label.getText() +" clicked: " + label.getText());
+                        selectedRowOrColumn.set(uiSheet.getRow(label.getText()));
+                    });
+                    setHeaderLable(anchorPane, label);
+                } else if (row > 0 && col > 0) {
+                    String cellID = fromDotToCellID(row, col);
+                    Label label = new Label();
+                    label.getStyleClass().add("single-cell");
+                    Coordinate coordinate = new CoordinateImpl(cellID);
+                    label.textProperty().bind(uiSheet.getCell(coordinate).effectiveValueProperty());
+                    uiSheet.setCellLabel(coordinate, label);
+                    label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                    label.setAlignment(javafx.geometry.Pos.CENTER);
+                    AnchorPane.setTopAnchor(label, 0.0);
+                    AnchorPane.setBottomAnchor(label, 0.0);
+                    AnchorPane.setLeftAnchor(label, 0.0);
+                    AnchorPane.setRightAnchor(label, 0.0);
+                    anchorPane.getChildren().add(label);
 
-                        // Set click event handler
-                        label.setOnMouseClicked(event -> {
-                            System.out.println("Label " + label.getId() +" clicked: " + label.getText());
-                            selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(cellID)));
-                            selectedCell.updateUICell(selectedCellProperty.get());
-                            //selectedCell.updateUICell(uiSheet.getCell(new CoordinateImpl(cellID)));
-                        });
-                    }
-                    dynamicGrid.add(anchorPane, col, row);
+                    // Set click event handler
+                    label.setOnMouseClicked(event -> {
+                        System.out.println("Label " + label.getId() +" clicked: " + label.getText());
+                        selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(cellID)));
+                        selectedCell.updateUICell(selectedCellProperty.get());
+                    });
                 }
+                dynamicGrid.add(anchorPane, col, row);
             }
+        }
 
-            dynamicGrid.setAlignment(javafx.geometry.Pos.CENTER);
-            dynamicGrid.setGridLinesVisible(true);
+        dynamicGrid.setAlignment(javafx.geometry.Pos.CENTER);
+        dynamicGrid.setGridLinesVisible(true);
 
-            dynamicGrid.setMinHeight(Region.USE_PREF_SIZE);
-            dynamicGrid.setMinWidth(Region.USE_PREF_SIZE);
+        dynamicGrid.setMinHeight(Region.USE_PREF_SIZE);
+        dynamicGrid.setMinWidth(Region.USE_PREF_SIZE);
 
-            ScrollPane scrollPane = new ScrollPane();
-            scrollPane.fitToHeightProperty().set(true);
-            scrollPane.fitToWidthProperty().set(true);
-            scrollPane.setContent(dynamicGrid);
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.fitToHeightProperty().set(true);
+        scrollPane.fitToWidthProperty().set(true);
+        scrollPane.setContent(dynamicGrid);
+        return scrollPane;
+    }
+
+    private void createViewSheet() {
+            ScrollPane scrollPane = creatSheetComponent(uiSheet);
             bodyComponent.setCenter(scrollPane);
 
             bodyComponent.setMinWidth(0);
@@ -331,5 +338,25 @@ public class AppController {
 
     public void deleteRangeFromSheet(String selectedItem) {
         logic.deleteRange(selectedItem);
+    }
+
+    public UISheet sortSheet(String topLeft, String bottomRight,String... columns) {
+        UISheet sortedSheet = new UISheet(logic.sortSheet(topLeft,bottomRight,columns));
+        return sortedSheet;
+
+    }
+
+    public int getColumnsNumber() {
+        return logic.getColumnsNumber();
+    }
+
+    public void showVersion(int i) {
+        Stage popupStage = new Stage();
+
+        UISheet versionSheet = new UISheet(logic.getSheetbyVersion(i-1));
+        ScrollPane popupLayout = creatSheetComponent(versionSheet);
+        Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
+        popupStage.setScene(popupSortedSheet);
+        popupStage.showAndWait();
     }
 }

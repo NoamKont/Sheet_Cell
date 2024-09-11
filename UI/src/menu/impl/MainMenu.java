@@ -215,6 +215,30 @@ public enum MainMenu implements Menu {
             }
         }
     } ,
+    FILTERSHEET{
+        @Override
+        public void invoke(Logic logic) {
+            System.out.println();
+            System.out.println("Please enter the range you want to filter (e.g. A1:B5): ");
+            Scanner scanner = new Scanner(System.in);
+            String range = scanner.nextLine();
+            String[] rangeSplit = range.split(":");
+            System.out.println("PLease enter the column you want to filter by (e.g. A,B,C): ");
+            String column = scanner.nextLine();
+            System.out.println("PLease enter the value you want to filter by: ");
+            String value = scanner.nextLine();
+            if(rangeSplit.length != 2){
+                System.out.println("ERROR! Please enter a valid range (e.g. A1:B5): ");
+                return;
+            }
+            try {
+                SheetDTO sheet = logic.filterSheet(rangeSplit[0], rangeSplit[1], List.of(value.split(",")), List.of(column.split(",")));
+                printSheet(sheet);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+        }
+    }
+    },
     LOADFROMSAVEDFILE{
         @Override
         public void invoke(Logic logic) {
@@ -255,6 +279,7 @@ public enum MainMenu implements Menu {
         System.out.println("7) Upload an existing Sheet");
         System.out.println("8) Exit");
         System.out.println("9) Sort Sheet");
+        System.out.println("10) Filter Sheet");
     }
 
     public static MainMenu parser (int option){

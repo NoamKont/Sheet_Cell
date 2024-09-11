@@ -42,8 +42,7 @@ public class HeaderComponentController implements Initializable {
     private Button updateValueBtn;
 
     @FXML
-    private SplitMenuButton versionSelectorMenu;
-
+    private ComboBox<String> versionSelectorMenu;
     @FXML
     private Button uploadXmlBtn;
 
@@ -60,8 +59,14 @@ public class HeaderComponentController implements Initializable {
             }
             updateValueBtn.setDisable(false);
         });
+
     }
 
+    @FXML
+    void selectedVersionToShow(ActionEvent event) {
+        String version = versionSelectorMenu.getValue().substring(8);
+        mainController.showVersion(Integer.parseInt(version));
+    }
 
     @FXML
     private void clickedOnBtnUpload(ActionEvent event) {
@@ -97,7 +102,8 @@ public class HeaderComponentController implements Initializable {
     }
 
     public void addVersionToMenu(Integer version){
-        versionSelectorMenu.getItems().add(new MenuItem("Version " + version.toString()));
+        //versionSelectorMenu.getItems().add(new MenuItem("Version " + version.toString()));
+        versionSelectorMenu.getItems().add("Version " + version.toString());
     }
 
     public void newSheetHeader(){

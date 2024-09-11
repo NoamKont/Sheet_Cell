@@ -191,9 +191,7 @@ public class ImplSheet implements Sheet, Serializable  {
 
     @Override
     public Sheet sortSheet(String topLeft, String bottomRight, String... columns) {
-            //Sheet sortedSheet = (Sheet) copyWithSerialization(this);
             Sheet sortedSheet = new ImplSheet(sheetName, thickness, width, row, col);
-
             List<List<Cell>> rows = new ArrayList<>();
             Coordinate topLeftCoord = new CoordinateImpl(topLeft);
             Coordinate bottomRightCoord = new CoordinateImpl(bottomRight);
@@ -251,6 +249,74 @@ public class ImplSheet implements Sheet, Serializable  {
             }
         }
         return 0; // Rows are equal if all compared columns have the same values
+    }
+
+    private boolean filterRow(List<Cell> row, List<String> value, List<Integer> columns) {
+        for(int Index = 0; Index < columns.size(); Index++){
+            if(row.get(columns.get(Index)).getEffectiveValue().getValue().toString().equals(value.get(Index))){
+                return true;
+            }
+        }
+        return true;
+    }
+    @Override
+    public Sheet filterSheet(String topLeft, String bottomRight, List<String> value, List<String> columns) {
+        Sheet filterSheet = new ImplSheet(sheetName, thickness, width, row, col);
+        List<List<Cell>> rows = new ArrayList<>();
+        Coordinate topLeftCoord = new CoordinateImpl(topLeft);
+        Coordinate bottomRightCoord = new CoordinateImpl(bottomRight);
+        checkValidBounds(topLeftCoord);
+        checkValidBounds(bottomRightCoord);
+
+
+        for(int row = topLeftCoord.getRow() ; row <= bottomRightCoord.getRow(); row++){
+            List<Cell> cellsInRow = new ArrayList<>();
+            for(int col = topLeftCoord.getColumn(); col <= bottomRightCoord.getColumn(); col++){
+                Coordinate currCoord = new CoordinateImpl(row,col);
+                if(activeCells.containsKey(currCoord)){
+                    cellsInRow.add(activeCells.get(currCoord));
+                }
+                else{
+                    Cell emptyCell = new ImplCell(currCoord.toString());
+                    cellsInRow.add(emptyCell);
+                }
+            }
+            rows.add(cellsInRow);
+        }
+
+        List<Integer> sortColumns = new ArrayList<>();
+        columns.stream().mapToInt(column -> column.charAt(0) + 1 - 'A' - topLeftCoord.getColumn()).forEach(sortColumns::add);
+        //need to creat predicate
+        rows.stream()
+                .filter(row -> filterRow(row, value, sortColumns))
+                .forEach(row -> row.forEach(cell -> new ImplCell(cell.getCoordinate().toString())));
+
+
+
+        rows.stream()
+                .filter(row -> row.stream().anyMatch(cell -> !cell.getEffectiveValue().getValue().toString().equals(value.get(0))))
+                .forEach(row -> row.forEach(cell -> new ImplCell(cell.getCoordinate().toString())));
+
+        Map<Coordinate, Cell> filterActiveCells = filterSheet.getActiveCells();
+
+        int currentRow = topLeftCoord.getRow();
+        for (List<Cell> row : rows) {
+            int currentCol = topLeftCoord.getColumn();
+            for (Cell cell: row) {
+                Coordinate newCoord = new CoordinateImpl(currentRow, currentCol);
+                filterActiveCells.put(newCoord, cell);
+                currentCol++;
+            }
+            currentRow++;
+        }
+        for(Cell cell : activeCells.values()){
+            if(!filterActiveCells.containsKey(cell.getCoordinate())){
+                filterActiveCells.put(cell.getCoordinate(), cell);
+            }
+        }
+
+        return filterSheet;
+
     }
 
     @Override

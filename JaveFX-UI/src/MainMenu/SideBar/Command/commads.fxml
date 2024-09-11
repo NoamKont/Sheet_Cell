@@ -15,7 +15,7 @@
       <VBox alignment="CENTER" prefHeight="250.0" prefWidth="200.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Text fx:id="chosenColumnRow" strokeType="OUTSIDE" strokeWidth="0.0" text="Choosen Column/Row" />
-            <ComboBox fx:id="alignmentBox" onAction="#alignmentSelectionListener" prefWidth="150.0" />
+            <ComboBox fx:id="alignmentBox" onAction="#alignmentSelectionListener" prefWidth="150.0" promptText="Alignment" />
             <HBox spacing="10.0">
                <children>
                   <VBox>
@@ -36,6 +36,12 @@
                <children>
                   <Button fx:id="clearSelectionBtn" mnemonicParsing="false" text="clear " />
                   <Button fx:id="undoChangesBtn" mnemonicParsing="false" text="undo Changes" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#sortSheetBtnClicked" text="Sort" />
+                  <Button mnemonicParsing="false" text="Filter" />
                </children>
             </HBox>
          </children>
