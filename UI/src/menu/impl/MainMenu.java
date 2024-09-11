@@ -302,6 +302,8 @@ public enum MainMenu implements Menu {
                 exit(0);
             case 9:
                 return SORTSHEET;
+            case 10:
+                return FILTERSHEET;
 
             default:
                 throw new IllegalArgumentException("Invalid option was pressed, only 1-8 numbers. Please try again.");
