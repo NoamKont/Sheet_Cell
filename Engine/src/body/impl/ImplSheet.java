@@ -200,20 +200,7 @@ public class ImplSheet implements Sheet, Serializable  {
             checkValidBounds(bottomRightCoord);
 
             rows = createRows(topLeftCoord, bottomRightCoord);
-//            for(int row = topLeftCoord.getRow() ; row <= bottomRightCoord.getRow(); row++){
-//                List<Cell> cellsInRow = new ArrayList<>();
-//                for(int col = topLeftCoord.getColumn(); col <= bottomRightCoord.getColumn(); col++){
-//                    Coordinate currCoord = new CoordinateImpl(row,col);
-//                    if(activeCells.containsKey(currCoord)){
-//                        cellsInRow.add(activeCells.get(currCoord));
-//                    }
-//                    else{
-//                        Cell emptyCell = new ImplCell(currCoord.toString());
-//                        cellsInRow.add(emptyCell);
-//                    }
-//                }
-//                rows.add(cellsInRow);
-//            }
+
             List<Integer> sortColumns = new ArrayList<>();
             Arrays.stream(columns).mapToInt(column -> column.charAt(0) + 1 - 'A' - topLeftCoord.getColumn()).forEach(sortColumns::add);
 
@@ -300,6 +287,17 @@ public class ImplSheet implements Sheet, Serializable  {
         }
 
         return filterSheet;
+    }
+
+    @Override
+    public List<String> getValuesFromColumn(Integer columnIndex) {
+        List<String> values = new ArrayList<>();
+        activeCells.forEach((coordinate, cell) -> {
+            if (coordinate.getColumn() == columnIndex) {
+                values.add(cell.getEffectiveValue().toString());
+            }
+        });
+        return values;
     }
 
     private List<List<Cell>> createRows(Coordinate topLeftCoord, Coordinate bottomRightCoord) {

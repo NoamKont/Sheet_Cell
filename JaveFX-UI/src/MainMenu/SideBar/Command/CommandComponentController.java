@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -41,6 +42,7 @@ public class CommandComponentController implements Initializable {
 
     @FXML
     private ComboBox<String> alignmentBox;
+
 
     private AppController mainController;
 
@@ -81,6 +83,7 @@ public class CommandComponentController implements Initializable {
                 break;
         }
     }
+
     @FXML
     void sortSheetBtnClicked(ActionEvent event) throws IOException {
         Stage popupStage = new Stage();
@@ -104,6 +107,29 @@ public class CommandComponentController implements Initializable {
         popupStage.showAndWait();
     }
 
+    @FXML
+    void filterSheetBtnClicked(ActionEvent event) throws IOException {
+        Stage popupStage = new Stage();
+
+        // Set the pop-up window to be modal (blocks interaction with other windows)
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setTitle("Filtered Sheet");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL url = getClass().getResource("popupViewForFilter.fxml");
+        fxmlLoader.setLocation(url);
+        Parent root = fxmlLoader.load(url.openStream());
+        FilterPopUpController controller = fxmlLoader.getController();
+
+        Scene popupScene = new Scene(root, 600, 400);
+
+        controller.setCommandComponentController(this);
+        controller.setPopupStage(popupStage);
+        controller.setColumnsNumberInSheet(mainController.getColumnsNumber());
+
+        popupStage.setScene(popupScene);
+        popupStage.showAndWait();
+    }
+
     public void sortSheet(String topLeft, String bottomRight, String[] columns,Stage popupStage) {
         UISheet sortedSheet = mainController.sortSheet(topLeft, bottomRight, columns);
         ScrollPane popupLayout = mainController.creatSheetComponent(sortedSheet);
@@ -120,6 +146,16 @@ public class CommandComponentController implements Initializable {
     }
     public Spinner<Integer> getWidthSpinner() {
         return widthSpinner;
+    }
+    public List<String> getValuesFromColumn(Integer columnIndex) {
+        return mainController.getValuesFromColumns(columnIndex);
+    }
+
+    public void filterSheet(String topLeft, String bottomRight, List<String> values, List<String> columns, Stage popupStage) {
+        UISheet filterSheet = mainController.filterSheet(topLeft, bottomRight, values, columns);
+        ScrollPane popupLayout = mainController.creatSheetComponent(filterSheet);
+        Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
+        popupStage.setScene(popupSortedSheet);
     }
 }
 

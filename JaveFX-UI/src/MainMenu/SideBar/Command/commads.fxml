@@ -41,7 +41,7 @@
             <HBox alignment="CENTER" prefWidth="200.0" spacing="20.0">
                <children>
                   <Button mnemonicParsing="false" onAction="#sortSheetBtnClicked" text="Sort" />
-                  <Button mnemonicParsing="false" text="Filter" />
+                  <Button mnemonicParsing="false" onAction="#filterSheetBtnClicked" text="Filter" />
                </children>
             </HBox>
          </children>

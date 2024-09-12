@@ -8,10 +8,7 @@ import expression.Range.api.Range;
 import expression.api.EffectiveValue;
 import body.Cell;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ImplSheetDTO implements SheetDTO {
     final private Sheet currSheet;
@@ -81,6 +78,11 @@ public class ImplSheetDTO implements SheetDTO {
     @Override
     public Map<String, Range> getAllRanges() {
         return currSheet.getAllRanges();
+    }
+
+    @Override
+    public List<String> getValuesFromColumn(Integer columnIndex) {
+        return currSheet.getValuesFromColumn(columnIndex);
     }
 
 }

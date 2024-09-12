@@ -4,6 +4,8 @@ import body.Coordinate;
 import dto.impl.CellDTO;
 import expression.api.EffectiveValue;
 import expression.Range.api.Range;
+
+import java.util.List;
 import java.util.Map;
 
 
@@ -17,4 +19,5 @@ public interface SheetDTO {
     EffectiveValue getEfectivevalueCell(Coordinate coordinate);
     Map<Coordinate, CellDTO> getActiveCells();
     Map<String, Range> getAllRanges();
+    List<String> getValuesFromColumn(Integer columnIndex);
 }

@@ -25,6 +25,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 
@@ -358,5 +359,14 @@ public class AppController {
         Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
         popupStage.setScene(popupSortedSheet);
         popupStage.showAndWait();
+    }
+
+    public List<String> getValuesFromColumns(Integer columnIndex) {
+        return logic.getSheet().getValuesFromColumn(columnIndex);
+    }
+
+    public UISheet filterSheet(String topLeft, String bottomRight, List<String> values, List<String> columns) {
+        UISheet filterSheet = new UISheet(logic.filterSheet(topLeft,bottomRight,values,columns));
+        return filterSheet;
     }
 }
