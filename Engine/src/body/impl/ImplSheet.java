@@ -243,18 +243,25 @@ public class ImplSheet implements Sheet, Serializable  {
         return 0; // Rows are equal if all compared columns have the same values
     }
 
-    private boolean filterRow(List<Cell> row, List<String> value, List<Integer> columns) {
+    private boolean filterRow(List<Cell> row, List<List<String>> value, List<Integer> columns) {
+        boolean res = false;
         for(int Index = 0; Index < columns.size(); Index++){
-            if(!row.get(columns.get(Index)).getEffectiveValue().toString().equals(value.get(Index))){
+            res = false;
+            for(String val : value.get(Index)){
+                if(row.get(columns.get(Index)).getEffectiveValue().toString().equals(val)){
+                    res = true;
+                }
+            }
+            if(!res){
                 return false;
             }
         }
-        return true;
+        return res;
     }
     @Override
-    public Sheet filterSheet(String topLeft, String bottomRight, List<String> value, List<String> columns) {
+    public Sheet filterSheet(String topLeft, String bottomRight, List<List<String>> value, List<String> columns) {
         Sheet filterSheet = new ImplSheet(sheetName, thickness, width, row, col);
-        List<List<Cell>> rows = new ArrayList<>();
+        List<List<Cell>> rows;
         Coordinate topLeftCoord = new CoordinateImpl(topLeft);
         Coordinate bottomRightCoord = new CoordinateImpl(bottomRight);
         checkValidBounds(topLeftCoord);

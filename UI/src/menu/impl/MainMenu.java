@@ -13,6 +13,7 @@ import menu.Menu;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -232,7 +233,15 @@ public enum MainMenu implements Menu {
                 return;
             }
             try {
-                SheetDTO sheet = logic.filterSheet(rangeSplit[0], rangeSplit[1], List.of(value.split(",")), List.of(column.split(",")));
+                List<String> B = new ArrayList<>();
+                B.add("WOBI");
+                B.add("AIG");
+                List<String> C = new ArrayList<>();
+                C.add("900");
+                List<List<String>> send = new ArrayList<>();
+                send.add(B);
+                send.add(C);
+                SheetDTO sheet = logic.filterSheet(rangeSplit[0], rangeSplit[1], send, List.of(column.split(",")));
                 printSheet(sheet);
             } catch (Exception e) {
                 System.out.println(e.getMessage());

@@ -34,7 +34,7 @@ public interface Sheet {
     boolean isCellExist(String cellID);
 
     Sheet sortSheet(String topLeft, String bottomRight, String... columns);
-    Sheet filterSheet(String topLeft, String bottomRight, List<String> value, List<String> columns);
+    Sheet filterSheet(String topLeft, String bottomRight, List<List<String>> value, List<String> columns);
 
     List<String> getValuesFromColumn(Integer columnIndex);
 

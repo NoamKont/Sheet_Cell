@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:id="bodyComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" prefHeight="600.0" stylesheets="@single-cell.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.AppController">
+<BorderPane fx:id="bodyComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="650.0" prefHeight="650.0" stylesheets="@single-cell.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.AppController">
    <opaqueInsets>
       <Insets />
    </opaqueInsets>
@@ -18,7 +18,7 @@
                <children>
                   <fx:include fx:id="commandComponent" source="SideBar/Command/commads.fxml" />
                </children></AnchorPane>
-            <AnchorPane layoutY="308.0" maxHeight="325.0" maxWidth="-Infinity" prefHeight="275.0" prefWidth="175.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <AnchorPane layoutY="308.0" maxHeight="325.0" maxWidth="-Infinity" prefHeight="229.0" prefWidth="215.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <fx:include fx:id="rangeComponent" source="SideBar/Range/ranges.fxml" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" />
                </children>

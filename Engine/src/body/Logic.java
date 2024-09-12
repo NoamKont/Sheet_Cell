@@ -24,7 +24,7 @@ public interface Logic {
     List<Sheet> getMainSheet();
     boolean isCellExist(String cellID);
     SheetDTO sortSheet(String topLeft, String bottomRight, String... columns);
-    SheetDTO filterSheet(String topLeft, String bottomRight, List<String> value, List<String> columns);
+    SheetDTO filterSheet(String topLeft, String bottomRight, List<List<String>> value, List<String> columns);
 
     void addRangeToSheet(String rangeName,String topLeft, String bottomRight);
 }

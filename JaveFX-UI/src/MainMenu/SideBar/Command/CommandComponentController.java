@@ -172,7 +172,7 @@ public class CommandComponentController implements Initializable {
         return mainController.getValuesFromColumns(columnIndex);
     }
 
-    public void filterSheet(String topLeft, String bottomRight, List<String> values, List<String> columns, Stage popupStage) {
+    public void filterSheet(String topLeft, String bottomRight, List<List<String>> values, List<String> columns, Stage popupStage) {
         UISheet filterSheet = mainController.filterSheet(topLeft, bottomRight, values, columns);
         ScrollPane popupLayout = mainController.creatSheetComponent(filterSheet);
         Scene popupSortedSheet = new Scene(popupLayout, 600, 400);

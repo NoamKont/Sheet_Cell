@@ -375,7 +375,7 @@ public class AppController {
         return logic.getSheet().getValuesFromColumn(columnIndex);
     }
 
-    public UISheet filterSheet(String topLeft, String bottomRight, List<String> values, List<String> columns) {
+    public UISheet filterSheet(String topLeft, String bottomRight, List<List<String>> values, List<String> columns) {
         UISheet filterSheet = new UISheet(logic.filterSheet(topLeft,bottomRight,values,columns));
         return filterSheet;
     }

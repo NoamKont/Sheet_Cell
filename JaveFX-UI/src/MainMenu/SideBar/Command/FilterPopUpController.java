@@ -4,8 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -28,7 +27,7 @@ public class FilterPopUpController {
     private TextField topLeftText;
 
     @FXML
-    private ComboBox<String> valuePicker;
+    private MenuButton valuePicker;
 
     private Integer numberOfColumns2Filter = 1;
 
@@ -43,7 +42,7 @@ public class FilterPopUpController {
         String topLeft = topLeftText.getText().toUpperCase();
         String bottomRight = bottomRightText.getText().toUpperCase();
         List<String> columns = getColumns();
-        List<String> values = getValues();
+        List<List<String>> values = getValues();
         commandComponentController.filterSheet(topLeft, bottomRight, values, columns,popupStage);
     }
 
@@ -61,39 +60,42 @@ public class FilterPopUpController {
         for(int col = 0; col < columnsNumberInSheet; col++){
             String colName = "Column " + Character.toString('A' + col);
             columnsComboBox.getItems().add(colName);
-
         }
 
-        //Create the ComboBox for values
-        ComboBox<String> valuesComboBox = new ComboBox<>();
-        valuesComboBox.setMinWidth(105.0);
-        valuesComboBox.setPrefWidth(150.0);
-
+        // Create the Menu Button for values each value is a checkbox
+        MenuButton menuButton = new MenuButton("Values");
+        menuButton.setMinWidth(105.0);
+        menuButton.setPrefWidth(150.0);
+        menuButton.setAlignment(javafx.geometry.Pos.CENTER);
         columnsComboBox.setOnAction(e -> {
-            valuesComboBox.getItems().clear();
+            menuButton.getItems().clear();
             int col = columnsComboBox.getSelectionModel().getSelectedIndex();
-            valuesComboBox.getItems().addAll(commandComponentController.getValuesFromColumn(col + 1));
+            List<String> values = commandComponentController.getValuesFromColumn(col + 1);
+            for(String value : values){
+                CheckBox checkBox = new CheckBox(value);
+                CustomMenuItem item = new CustomMenuItem(checkBox,false);
+                menuButton.getItems().add(item);
+            }
         });
 
         // Set the GridPane row and column index for both elements
-        //int nextRowIndex = getNextRowIndex(GridPaneOfColumns);
         GridPane.setRowIndex(text, numberOfColumns2Filter);
         GridPane.setColumnIndex(text, 0);
 
         GridPane.setRowIndex(columnsComboBox, numberOfColumns2Filter);
         GridPane.setColumnIndex(columnsComboBox, 1);
 
-        GridPane.setRowIndex(valuesComboBox, numberOfColumns2Filter);
-        GridPane.setColumnIndex(valuesComboBox, 2);
+        GridPane.setRowIndex(menuButton, numberOfColumns2Filter);
+        GridPane.setColumnIndex(menuButton, 2);
 
         // Set margin for the ComboBox
         GridPane.setMargin(columnsComboBox, new Insets(10, 0, 10, 0));
 
-        // Set margin for the ComboBox
-        GridPane.setMargin(valuesComboBox, new Insets(10, 0, 10, 0));
+        // Set margin for the menuButton
+        GridPane.setMargin(menuButton, new Insets(10, 0, 10, 0));
 
         // Add the Text and ComboBox to the GridPane
-        GridPaneOfColumns.getChildren().addAll(text, columnsComboBox, valuesComboBox);
+        GridPaneOfColumns.getChildren().addAll(text, columnsComboBox, menuButton);
         numberOfColumns2Filter++;
     }
 
@@ -114,7 +116,12 @@ public class FilterPopUpController {
         firstColumnPicker.setOnAction(e -> {
             valuePicker.getItems().clear();
             int col = firstColumnPicker.getSelectionModel().getSelectedIndex();
-            valuePicker.getItems().addAll(commandComponentController.getValuesFromColumn(col + 1));
+            List<String> values = commandComponentController.getValuesFromColumn(col + 1);
+            for(String value : values){
+                CheckBox checkBox = new CheckBox(value);
+                CustomMenuItem item = new CustomMenuItem(checkBox,false);
+                valuePicker.getItems().add(item);
+            }
         });
     }
 
@@ -135,11 +142,19 @@ public class FilterPopUpController {
         return columns;
     }
 
-    public List<String> getValues() {
-        List<String> values = new ArrayList<>();
+    public List<List<String>> getValues() {
+        List<List<String>> values = new ArrayList<>();
         for (int i = 0; i < numberOfColumns2Filter; i++) {
-            ComboBox<String> comboBox = (ComboBox<String>) getChildFromGridPane(GridPaneOfColumns, i, 2);
-            values.add(comboBox.getValue());
+            List<String> columnValues = new ArrayList<>();
+            MenuButton menuButton = (MenuButton) getChildFromGridPane(GridPaneOfColumns, i, 2);
+            menuButton.getItems().forEach(item -> {
+                CustomMenuItem customMenuItem = (CustomMenuItem) item;
+                CheckBox checkBox = (CheckBox) customMenuItem.getContent();
+                if (checkBox.isSelected()) {
+                    columnValues.add(checkBox.getText());
+                }
+            });
+            values.add(columnValues);
         }
         return values;
     }
