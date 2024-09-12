@@ -15,6 +15,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -22,8 +23,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -95,6 +96,15 @@ public class AppController {
         selectedCellProperty.addListener((observableValue, oldCell, newCell) -> {
             if (newCell != null) {
                 newCell.getCellLabel().setId("selected-cell");
+                commandComponentController.getTextColorPicker().setValue((Color) newCell.getCellLabel().getTextFill());
+                Background background = newCell.getCellLabel().getBackground();
+                if (background != null && !background.getFills().isEmpty()) {
+                    BackgroundFill fill = background.getFills().get(0);
+                    commandComponentController.getBackgroundColorPicker().setValue((Color) fill.getFill());
+                }else{
+                    commandComponentController.getBackgroundColorPicker().setValue(Color.WHITE);
+                }
+
             }
             if(oldCell != null){
                 oldCell.getCellLabel().setId(null);
@@ -146,6 +156,7 @@ public class AppController {
             }
         });
 
+
 //        uiSheet.rangeMapProperty().addListener((MapChangeListener.Change<? extends String, ? extends Set<Coordinate>> change) -> {
 //            if (change.wasAdded()) {
 //                rangeComponentController.addRangeToList(change.getKey());
@@ -168,11 +179,10 @@ public class AppController {
         // Create a Sheet
         try{
             logic.creatNewSheet(filePath);
+            selectedCell.clearCell();
             uiSheet = new UISheet(logic.getSheet()); //set the module
             createViewSheet();
             headerComponentController.newSheetHeader();
-            selectedCell.clearCell();
-
             headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
             System.out.println("Sheet Created");
         }catch (JAXBException | IOException e){
@@ -265,7 +275,7 @@ public class AppController {
 
                     // Set click event handler
                     label.setOnMouseClicked(event -> {
-                        System.out.println("Label " + label.getId() +" clicked: " + label.getText());
+                        System.out.println("Label clicked: " + label.getText());
                         selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(cellID)));
                         selectedCell.updateUICell(selectedCellProperty.get());
                     });
@@ -368,5 +378,16 @@ public class AppController {
     public UISheet filterSheet(String topLeft, String bottomRight, List<String> values, List<String> columns) {
         UISheet filterSheet = new UISheet(logic.filterSheet(topLeft,bottomRight,values,columns));
         return filterSheet;
+    }
+
+    public void changeTextColorForSelectedCell(Color textColor) {
+        selectedCell.getCellLabel().setTextFill(textColor);
+    }
+
+    public void changeBackgroundColorForSelectedCell(Color backgroundColor) {
+        selectedCell.getCellLabel().setBackground(new Background(new BackgroundFill(
+                backgroundColor,
+                CornerRadii.EMPTY,
+                javafx.geometry.Insets.EMPTY)));
     }
 }

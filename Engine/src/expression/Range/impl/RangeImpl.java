@@ -47,8 +47,9 @@ public class RangeImpl implements Range, Serializable{
     public Boolean isRangeValid(String topLeftCellId, String rightBottomCellId) {
         int sheetRowCount = sheet.getRowCount();
         int sheetColumnCount = sheet.getColumnCount();
-        checkValidCoordinate(topLeftCellId);
-        checkValidCoordinate(rightBottomCellId);
+
+        sheet.checkValidBounds(new CoordinateImpl(topLeftCellId));
+        sheet.checkValidBounds(new CoordinateImpl(rightBottomCellId));
 
         Coordinate leftCoordinate = new CoordinateImpl(topLeftCellId);
         Coordinate rightCoordinate = new CoordinateImpl(rightBottomCellId);

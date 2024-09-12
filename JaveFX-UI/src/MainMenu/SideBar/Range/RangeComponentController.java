@@ -48,6 +48,7 @@ public class RangeComponentController implements Initializable {
             //rangeListView.getItems().add(rangeNameBox.getText());
 
         }catch (Exception e){
+            //TODO: add error message as a pop up
             System.out.println("Error: " + e.getMessage());
         }
         finally {

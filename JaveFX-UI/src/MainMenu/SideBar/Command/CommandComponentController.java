@@ -13,12 +13,10 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -43,6 +41,11 @@ public class CommandComponentController implements Initializable {
     @FXML
     private ComboBox<String> alignmentBox;
 
+    @FXML
+    private ColorPicker textColorPicker;
+
+    @FXML
+    private ColorPicker backgroundColorPicker;
 
     private AppController mainController;
 
@@ -68,6 +71,24 @@ public class CommandComponentController implements Initializable {
         this.mainController = mainController;
     }
 
+    @FXML
+    void undoColorChangeBtnPressed(ActionEvent event) {
+    }
+    @FXML
+    void textColorPickerChoose(ActionEvent event) {
+        Color textColor = textColorPicker.getValue();
+        mainController.changeTextColorForSelectedCell(textColor);
+    }
+
+    @FXML
+    void backgroundColorChoose(ActionEvent event) {
+        Color backgroundColor = backgroundColorPicker.getValue();
+        mainController.changeBackgroundColorForSelectedCell(backgroundColor);
+    }
+    @FXML
+    void clearSelectionPressed(ActionEvent event) {
+
+    }
     @FXML
     void alignmentSelectionListener(ActionEvent event) {
         int selectedIndex = alignmentBox.getSelectionModel().getSelectedIndex();
@@ -157,5 +178,12 @@ public class CommandComponentController implements Initializable {
         Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
         popupStage.setScene(popupSortedSheet);
     }
+    public ColorPicker getBackgroundColorPicker() {
+        return backgroundColorPicker;
+    }
+    public ColorPicker getTextColorPicker() {
+        return textColorPicker;
+    }
+
 }
 

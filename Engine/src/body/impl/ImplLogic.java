@@ -16,6 +16,7 @@ import jakarta.xml.bind.Unmarshaller;
 //import jaxb.generated.STLSheet;
 
 import jaxb.generatedEx2.STLCell;
+import jaxb.generatedEx2.STLRange;
 import jaxb.generatedEx2.STLSheet;
 
 import java.io.*;
@@ -104,6 +105,12 @@ public class ImplLogic implements Logic,Serializable  {
 //
 //        return res;
 //    }
+//
+//    private STLSheet creatGeneratedObject(InputStream path)throws JAXBException {
+//        JAXBContext jc = JAXBContext.newInstance("jaxb.generated");
+//        Unmarshaller u = jc.createUnmarshaller();
+//        return (STLSheet) u.unmarshal(path);
+//    }
 
     private Sheet STLSheet2Sheet(STLSheet stlSheet) {
         String name = stlSheet.getName();
@@ -111,10 +118,19 @@ public class ImplLogic implements Logic,Serializable  {
         int width = stlSheet.getSTLLayout().getSTLSize().getColumnWidthUnits();
         int row = stlSheet.getSTLLayout().getRows();
         int col = stlSheet.getSTLLayout().getColumns();
-        //TODO add Ranges!!
         Sheet res = new ImplSheet(name,thickness,width,row,col);
+        List<STLRange> ranges = stlSheet.getSTLRanges().getSTLRange();
+
         List<STLCell> listofSTLCells = stlSheet.getSTLCells().getSTLCell();
         String cellId = null;
+
+        for (STLRange range : ranges) {
+            String rangeName = range.getName();
+            String topLeft = range.getSTLBoundaries().getFrom();
+            String bottomRight = range.getSTLBoundaries().getTo();
+            res.addRange(rangeName, topLeft, bottomRight);
+        }
+
         for (STLCell stlCell : listofSTLCells) {
             res.setVersion(0);
             cellId = stlCell.getColumn() + String.valueOf(stlCell.getRow());
@@ -130,11 +146,7 @@ public class ImplLogic implements Logic,Serializable  {
         Unmarshaller u = jc.createUnmarshaller();
         return (STLSheet) u.unmarshal(path);
     }
-//    private STLSheet creatGeneratedObject(InputStream path)throws JAXBException {
-//        JAXBContext jc = JAXBContext.newInstance("jaxb.generated");
-//        Unmarshaller u = jc.createUnmarshaller();
-//        return (STLSheet) u.unmarshal(path);
-//    }
+
     @Override
     public SheetDTO getSheet() {
         return new ImplSheetDTO(mainSheet.get(mainSheet.size() - 1));

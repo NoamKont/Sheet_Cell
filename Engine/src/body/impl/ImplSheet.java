@@ -113,8 +113,13 @@ public class ImplSheet implements Sheet, Serializable  {
 
     @Override
     public void addRange(String rangeName, String topLeftCellId, String rightBottomCellId) {
-        Range range = new RangeImpl(rangeName, topLeftCellId, rightBottomCellId, this);
-        rangeMap.putIfAbsent(rangeName, range);
+        if(rangeMap.containsKey(rangeName)){
+            throw new IllegalArgumentException("This range name already exist");
+        }
+        else{
+            Range range = new RangeImpl(rangeName, topLeftCellId, rightBottomCellId, this);
+            rangeMap.putIfAbsent(rangeName, range);
+        }
     }
 
     @Override
@@ -525,7 +530,7 @@ public class ImplSheet implements Sheet, Serializable  {
         return rangeMap.get(rangeName).getCells();
     }
 
-    private void checkValidBounds(Coordinate coordinate) {
+    public void checkValidBounds(Coordinate coordinate) {
         if(coordinate.getRow() > row || coordinate.getColumn() > col){
             throw new IllegalArgumentException("Cell: " + coordinate.toString() + " is out of bounds");
         }
@@ -597,23 +602,6 @@ public class ImplSheet implements Sheet, Serializable  {
             case "PLUS", "MINUS", "TIMES", "DIVIDE", "MOD", "POW", "CONCAT", "ABS", "SUB", "REF","EQUAL","BIGGER","NOT","OR","AND","LESS","IF","PERCENT","SUM","AVERAGE" -> true;
             default -> false;
         };
-    }
-
-    public static Object copyWithSerialization(Object object) {
-        try {
-            ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
-            ObjectOutputStream outStream = new ObjectOutputStream(byteOutStream);
-            outStream.writeObject(object);
-            outStream.flush();
-
-            ByteArrayInputStream byteInStream = new ByteArrayInputStream(byteOutStream.toByteArray());
-            ObjectInputStream inStream = new ObjectInputStream(byteInStream);
-
-            return inStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
 }
