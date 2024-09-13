@@ -14,11 +14,6 @@ public class Minus extends BinaryExpression implements Serializable {
     }
 
     @Override
-    public String getOperationSign() {
-        return "-";
-    }
-
-    @Override
     public String expressionTOtoString() {
         return "{MINUS," + getExpression1().expressionTOtoString() + "," + getExpression2().expressionTOtoString() + "}";
     }

@@ -156,7 +156,12 @@ public class AppController {
             }
         });
 
-
+        uiSheet.rangeMapProperty().addListener(new MapChangeListener<String, Set<Coordinate>>() {
+            @Override
+            public void onChanged(Change<? extends String, ? extends Set<Coordinate>> change) {
+                System.out.println("Range Map Changed");
+            }
+        });
 //        uiSheet.rangeMapProperty().addListener((MapChangeListener.Change<? extends String, ? extends Set<Coordinate>> change) -> {
 //            if (change.wasAdded()) {
 //                rangeComponentController.addRangeToList(change.getKey());

@@ -486,10 +486,8 @@ public class ImplSheet implements Sheet, Serializable  {
             case "AND" -> new And(args.get(0), args.get(1));
             case "NOT" -> new Not(args.get(0));
             case "PERCENT" -> new Percent(args.get(0), args.get(1));
-            //case "SUM" -> new Sum(rangeMap.get(args.get(0).expressionTOtoString().trim()));
             case "SUM" -> new Sum(rangeHelper(args.get(0).expressionTOtoString(), coordinate));
             case "AVERAGE" -> new Average(rangeHelper(args.get(0).expressionTOtoString(), coordinate));
-            //case "AVERAGE" -> new Average(rangeMap.get(args.get(0).expressionTOtoString().trim()));
             default -> throw new IllegalArgumentException("Unknown operator: " + operator);
         };
     }

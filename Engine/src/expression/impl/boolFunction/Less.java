@@ -26,10 +26,6 @@ public class Less extends BinaryExpression implements Serializable {
     }
 
     @Override
-    public String getOperationSign() {
-        return "";
-    }
-    @Override
     public String toString() {
         return "{LESS, " + getExpression1().toString() + ", " + getExpression2().toString() + "}";
     }

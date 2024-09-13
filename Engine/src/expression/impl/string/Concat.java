@@ -24,11 +24,6 @@ public class Concat extends BinaryExpression implements Serializable {
     }
 
     @Override
-    public String getOperationSign() {
-        return "";
-    }
-
-    @Override
     public String expressionTOtoString() {
         return "{CONCAT," + getExpression1().expressionTOtoString() + "," + getExpression2().expressionTOtoString() + "}";
     }

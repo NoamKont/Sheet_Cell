@@ -121,11 +121,6 @@ public class RangeImpl implements Range, Serializable{
     }
 
     @Override
-    public String getOperationSign() {
-        return "";
-    }
-
-    @Override
     public String expressionTOtoString() {
         return rangeName;
     }

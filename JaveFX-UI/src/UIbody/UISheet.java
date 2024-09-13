@@ -20,7 +20,6 @@ public class UISheet {
     private IntegerProperty thickness = new SimpleIntegerProperty();;
     private IntegerProperty width = new SimpleIntegerProperty();
     private Map<Coordinate, UICell> activeCells = new HashMap<>();
-    private ListProperty<String> rangeNames = new SimpleListProperty<>(FXCollections.observableArrayList());
     private MapProperty<String, Set<Coordinate>> ranges =  new SimpleMapProperty<>(FXCollections.observableHashMap());
     private Map<String, UIGridPart> rows = new HashMap<>();
     private Map<String, UIGridPart> columns = new HashMap<>();
@@ -37,8 +36,6 @@ public class UISheet {
         for (Map.Entry<String, Range> entry : sheetDTO.getAllRanges().entrySet()) {
             if(!ranges.containsKey(entry.getKey())){
                 ranges.put(entry.getKey(), entry.getValue().getCellCoordinates());
-                //test
-                rangeNames.add(entry.getKey());
             }
         }
         for(int i = 1; i <= sheetDTO.getRowCount(); i++){
@@ -50,7 +47,6 @@ public class UISheet {
                 if(sheetDTO.getActiveCells().containsKey(coordinate)){
                     UICell cell = new UICell(sheetDTO.getActiveCells().get(coordinate));
                     activeCells.put(coordinate, cell);
-                    //activeCells.put(coordinate, new UICell(sheetDTO.getActiveCells().get(coordinate)));
                     rows.get(String.valueOf(i)).addCell(cell);
                     columns.get(String.valueOf((char)('A' + j - 1))).addCell(cell);
 
@@ -58,7 +54,6 @@ public class UISheet {
                 else{
                     UICell cell = new UICell(String.valueOf((char)('A' + j - 1)) + (i));
                     activeCells.put(coordinate, cell);
-                    //activeCells.put(coordinate, new UICell(String.valueOf((char)('A' + j - 1)) + (i)));
                     rows.get(String.valueOf(i)).addCell(cell);
                     columns.get(String.valueOf((char)('A' + j - 1))).addCell(cell);
                 }
@@ -74,8 +69,6 @@ public class UISheet {
         for (Map.Entry<String, Range> entry : sheetDTO.getAllRanges().entrySet()) {
             if(!ranges.containsKey(entry.getKey())){
                 ranges.put(entry.getKey(), entry.getValue().getCellCoordinates());
-                //test
-                rangeNames.add(entry.getKey());
             }
         }
         //update all the cells that active by engine
@@ -88,9 +81,11 @@ public class UISheet {
     public void setCellLabel(Coordinate coordinate, Label label) {
         activeCells.get(coordinate).setCellLabel(label);
     }
+
     public UICell getCell(Coordinate coordinate) {
         return activeCells.get(coordinate);
     }
+
     public IntegerProperty sheetVersionProperty() {
         return sheetVersion;
     }
@@ -98,15 +93,13 @@ public class UISheet {
     public IntegerProperty thicknessProperty() {
         return thickness;
     }
+
     public IntegerProperty widthProperty() {
         return width;
     }
 
     public MapProperty<String, Set<Coordinate>> rangeMapProperty() {
         return ranges;
-    }
-    public ListProperty<String> rangeNamesProperty() {
-        return rangeNames;
     }
 
     public Set<Coordinate> getCoordinatesOfRange(String rangeName) {
@@ -121,6 +114,7 @@ public class UISheet {
     public UIGridPart getRow(String text) {
         return rows.get(text);
     }
+
     public UIGridPart getColumn(String text) {
         return columns.get(text);
     }

@@ -14,11 +14,6 @@ public class Plus extends BinaryExpression implements Serializable {
     }
 
     @Override
-    public String getOperationSign() {
-        return "+";
-    }
-
-    @Override
     protected EffectiveValue evaluate(EffectiveValue e1, EffectiveValue e2) {
         if(Number.CheckIsNan(e1, e2)){
             return new Number(true);

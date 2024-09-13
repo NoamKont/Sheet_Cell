@@ -24,11 +24,6 @@ public class Or extends BinaryExpression implements Serializable {
     }
 
     @Override
-    public String getOperationSign() {
-        return "";
-    }
-
-    @Override
     public String toString() {
         return "{OR, " + getExpression1().toString() + ", " + getExpression2().toString() + "}";
     }

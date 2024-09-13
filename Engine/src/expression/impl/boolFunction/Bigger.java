@@ -27,11 +27,6 @@ public class Bigger extends BinaryExpression implements Serializable {
     }
 
     @Override
-    public String getOperationSign() {
-        return "";
-    }
-
-    @Override
     public String toString() {
         return "{BIGGER, " + getExpression1().toString() + ", " + getExpression2().toString() + "}";
     }

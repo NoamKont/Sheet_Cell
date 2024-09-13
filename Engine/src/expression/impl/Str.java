@@ -23,11 +23,6 @@ public class Str implements EffectiveValue,Serializable {
     public EffectiveValue evaluate() {return new Str(string);}
 
     @Override
-    public String getOperationSign() {
-        return "";
-    }
-
-    @Override
     public String expressionTOtoString() {
         return string;
     }

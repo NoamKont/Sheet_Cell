@@ -9,7 +9,7 @@ public interface Expression {
      */
     EffectiveValue evaluate();
 
-    String getOperationSign();
+    //String getOperationSign();
 
     String expressionTOtoString();
 }

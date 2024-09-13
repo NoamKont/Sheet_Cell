@@ -22,7 +22,7 @@ public abstract class BinaryExpression implements Expression, Serializable {
 
     @Override
     public String toString() {
-        return "(" + expression1 + getOperationSign() + expression2 + ")";
+        return "{" + expression1.toString() + "," + expression2.toString() + "}";
     }
 
     abstract protected EffectiveValue evaluate(EffectiveValue evaluate, EffectiveValue evaluate2) throws NumberFormatException;

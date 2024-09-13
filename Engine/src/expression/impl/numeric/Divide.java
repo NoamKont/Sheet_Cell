@@ -26,15 +26,12 @@ public class Divide extends BinaryExpression implements Serializable {
     }
 
     @Override
-    public String getOperationSign() {return "/";}
-
-    @Override
     public String expressionTOtoString() {
         return "{DIVIDE, " + getExpression1().expressionTOtoString() + "," + getExpression2().expressionTOtoString() + "}";
     }
 
     @Override
     public String toString() {
-        return "{DIV, " + getExpression1().toString() + ", " + getExpression2().toString() + "}";
+        return "{DIVIDE, " + getExpression1().toString() + ", " + getExpression2().toString() + "}";
     }
 }

@@ -30,11 +30,6 @@ public class Bool implements EffectiveValue, Serializable{
     }
 
     @Override
-    public String getOperationSign() {
-        return "";
-    }
-
-    @Override
     public String expressionTOtoString() { return Boolean.toString(value);}
 
     @Override

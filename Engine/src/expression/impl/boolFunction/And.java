@@ -23,10 +23,7 @@ public class And extends BinaryExpression implements Serializable {
         }
     }
 
-    @Override
-    public String getOperationSign() {
-        return "";
-    }
+
 
     @Override
     public String toString() {

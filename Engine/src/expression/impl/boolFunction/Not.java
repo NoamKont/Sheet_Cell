@@ -15,11 +15,6 @@ public class Not extends UnaryExpression implements Serializable {
     }
 
     @Override
-    public String getOperationSign() {
-        return "";
-    }
-
-    @Override
     protected EffectiveValue evaluate(EffectiveValue evaluate) throws NumberFormatException {
         if(Bool.CheckIsUnknown(evaluate)){
             return new Bool(null, true);

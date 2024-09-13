@@ -30,11 +30,6 @@ public class ImplCell implements Cell,Serializable  {
         expression = new Empty();
         effectiveValue = new Empty();
     }
-//
-//    public ImplCell(double num){
-//        Number number = new Number(num);
-//        effectiveValue = number;
-//    }
 
     @Override
     public String getId() {

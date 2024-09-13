@@ -21,11 +21,6 @@ public class Reference implements EffectiveValue,Serializable {
     public EffectiveValue evaluate() {return new Reference(cell);}
 
     @Override
-    public String getOperationSign() {
-        return "";
-    }
-
-    @Override
     public String expressionTOtoString() {
         return "{REF," + cell.getId() + "}";
     }
