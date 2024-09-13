@@ -36,7 +36,7 @@ public class Number implements EffectiveValue, Serializable{
 
     @Override
     public String expressionTOtoString() {
-        return Integer.toString((int) num);
+        return Double.toString(num);
     }
 
     @Override

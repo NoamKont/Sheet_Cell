@@ -68,6 +68,7 @@ public class UICell {
     public void setCellLabel(Label label){
         cellLabel.set(label);
     }
+
     public StringProperty idProperty() {
         return id;
     }
