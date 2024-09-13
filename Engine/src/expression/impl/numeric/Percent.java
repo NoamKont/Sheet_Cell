@@ -27,11 +27,7 @@ public class Percent extends BinaryExpression implements Serializable {
 
     @Override
     public String toString() {
-        return "{PERCENT, " + getExpression1().toString() + ", " + getExpression2().toString() + "}";
+        return "{PERCENT, " + getExpression1().toString() + "," + getExpression2().toString() + "}";
     }
 
-    @Override
-    public String expressionTOtoString() {
-        return "{PERCENT," + getExpression1().expressionTOtoString() + "," + getExpression2().expressionTOtoString() + "}";
-    }
 }

@@ -27,10 +27,4 @@ public class Plus extends BinaryExpression implements Serializable {
         return "{PLUS, " + getExpression1().toString() + ", " + getExpression2().toString() + "}";
     }
 
-    @Override
-    public String expressionTOtoString() {
-        return "{PLUS," + getExpression1().expressionTOtoString() + "," + getExpression2().expressionTOtoString() + "}";
-    }
-
-
 }

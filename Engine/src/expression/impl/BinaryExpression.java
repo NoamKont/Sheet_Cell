@@ -35,8 +35,4 @@ public abstract class BinaryExpression implements Expression, Serializable {
         return expression2;
     }
 
-    public String expressionTOtoString(){
-        return "{" + expression1.expressionTOtoString() + "," + expression2.expressionTOtoString() + "}";
-    }
-
 }

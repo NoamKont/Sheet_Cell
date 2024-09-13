@@ -29,9 +29,4 @@ public class Less extends BinaryExpression implements Serializable {
     public String toString() {
         return "{LESS, " + getExpression1().toString() + ", " + getExpression2().toString() + "}";
     }
-
-    @Override
-    public String expressionTOtoString() {
-        return "{LESS," + getExpression1().expressionTOtoString() + "," + getExpression2().expressionTOtoString() + "}";
-    }
 }

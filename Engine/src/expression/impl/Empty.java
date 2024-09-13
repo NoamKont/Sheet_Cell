@@ -40,11 +40,6 @@ public class Empty implements EffectiveValue, Serializable {
     }
 
     @Override
-    public String expressionTOtoString() {
-        return "";
-    }
-
-    @Override
     public String toString(){
         return "";
     }

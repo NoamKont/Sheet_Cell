@@ -32,11 +32,6 @@ public class Sub  extends TrinaryExpression implements Serializable {
     }
 
     @Override
-    public String expressionTOtoString() {
-        return "{SUB," + getExpression1().expressionTOtoString() + "," + getExpression2().expressionTOtoString() + "," + getExpression3().expressionTOtoString() + "}";
-    }
-
-    @Override
     public String toString() {
         return "{SUB, " + getExpression1().toString() + ", " + getExpression2().toString() + ", " + getExpression3().toString() + "}";
     }

@@ -9,7 +9,7 @@ import javafx.beans.property.StringProperty;
 
 import java.io.Serializable;
 
-public class Reference implements EffectiveValue,Serializable {
+public class Reference implements EffectiveValue, Serializable {
 
     private Cell cell;
 
@@ -19,11 +19,6 @@ public class Reference implements EffectiveValue,Serializable {
 
     @Override
     public EffectiveValue evaluate() {return new Reference(cell);}
-
-    @Override
-    public String expressionTOtoString() {
-        return "{REF," + cell.getId() + "}";
-    }
 
     @Override
     public String toString() {

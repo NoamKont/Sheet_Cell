@@ -23,11 +23,6 @@ public class AbsoluteValue  extends UnaryExpression implements Serializable {
     }
 
     @Override
-    public String expressionTOtoString() {
-        return "{ABS," + getExpression().expressionTOtoString() + "}";
-    }
-
-    @Override
     public String toString() {
         return "{ABS, " + getExpression().toString() + "}";
     }

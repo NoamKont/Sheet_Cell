@@ -30,11 +30,6 @@ public class Number implements EffectiveValue, Serializable{
     }
 
     @Override
-    public String expressionTOtoString() {
-        return Double.toString(num);
-    }
-
-    @Override
     public String toString() {
         if(isNan)
             return "NaN";

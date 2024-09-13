@@ -24,12 +24,7 @@ public abstract class TrinaryExpression implements Expression, Serializable {
 //not being used
     @Override
     public String toString() {
-        //return "(" + expression1 + getOperationSign() + expression2 + ")";
-        return "{" + expression1.toString() + ", " + expression2.toString() + ", " + expression3.toString() + "}";
-    }
-
-    public String expressionTOtoString(){
-        return "{" + expression1.expressionTOtoString() + "," + expression2.expressionTOtoString() + "," + expression3.expressionTOtoString() + "}";
+        return "{" + expression1.toString() + "," + expression2.toString() + "," + expression3.toString() + "}";
     }
 
     abstract protected EffectiveValue evaluate(EffectiveValue evaluate, EffectiveValue evaluate2, EffectiveValue evaluate3) throws NumberFormatException;

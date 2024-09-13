@@ -23,11 +23,6 @@ public class Str implements EffectiveValue,Serializable {
     public EffectiveValue evaluate() {return new Str(string);}
 
     @Override
-    public String expressionTOtoString() {
-        return string;
-    }
-
-    @Override
     public String toString() {
         if (isUndifined) return "!UNDEFINED!";
         return string;

@@ -29,8 +29,4 @@ public class Not extends UnaryExpression implements Serializable {
         return "{NOT, " + getExpression().toString() + "}";
     }
 
-    @Override
-    public String expressionTOtoString() {
-        return "{NOT, " + getExpression().expressionTOtoString() + "}";
-    }
 }

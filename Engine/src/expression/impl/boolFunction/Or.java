@@ -28,8 +28,4 @@ public class Or extends BinaryExpression implements Serializable {
         return "{OR, " + getExpression1().toString() + ", " + getExpression2().toString() + "}";
     }
 
-    @Override
-    public String expressionTOtoString() {
-        return "{OR," + getExpression1().expressionTOtoString() + "," + getExpression2().expressionTOtoString() + "}";
-    }
 }

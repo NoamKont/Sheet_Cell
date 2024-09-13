@@ -36,11 +36,6 @@ public class Sum extends UnaryExpression implements Serializable {
     }
 
     @Override
-    public String expressionTOtoString() {
-        return "{SUM, " + getExpression().expressionTOtoString() + "}";
-    }
-
-    @Override
     public String toString() {
         return "{SUM, " + getExpression().toString() + "}";
     }

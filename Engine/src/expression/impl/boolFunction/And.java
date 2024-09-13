@@ -23,15 +23,9 @@ public class And extends BinaryExpression implements Serializable {
         }
     }
 
-
-
     @Override
     public String toString() {
         return "{AND, " + getExpression1().toString() + ", " + getExpression2().toString() + "}";
     }
 
-    @Override
-    public String expressionTOtoString() {
-        return "{AND, " + getExpression1().expressionTOtoString() + "," + getExpression2().expressionTOtoString() + "}";
-    }
 }

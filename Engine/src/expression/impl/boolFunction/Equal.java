@@ -28,11 +28,7 @@ public class Equal extends BinaryExpression implements Serializable {
 
     @Override
     public String toString() {
-        return "{EQUAL, " + getExpression1().toString() + ", " + getExpression2().toString() + "}";
+        return "{EQUAL, " + getExpression1().toString() + "," + getExpression2().toString() + "}";
     }
 
-    @Override
-    public String expressionTOtoString() {
-        return "{EQUAL," + getExpression1().expressionTOtoString() + "," + getExpression2().expressionTOtoString() + "}";
-    }
 }

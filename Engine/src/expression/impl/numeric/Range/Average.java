@@ -46,11 +46,6 @@ public class Average extends UnaryExpression implements Serializable {
     }
 
     @Override
-    public String expressionTOtoString() {
-        return "{AVERAGE, " + getExpression().expressionTOtoString() + "}";
-    }
-
-    @Override
     public String toString() {
         return "{AVERAGE, " + getExpression().toString() + "}";
     }

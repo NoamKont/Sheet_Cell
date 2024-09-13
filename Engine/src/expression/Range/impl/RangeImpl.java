@@ -121,7 +121,7 @@ public class RangeImpl implements Range, Serializable{
     }
 
     @Override
-    public String expressionTOtoString() {
+    public String toString() {
         return rangeName;
     }
 

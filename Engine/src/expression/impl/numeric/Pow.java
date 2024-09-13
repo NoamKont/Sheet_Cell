@@ -15,11 +15,6 @@ public class Pow extends BinaryExpression implements Serializable {
     }
 
     @Override
-    public String expressionTOtoString() {
-        return "{POW," + getExpression1().expressionTOtoString() + "," + getExpression2().expressionTOtoString() + "}";
-    }
-
-    @Override
     protected EffectiveValue evaluate(EffectiveValue e1, EffectiveValue e2) {
         if (Number.CheckIsNan(e1, e2)) {
             return new Number(true);

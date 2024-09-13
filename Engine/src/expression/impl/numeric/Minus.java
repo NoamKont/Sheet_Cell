@@ -14,11 +14,6 @@ public class Minus extends BinaryExpression implements Serializable {
     }
 
     @Override
-    public String expressionTOtoString() {
-        return "{MINUS," + getExpression1().expressionTOtoString() + "," + getExpression2().expressionTOtoString() + "}";
-    }
-
-    @Override
     protected EffectiveValue evaluate(EffectiveValue e1, EffectiveValue e2)throws NumberFormatException{
         if(Number.CheckIsNan(e1, e2)){
             return new Number(true);
@@ -29,7 +24,7 @@ public class Minus extends BinaryExpression implements Serializable {
 
     @Override
     public String toString() {
-        return "{MINUS, " + getExpression1().toString() + ", " + getExpression2().toString() + "}";
+        return "{MINUS, " + getExpression1().toString() + "," + getExpression2().toString() + "}";
     }
 
 

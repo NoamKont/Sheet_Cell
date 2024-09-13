@@ -165,7 +165,8 @@ public class ImplSheet implements Sheet, Serializable  {
         //why we need it?
         //cell.setEffectiveValue(null);
         Expression currExpression = stringToExpression(value,currCoord);
-        cell.setOriginalValue(currExpression.expressionTOtoString());
+        //cell.setOriginalValue(currExpression.expressionTOtoString());
+        cell.setOriginalValue(currExpression.toString());
         cell.setExpression(currExpression);
         cell.setLastVersionUpdate(sheetVersion);
         countUpdateCell++;
@@ -486,8 +487,8 @@ public class ImplSheet implements Sheet, Serializable  {
             case "AND" -> new And(args.get(0), args.get(1));
             case "NOT" -> new Not(args.get(0));
             case "PERCENT" -> new Percent(args.get(0), args.get(1));
-            case "SUM" -> new Sum(rangeHelper(args.get(0).expressionTOtoString(), coordinate));
-            case "AVERAGE" -> new Average(rangeHelper(args.get(0).expressionTOtoString(), coordinate));
+            case "SUM" -> new Sum(rangeHelper(args.get(0).toString(), coordinate));
+            case "AVERAGE" -> new Average(rangeHelper(args.get(0).toString(), coordinate));
             default -> throw new IllegalArgumentException("Unknown operator: " + operator);
         };
     }
