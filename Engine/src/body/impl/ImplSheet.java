@@ -165,7 +165,6 @@ public class ImplSheet implements Sheet, Serializable  {
         //why we need it?
         //cell.setEffectiveValue(null);
         Expression currExpression = stringToExpression(value,currCoord);
-        //cell.setOriginalValue(currExpression.expressionTOtoString());
         cell.setOriginalValue(currExpression.toString());
         cell.setExpression(currExpression);
         cell.setLastVersionUpdate(sheetVersion);
@@ -456,6 +455,7 @@ public class ImplSheet implements Sheet, Serializable  {
                 }
                 break;
             case "SUB":
+            case"IF":
                 if (args.size() != 4){
                     res = false;
                     throw new NumberFormatException("Error: Incorrect number of arguments. Expected 3 arguments.");
@@ -489,6 +489,7 @@ public class ImplSheet implements Sheet, Serializable  {
             case "PERCENT" -> new Percent(args.get(0), args.get(1));
             case "SUM" -> new Sum(rangeHelper(args.get(0).toString(), coordinate));
             case "AVERAGE" -> new Average(rangeHelper(args.get(0).toString(), coordinate));
+            case "IF" -> new If(args.get(0), args.get(1), args.get(2));
             default -> throw new IllegalArgumentException("Unknown operator: " + operator);
         };
     }

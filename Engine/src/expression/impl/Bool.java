@@ -16,10 +16,6 @@ public class Bool implements EffectiveValue, Serializable{
         isunknown = unknown;
     }
 
-//    public Bool(boolean unknown) {
-//        this.isunknown = unknown;
-//    }
-
     public Bool(String val) {
         this.value = Boolean.parseBoolean(val);
     }
