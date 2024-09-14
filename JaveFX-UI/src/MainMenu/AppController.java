@@ -156,28 +156,20 @@ public class AppController {
             }
         });
 
-        uiSheet.rangeMapProperty().addListener(new MapChangeListener<String, Set<Coordinate>>() {
-            @Override
-            public void onChanged(Change<? extends String, ? extends Set<Coordinate>> change) {
-                System.out.println("Range Map Changed");
+    }
+    private void rangeMapListener() {
+        uiSheet.rangeMapProperty().addListener((MapChangeListener.Change<? extends String, ? extends Set<Coordinate>> change) -> {
+            if (change.wasAdded()) {
+                rangeComponentController.addRangeToList(change.getKey());
+                System.out.println("Added: " + change.getKey() + " -> " + change.getValueAdded());
+            }
+            if (change.wasRemoved()) {
+                selectedRange.set(null);
+                rangeComponentController.deleteRangeFromList(change.getKey());
+                System.out.println("Removed: " + change.getKey() + " -> " + change.getValueRemoved());
             }
         });
-//        uiSheet.rangeMapProperty().addListener((MapChangeListener.Change<? extends String, ? extends Set<Coordinate>> change) -> {
-//            if (change.wasAdded()) {
-//                rangeComponentController.addRangeToList(change.getKey());
-//                System.out.println("Added: " + change.getKey() + " -> " + change.getValueAdded());
-//            }
-//            if (change.wasRemoved()) {
-//                rangeComponentController.deleteRangeFromList(change.getKey());
-//                System.out.println("Removed: " + change.getKey() + " -> " + change.getValueRemoved());
-//            }
-//        });
-
-
-
-
     }
-
 
 
     public void createSheet(String filePath) {
@@ -186,6 +178,8 @@ public class AppController {
             logic.creatNewSheet(filePath);
             selectedCell.clearCell();
             uiSheet = new UISheet(logic.getSheet()); //set the module
+            rangeMapListener();
+            uiSheet.updateSheet(logic.getSheet());
             createViewSheet();
             headerComponentController.newSheetHeader();
             headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
@@ -352,6 +346,7 @@ public class AppController {
 
     public void deleteRangeFromSheet(String selectedItem) {
         logic.deleteRange(selectedItem);
+        uiSheet.updateSheet(logic.getSheet());
     }
 
     public UISheet sortSheet(String topLeft, String bottomRight,String... columns) {

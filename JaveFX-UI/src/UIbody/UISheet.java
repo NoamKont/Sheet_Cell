@@ -36,6 +36,7 @@ public class UISheet {
         for (Map.Entry<String, Range> entry : sheetDTO.getAllRanges().entrySet()) {
             if(!ranges.containsKey(entry.getKey())){
                 ranges.put(entry.getKey(), entry.getValue().getCellCoordinates());
+
             }
         }
         for(int i = 1; i <= sheetDTO.getRowCount(); i++){
@@ -65,7 +66,8 @@ public class UISheet {
         thickness.setValue(sheetDTO.getThickness());
         width.setValue(sheetDTO.getWidth());
         sheetVersion.setValue(sheetDTO.getVersion());
-        //add the range as entry
+        //RESET range map and add the all ranges as entry
+        ranges.clear();
         for (Map.Entry<String, Range> entry : sheetDTO.getAllRanges().entrySet()) {
             if(!ranges.containsKey(entry.getKey())){
                 ranges.put(entry.getKey(), entry.getValue().getCellCoordinates());
