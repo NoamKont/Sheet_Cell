@@ -86,6 +86,10 @@ public class UISheet {
         return activeCells.get(coordinate);
     }
 
+    public Map<Coordinate,UICell> getActiveCells() {
+        return activeCells;
+    }
+
     public IntegerProperty sheetVersionProperty() {
         return sheetVersion;
     }

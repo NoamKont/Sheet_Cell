@@ -2,7 +2,10 @@ package MainMenu.SideBar.Command;
 
 
 import MainMenu.AppController;
+import UIbody.UICell;
 import UIbody.UISheet;
+import body.Coordinate;
+import body.impl.CoordinateImpl;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +27,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 
@@ -153,10 +157,29 @@ public class CommandComponentController implements Initializable {
 
     public void sortSheet(String topLeft, String bottomRight, String[] columns,Stage popupStage) {
         UISheet sortedSheet = mainController.sortSheet(topLeft, bottomRight, columns);
+        updateStyleSheet(sortedSheet);
         ScrollPane popupLayout = mainController.creatSheetComponent(sortedSheet);
         Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
         popupStage.setScene(popupSortedSheet);
 
+    }
+
+    private void updateStyleSheet(UISheet newSheet) {
+        UISheet currentSheet = mainController.getUiSheet();
+        Map<Coordinate, UICell> activeCellsOfNewSheet = newSheet.getActiveCells();
+        activeCellsOfNewSheet.forEach((coordinate, cell) -> {
+            Label oldLabel = currentSheet.getCell(new CoordinateImpl(cell.idProperty().get())).getCellLabel();
+            Label newLabel = cell.getCellLabel();
+            if(oldLabel != null){
+                copyCellStyle(oldLabel, newLabel);
+            }
+        });
+    }
+
+    public void copyCellStyle(Label labelSrc, Label labelDest) {
+        labelDest.setTextFill(labelSrc.getTextFill());
+        labelDest.setBackground(labelSrc.getBackground());
+        labelDest.setAlignment(labelSrc.getAlignment());
     }
 
     public Text getChosenColumnRow() {
@@ -174,6 +197,7 @@ public class CommandComponentController implements Initializable {
 
     public void filterSheet(String topLeft, String bottomRight, List<List<String>> values, List<String> columns, Stage popupStage) {
         UISheet filterSheet = mainController.filterSheet(topLeft, bottomRight, values, columns);
+        updateStyleSheet(filterSheet);
         ScrollPane popupLayout = mainController.creatSheetComponent(filterSheet);
         Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
         popupStage.setScene(popupSortedSheet);

@@ -5,6 +5,7 @@ import dto.impl.CellDTO;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 
 public class UICell {
     private StringProperty id = new SimpleStringProperty();
@@ -26,10 +27,13 @@ public class UICell {
         effectiveValue.setValue(Cell.getOriginalEffectiveValue().toString());
         cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
         cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
+        initCellLabel();
+
     }
 
     public UICell(String id){
         this.id.setValue(id);
+        initCellLabel();
     }
 
     public UICell(){}
@@ -115,5 +119,11 @@ public class UICell {
         effectiveValue.setValue("");
         cellsDependsOnThem.set(FXCollections.observableArrayList());
         cellsDependsOnHim.set(FXCollections.observableArrayList());
+    }
+    private void initCellLabel() {
+        Label label = new Label();
+        label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        label.setAlignment(javafx.geometry.Pos.CENTER);
+        cellLabel.set(label);
     }
 }

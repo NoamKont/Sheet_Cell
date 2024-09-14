@@ -213,7 +213,7 @@ public class AppController {
         //rangeComponentController.bindModuleToUI(uiSheet);
     }
 
-    public ScrollPane creatSheetComponent(UISheet uiSheet) {
+    public ScrollPane creatSheetComponent(UISheet Sheet) {
         GridPane dynamicGrid = new GridPane();
         //add '1' for the header
         int numRows = logic.getRowsNumber() + 1;
@@ -246,32 +246,31 @@ public class AppController {
                 if (row == 0 && col > 0) {
                     // Top row (column headers)
                     Label label = new Label(Character.toString((char) ('A' + col - 1))); // "A", "B", "C", ...
-                    dynamicGrid.getColumnConstraints().get(col).prefWidthProperty().bind(uiSheet.getColumn(label.getText()).widthProperty());
+                    dynamicGrid.getColumnConstraints().get(col).prefWidthProperty().bind(Sheet.getColumn(label.getText()).widthProperty());
                     // Set click event handler
                     label.setOnMouseClicked(event -> {
                         System.out.println("Label " + label.getText() +" clicked: " + label.getText());
-                        selectedRowOrColumn.set(uiSheet.getColumn(label.getText()));
+                        selectedRowOrColumn.set(Sheet.getColumn(label.getText()));
                     });
                     setHeaderLable(anchorPane, label);
                 } else if (col == 0 && row > 0) {
                     // First column (row headers)
                     Label label = new Label(Integer.toString(row)); // "1", "2", "3", ..
-                    dynamicGrid.getRowConstraints().get(row).prefHeightProperty().bind(uiSheet.getRow(label.getText()).thicknessProperty());
+                    dynamicGrid.getRowConstraints().get(row).prefHeightProperty().bind(Sheet.getRow(label.getText()).thicknessProperty());
                     // Set click event handler
                     label.setOnMouseClicked(event -> {
                         System.out.println("Label " + label.getText() +" clicked: " + label.getText());
-                        selectedRowOrColumn.set(uiSheet.getRow(label.getText()));
+                        selectedRowOrColumn.set(Sheet.getRow(label.getText()));
                     });
                     setHeaderLable(anchorPane, label);
                 } else if (row > 0 && col > 0) {
                     String cellID = fromDotToCellID(row, col);
-                    Label label = new Label();
+                    Label label = Sheet.getCell(new CoordinateImpl(cellID)).getCellLabel();
+
                     label.getStyleClass().add("single-cell");
                     Coordinate coordinate = new CoordinateImpl(cellID);
-                    label.textProperty().bind(uiSheet.getCell(coordinate).effectiveValueProperty());
-                    uiSheet.setCellLabel(coordinate, label);
-                    label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                    label.setAlignment(javafx.geometry.Pos.CENTER);
+                    label.textProperty().bind(Sheet.getCell(coordinate).effectiveValueProperty());
+                    Sheet.setCellLabel(coordinate, label);
                     AnchorPane.setTopAnchor(label, 0.0);
                     AnchorPane.setBottomAnchor(label, 0.0);
                     AnchorPane.setLeftAnchor(label, 0.0);
@@ -281,7 +280,7 @@ public class AppController {
                     // Set click event handler
                     label.setOnMouseClicked(event -> {
                         System.out.println("Label clicked: " + label.getText());
-                        selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(cellID)));
+                        selectedCellProperty.set(Sheet.getCell(new CoordinateImpl(cellID)));
                         selectedCell.updateUICell(selectedCellProperty.get());
                     });
                 }
@@ -305,7 +304,6 @@ public class AppController {
     private void createViewSheet() {
             ScrollPane scrollPane = creatSheetComponent(uiSheet);
             bodyComponent.setCenter(scrollPane);
-
             bodyComponent.setMinWidth(0);
             bodyComponent.setMinHeight(0);
     }
