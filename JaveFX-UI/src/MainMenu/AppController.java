@@ -15,7 +15,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -45,10 +44,10 @@ public class AppController {
     @FXML private ScrollPane headerComponent;
     @FXML private HeaderComponentController headerComponentController;
 
-    @FXML private AnchorPane rangeComponent;
+    @FXML private GridPane rangeComponent;
     @FXML private RangeComponentController rangeComponentController;
 
-    @FXML private AnchorPane commandComponent;
+    @FXML private VBox commandComponent;
     @FXML private CommandComponentController commandComponentController;
 
 
@@ -123,6 +122,7 @@ public class AppController {
                 uiSheet.getCoordinatesOfRange(oldValue).forEach(coordinate -> {
                     uiSheet.getCell(coordinate).getCellLabel().getStyleClass().remove("selected-range");
                 });
+                System.out.println("Unselected Range: " + oldValue);
             }
         });
 
@@ -157,20 +157,20 @@ public class AppController {
         });
 
     }
+
     private void rangeMapListener() {
+        rangeComponentController.getRangeListView().getItems().clear();
         uiSheet.rangeMapProperty().addListener((MapChangeListener.Change<? extends String, ? extends Set<Coordinate>> change) -> {
             if (change.wasAdded()) {
                 rangeComponentController.addRangeToList(change.getKey());
                 System.out.println("Added: " + change.getKey() + " -> " + change.getValueAdded());
             }
             if (change.wasRemoved()) {
-                selectedRange.set(null);
                 rangeComponentController.deleteRangeFromList(change.getKey());
                 System.out.println("Removed: " + change.getKey() + " -> " + change.getValueRemoved());
             }
         });
     }
-
 
     public void createSheet(String filePath) {
         // Create a Sheet
@@ -197,7 +197,7 @@ public class AppController {
         headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
         selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
         selectedCell.updateUICell(selectedCellProperty.get());
-        //selectedCell.updateUICell(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
+
 
     }
 
@@ -246,7 +246,7 @@ public class AppController {
                         System.out.println("Label " + label.getText() +" clicked: " + label.getText());
                         selectedRowOrColumn.set(Sheet.getColumn(label.getText()));
                     });
-                    setHeaderLable(anchorPane, label);
+                    setHeaderLabel(anchorPane, label);
                 } else if (col == 0 && row > 0) {
                     // First column (row headers)
                     Label label = new Label(Integer.toString(row)); // "1", "2", "3", ..
@@ -256,7 +256,7 @@ public class AppController {
                         System.out.println("Label " + label.getText() +" clicked: " + label.getText());
                         selectedRowOrColumn.set(Sheet.getRow(label.getText()));
                     });
-                    setHeaderLable(anchorPane, label);
+                    setHeaderLabel(anchorPane, label);
                 } else if (row > 0 && col > 0) {
                     String cellID = fromDotToCellID(row, col);
                     Label label = Sheet.getCell(new CoordinateImpl(cellID)).getCellLabel();
@@ -302,7 +302,7 @@ public class AppController {
             bodyComponent.setMinHeight(0);
     }
 
-    private void setHeaderLable(AnchorPane anchorPane, Label label) {
+    private void setHeaderLabel(AnchorPane anchorPane, Label label) {
         label.getStyleClass().add("headers-cell");
         label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         label.setAlignment(Pos.CENTER);
@@ -313,7 +313,6 @@ public class AppController {
         anchorPane.getChildren().add(label);
     }
 
-
     private String fromDotToCellID(int row, int col){
         return String.valueOf((char)('A' + col - 1)) + (row);
     }
@@ -323,13 +322,12 @@ public class AppController {
     }
 
     public void addRangeToSheet(String rangeName, String topLeft, String bottomRight) {
-        logic.addRangeToSheet(rangeName,topLeft,bottomRight);
-        uiSheet.updateSheet(logic.getSheet());
+        Set<Coordinate> coordinates = logic.addRangeToSheet(rangeName,topLeft,bottomRight);
+        uiSheet.addRange(rangeName, coordinates);
     }
 
     public void setSelectedRange(String newValue) {
         selectedRange.set(newValue);
-        System.out.println("Selected Range: " + selectedRange.get());
     }
 
     public void alignCells(Pos pos) {
@@ -345,8 +343,14 @@ public class AppController {
     }
 
     public void deleteRangeFromSheet(String selectedItem) {
-        logic.deleteRange(selectedItem);
-        uiSheet.updateSheet(logic.getSheet());
+        selectedRange.set(null);
+        try {
+            logic.deleteRange(selectedItem);
+            uiSheet.deleteRange(selectedItem);
+
+        }catch (Exception e){
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     public UISheet sortSheet(String topLeft, String bottomRight,String... columns) {
@@ -369,6 +373,7 @@ public class AppController {
         popupStage.showAndWait();
     }
 
+    //TODO: change it only to the range
     public List<String> getValuesFromColumns(Integer columnIndex) {
         return logic.getSheet().getValuesFromColumn(columnIndex);
     }

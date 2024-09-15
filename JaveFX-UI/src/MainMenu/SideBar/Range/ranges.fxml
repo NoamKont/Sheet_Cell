@@ -4,57 +4,55 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="250.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.SideBar.Range.RangeComponentController">
+<GridPane minHeight="250.0" minWidth="210.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.SideBar.Range.RangeComponentController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="72.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="157.0" minHeight="10.0" prefHeight="98.0" vgrow="NEVER" />
+      <RowConstraints maxHeight="69.0" minHeight="19.0" prefHeight="39.0" vgrow="NEVER" />
+      <RowConstraints maxHeight="44.0" minHeight="34.0" prefHeight="41.0" vgrow="NEVER" />
+   </rowConstraints>
    <children>
-      <GridPane layoutX="7.0" layoutY="1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints maxHeight="72.0" minHeight="0.0" prefHeight="72.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="157.0" minHeight="10.0" prefHeight="98.0" vgrow="NEVER" />
-            <RowConstraints maxHeight="69.0" minHeight="19.0" prefHeight="39.0" vgrow="NEVER" />
-            <RowConstraints maxHeight="44.0" minHeight="34.0" prefHeight="41.0" vgrow="NEVER" />
-         </rowConstraints>
+      <Button fx:id="deleteRangeBtn" disable="true" mnemonicParsing="false" onAction="#deleteRangeAction" text="Delete Range" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets bottom="10.0" left="5.0" right="5.0" />
+         </GridPane.margin>
+      </Button>
+      <Button fx:id="addRange" alignment="CENTER" mnemonicParsing="false" onAction="#addRangeToSheet" text="add new Range" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets bottom="10.0" left="5.0" right="5.0" />
+         </GridPane.margin>
+      </Button>
+      <VBox alignment="BOTTOM_CENTER" prefHeight="101.0" prefWidth="70.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowSpan="2">
          <children>
-            <Button fx:id="deleteRangeBtn" disable="true" mnemonicParsing="false" onAction="#deleteRangeAction" text="Delete Range" GridPane.rowIndex="3">
-               <GridPane.margin>
-                  <Insets bottom="10.0" left="5.0" right="5.0" />
-               </GridPane.margin>
-            </Button>
-            <Button fx:id="addRange" mnemonicParsing="false" onAction="#addRangeToSheet" text="add new Range" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <GridPane.margin>
-                  <Insets bottom="10.0" left="5.0" right="5.0" />
-               </GridPane.margin>
-            </Button>
-            <VBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2">
-               <children>
-                  <TextField fx:id="rangeNameBox" maxWidth="100.0" promptText="Name" />
-                  <TextField fx:id="TopLeft" maxWidth="100.0" promptText="TopLeft" />
-                  <TextField fx:id="BottomRight" maxWidth="100.0" promptText="BottomRight" />
-               </children>
-               <GridPane.margin>
-                  <Insets left="5.0" />
-               </GridPane.margin>
-            </VBox>
-            <ListView fx:id="rangeListView" prefHeight="147.0" prefWidth="87.0" GridPane.rowSpan="2">
-               <GridPane.margin>
-                  <Insets bottom="10.0" top="10.0" />
-               </GridPane.margin>
-            </ListView>
-            <Button fx:id="clearOptionBtn" mnemonicParsing="false" onAction="#clearOptionChoosen" prefWidth="87.0" text="Clear" GridPane.rowIndex="2">
-               <GridPane.margin>
-                  <Insets bottom="10.0" left="5.0" right="5.0" />
-               </GridPane.margin>
-            </Button>
+            <TextField fx:id="rangeNameBox" maxWidth="100.0" promptText="Name" />
+            <TextField fx:id="TopLeft" maxWidth="100.0" promptText="TopLeft" />
+            <TextField fx:id="BottomRight" maxWidth="100.0" promptText="BottomRight" />
          </children>
-      </GridPane>
+         <GridPane.margin>
+            <Insets left="5.0" />
+         </GridPane.margin>
+      </VBox>
+      <ListView fx:id="rangeListView" onMouseClicked="#selectedRangePressed" prefHeight="168.0" prefWidth="97.0" GridPane.hgrow="ALWAYS" GridPane.rowSpan="2">
+         <GridPane.margin>
+            <Insets top="10.0" />
+         </GridPane.margin>
+      </ListView>
+      <Button fx:id="clearOptionBtn" alignment="CENTER" mnemonicParsing="false" onAction="#clearOptionChoosen" prefWidth="87.0" text="Clear" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets left="5.0" right="5.0" />
+         </GridPane.margin>
+      </Button>
    </children>
-</AnchorPane>
+   <padding>
+      <Insets left="3.0" right="3.0" />
+   </padding>
+</GridPane>

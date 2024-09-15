@@ -22,6 +22,8 @@ import jaxb.generatedEx2.STLSheet;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import body.Coordinate;
 
 
@@ -203,8 +205,8 @@ public class ImplLogic implements Logic,Serializable  {
     }
 
     @Override
-    public void addRangeToSheet(String rangeName, String topLeft, String bottomRight) {
-        mainSheet.get(mainSheet.size() - 1).addRange(rangeName, topLeft, bottomRight);
+    public Set<Coordinate> addRangeToSheet(String rangeName, String topLeft, String bottomRight) {
+        return mainSheet.get(mainSheet.size() - 1).addRange(rangeName, topLeft, bottomRight);
     }
 
     @Override

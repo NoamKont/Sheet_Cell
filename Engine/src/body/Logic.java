@@ -7,6 +7,7 @@ import jakarta.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 public interface Logic {
     CellDTO getCell(String cellID);
@@ -26,5 +27,5 @@ public interface Logic {
     SheetDTO sortSheet(String topLeft, String bottomRight, String... columns);
     SheetDTO filterSheet(String topLeft, String bottomRight, List<List<String>> value, List<String> columns);
 
-    void addRangeToSheet(String rangeName,String topLeft, String bottomRight);
+    Set<Coordinate> addRangeToSheet(String rangeName, String topLeft, String bottomRight);
 }

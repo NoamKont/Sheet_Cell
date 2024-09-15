@@ -23,7 +23,7 @@ public interface Sheet {
     void setVersion(int version);
     void setUpdateCellCount(int countUpdateCell);
 
-    void addRange(String rangeName, String topLeftCellId, String rightBottomCellId);
+    Set<Coordinate> addRange(String rangeName, String topLeftCellId, String rightBottomCellId);
     void deleteRange(String rangeName);
 
     void updateCell(String cellId, String value);

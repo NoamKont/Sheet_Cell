@@ -2,17 +2,22 @@ package MainMenu.SideBar.Range;
 
 import MainMenu.AppController;
 import UIbody.UISheet;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
 
 public class RangeComponentController implements Initializable {
 
@@ -75,13 +80,11 @@ public class RangeComponentController implements Initializable {
         //rangeListView.getItems().remove(rangeListView.getSelectionModel().getSelectedItem());
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         rangeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue != null){
                 deleteRangeBtn.setDisable(false);
-                mainController.setSelectedRange(newValue);
             }
             else{
                 deleteRangeBtn.setDisable(true);
@@ -91,12 +94,18 @@ public class RangeComponentController implements Initializable {
 
     }
 
+    @FXML
+    void selectedRangePressed(MouseEvent event) {
+        mainController.setSelectedRange(rangeListView.getSelectionModel().getSelectedItem());
+    }
     public void addRangeToList(String key) {
         rangeListView.getItems().add(key);
+        rangeListView.getSelectionModel().clearSelection();
     }
 
     public void deleteRangeFromList(String key) {
         rangeListView.getItems().remove(key);
+        rangeListView.getSelectionModel().clearSelection();
     }
 
     public ListView<String> getRangeListView(){

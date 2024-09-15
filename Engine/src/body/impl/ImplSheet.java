@@ -112,13 +112,14 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
-    public void addRange(String rangeName, String topLeftCellId, String rightBottomCellId) {
+    public Set<Coordinate> addRange(String rangeName, String topLeftCellId, String rightBottomCellId) {
         if(rangeMap.containsKey(rangeName)){
             throw new IllegalArgumentException("This range name already exist");
         }
         else{
             Range range = new RangeImpl(rangeName, topLeftCellId, rightBottomCellId, this);
             rangeMap.putIfAbsent(rangeName, range);
+            return range.getCellCoordinates();
         }
     }
 

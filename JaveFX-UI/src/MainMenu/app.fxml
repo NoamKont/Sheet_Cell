@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:id="bodyComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="650.0" prefHeight="650.0" stylesheets="@single-cell.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.AppController">
+
+<BorderPane fx:id="bodyComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="650.0" minWidth="-Infinity" prefHeight="677.0" prefWidth="1005.0" stylesheets="@single-cell.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.AppController">
    <opaqueInsets>
       <Insets />
    </opaqueInsets>
    <top>
-      <fx:include fx:id="headerComponent" source="Header/header.fxml" />
+      <fx:include fx:id="headerComponent" minWidth="100.0" prefHeight="100.0" source="Header/header.fxml" />
    </top>
    <left>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <AnchorPane prefHeight="254.0" prefWidth="217.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" BorderPane.alignment="CENTER">
+         <content>
+            <AnchorPane minHeight="570.0">
                <children>
-                  <fx:include fx:id="commandComponent" source="SideBar/Command/commads.fxml" />
-               </children></AnchorPane>
-            <AnchorPane layoutY="308.0" maxHeight="325.0" maxWidth="-Infinity" prefHeight="229.0" prefWidth="215.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-               <children>
-                  <fx:include fx:id="rangeComponent" source="SideBar/Range/ranges.fxml" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="3.0" />
+                  <fx:include fx:id="commandComponent" maxHeight="-Infinity" maxWidth="-Infinity" source="SideBar/Command/commads.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <fx:include fx:id="rangeComponent" source="SideBar/Range/ranges.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="315.0" />
                </children>
             </AnchorPane>
-         </children>
-      </AnchorPane>
+         </content>
+      </ScrollPane>
    </left>
 </BorderPane>

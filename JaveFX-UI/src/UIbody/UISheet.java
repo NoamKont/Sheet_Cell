@@ -32,7 +32,7 @@ public class UISheet {
         thickness.setValue(sheetDTO.getThickness());
         width.setValue(sheetDTO.getWidth());
         sheetVersion.setValue(sheetDTO.getVersion());
-
+        //range map and add the all ranges as entry
         for (Map.Entry<String, Range> entry : sheetDTO.getAllRanges().entrySet()) {
             if(!ranges.containsKey(entry.getKey())){
                 ranges.put(entry.getKey(), entry.getValue().getCellCoordinates());
@@ -66,6 +66,7 @@ public class UISheet {
         thickness.setValue(sheetDTO.getThickness());
         width.setValue(sheetDTO.getWidth());
         sheetVersion.setValue(sheetDTO.getVersion());
+
         //RESET range map and add the all ranges as entry
         ranges.clear();
         for (Map.Entry<String, Range> entry : sheetDTO.getAllRanges().entrySet()) {
@@ -78,6 +79,13 @@ public class UISheet {
             Coordinate coordinate = new CoordinateImpl(entry.getKey());
             activeCells.get(coordinate).updateUICell(entry.getValue());
         }
+    }
+
+    public void addRange(String rangeName, Set<Coordinate> coordinates) {
+        ranges.put(rangeName, coordinates);
+    }
+    public void deleteRange(String rangeName) {
+        ranges.remove(rangeName);
     }
 
     public void setCellLabel(Coordinate coordinate, Label label) {
