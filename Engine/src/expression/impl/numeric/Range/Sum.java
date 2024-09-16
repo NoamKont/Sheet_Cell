@@ -18,7 +18,7 @@ public class Sum extends UnaryExpression implements Serializable {
     @Override
     protected EffectiveValue evaluate(EffectiveValue evaluate) throws NumberFormatException {
         if(evaluate == null){
-            throw new NumberFormatException("ERROR!, No such Range founded.");
+            throw new NumberFormatException("No such Range founded.");
         }
         else if (evaluate instanceof Range) {
             double res = 0.0;
@@ -31,7 +31,7 @@ public class Sum extends UnaryExpression implements Serializable {
             return new Number(res);
         }
         else{
-            throw new NumberFormatException("ERROR!, SUM function must get valid Range.");
+            throw new NumberFormatException("SUM function must get valid Range.");
         }
     }
 

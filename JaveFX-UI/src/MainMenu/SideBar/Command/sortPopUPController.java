@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -49,7 +50,20 @@ public class sortPopUPController {
         String topLeft = topLeftText.getText().toUpperCase();
         String bottomRight = bottomRightText.getText().toUpperCase();
         String[] columns = getColumns();
-        commandComponentController.sortSheet(topLeft, bottomRight, columns,popupStage);
+        try{
+            commandComponentController.sortSheet(topLeft, bottomRight, columns,popupStage);
+        }catch (Exception e) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error in sorting sheet");
+        alert.setContentText(e.getMessage());
+        alert.showAndWait();
+        e.printStackTrace();
+        }
+        finally {
+            topLeftText.clear();
+            bottomRightText.clear();
+        }
 
     }
 

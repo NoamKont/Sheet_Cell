@@ -43,7 +43,20 @@ public class FilterPopUpController {
         String bottomRight = bottomRightText.getText().toUpperCase();
         List<String> columns = getColumns();
         List<List<String>> values = getValues();
-        commandComponentController.filterSheet(topLeft, bottomRight, values, columns,popupStage);
+        try{
+            commandComponentController.filterSheet(topLeft, bottomRight, values, columns,popupStage);
+        }catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error in filtering sheet");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            e.printStackTrace();
+        }
+        finally {
+            topLeftText.clear();
+            bottomRightText.clear();
+        }
     }
 
     @FXML

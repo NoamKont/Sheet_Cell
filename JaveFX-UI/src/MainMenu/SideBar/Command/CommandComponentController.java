@@ -55,16 +55,18 @@ public class CommandComponentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         // alignment box
         ObservableList<String> options =
                 FXCollections.observableArrayList( "Left", "Center", "Right" );
         alignmentBox.setItems(options);
 
-
+        //width spinners
         SpinnerValueFactory<Integer> widthValueFactory =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 200);
         widthSpinner.setValueFactory(widthValueFactory);
 
+        //thickness spinners
         SpinnerValueFactory<Integer> thicknessValueFactory =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 200);
         thicknessSpinner.setValueFactory(thicknessValueFactory);
@@ -89,9 +91,10 @@ public class CommandComponentController implements Initializable {
         Color backgroundColor = backgroundColorPicker.getValue();
         mainController.changeBackgroundColorForSelectedCell(backgroundColor);
     }
+
     @FXML
     void clearSelectionPressed(ActionEvent event) {
-
+        //TODO: fill clear selection
     }
     @FXML
     void alignmentSelectionListener(ActionEvent event) {
@@ -156,11 +159,11 @@ public class CommandComponentController implements Initializable {
     }
 
     public void sortSheet(String topLeft, String bottomRight, String[] columns,Stage popupStage) {
-        UISheet sortedSheet = mainController.sortSheet(topLeft, bottomRight, columns);
-        updateStyleSheet(sortedSheet);
-        ScrollPane popupLayout = mainController.creatSheetComponent(sortedSheet);
-        Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
-        popupStage.setScene(popupSortedSheet);
+            UISheet sortedSheet = mainController.sortSheet(topLeft, bottomRight, columns);
+            updateStyleSheet(sortedSheet);
+            ScrollPane popupLayout = mainController.creatSheetComponent(sortedSheet);
+            Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
+            popupStage.setScene(popupSortedSheet);
 
     }
 

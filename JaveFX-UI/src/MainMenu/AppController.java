@@ -19,12 +19,14 @@ import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -184,21 +186,33 @@ public class AppController {
             headerComponentController.newSheetHeader();
             headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
             System.out.println("Sheet Created");
-        }catch (JAXBException | IOException e){
+        }catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error in Upload new Sheet");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
             e.printStackTrace();
-            System.out.println(e.getMessage());
         }
 
     }
 
     public void updateCell(String input){
-        logic.updateCell(selectedCell.idProperty().getValue(), input);
-        uiSheet.updateSheet(logic.getSheet());
-        headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
-        selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
-        selectedCell.updateUICell(selectedCellProperty.get());
+        try{
+            logic.updateCell(selectedCell.idProperty().getValue(), input);
+            uiSheet.updateSheet(logic.getSheet());
+            headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
+            selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
+            selectedCell.updateUICell(selectedCellProperty.get());
 
-
+        }catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error in updating cell");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            e.printStackTrace();
+        }
     }
 
     private void bindModuleToUI() {
@@ -210,6 +224,7 @@ public class AppController {
     public ScrollPane creatSheetComponent(UISheet Sheet) {
         GridPane dynamicGrid = new GridPane();
         //add '1' for the header
+
         int numRows = logic.getRowsNumber() + 1;
         int numCols = logic.getColumnsNumber()+ 1;
 
@@ -322,8 +337,17 @@ public class AppController {
     }
 
     public void addRangeToSheet(String rangeName, String topLeft, String bottomRight) {
-        Set<Coordinate> coordinates = logic.addRangeToSheet(rangeName,topLeft,bottomRight);
-        uiSheet.addRange(rangeName, coordinates);
+        try{
+            Set<Coordinate> coordinates = logic.addRangeToSheet(rangeName,topLeft,bottomRight);
+            uiSheet.addRange(rangeName, coordinates);
+        }catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error in adding range");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            e.printStackTrace();
+        }
     }
 
     public void setSelectedRange(String newValue) {
@@ -349,14 +373,18 @@ public class AppController {
             uiSheet.deleteRange(selectedItem);
 
         }catch (Exception e){
-            System.out.println("Error: " + e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error in deleting range");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            //System.out.println("Error: " + e.getMessage());
         }
     }
 
     public UISheet sortSheet(String topLeft, String bottomRight,String... columns) {
-        UISheet sortedSheet = new UISheet(logic.sortSheet(topLeft,bottomRight,columns));
-        return sortedSheet;
-
+            UISheet sortedSheet = new UISheet(logic.sortSheet(topLeft,bottomRight,columns));
+            return sortedSheet;
     }
 
     public int getColumnsNumber() {
@@ -365,22 +393,40 @@ public class AppController {
 
     public void showVersion(int i) {
         Stage popupStage = new Stage();
-
-        UISheet versionSheet = new UISheet(logic.getSheetbyVersion(i-1));
-        ScrollPane popupLayout = creatSheetComponent(versionSheet);
-        Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
-        popupStage.setScene(popupSortedSheet);
-        popupStage.showAndWait();
+        try{
+            UISheet versionSheet = new UISheet(logic.getSheetbyVersion(i-1));
+            ScrollPane popupLayout = creatSheetComponent(versionSheet);
+            Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
+            popupStage.setScene(popupSortedSheet);
+            popupStage.showAndWait();
+        }catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error in showing version");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            e.printStackTrace();
+        }
     }
 
     //TODO: change it only to the range
     public List<String> getValuesFromColumns(Integer columnIndex) {
-        return logic.getSheet().getValuesFromColumn(columnIndex);
+        try{
+            return logic.getSheet().getValuesFromColumn(columnIndex);
+        }catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error in getting values from column");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            e.printStackTrace();
+            return new ArrayList<String>();
+        }
     }
 
     public UISheet filterSheet(String topLeft, String bottomRight, List<List<String>> values, List<String> columns) {
-        UISheet filterSheet = new UISheet(logic.filterSheet(topLeft,bottomRight,values,columns));
-        return filterSheet;
+            UISheet filterSheet = new UISheet(logic.filterSheet(topLeft,bottomRight,values,columns));
+            return filterSheet;
     }
 
     public void changeTextColorForSelectedCell(Color textColor) {

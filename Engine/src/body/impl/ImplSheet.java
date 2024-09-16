@@ -38,7 +38,7 @@ public class ImplSheet implements Sheet, Serializable  {
 
     public ImplSheet(String sheetName, int thickness, int width, int row, int col) {
         if (row > 50 || col > 20 || row < 1 || col < 1) {
-            throw new IllegalArgumentException("ERROR! Can't load the file. The file has a row or column that is out of range.");
+            throw new IllegalArgumentException("Can't load the file. The file Rows or Columns is out of valid range.");
         }
         this.sheetName = sheetName;
         this.thickness = thickness;
@@ -114,7 +114,7 @@ public class ImplSheet implements Sheet, Serializable  {
     @Override
     public Set<Coordinate> addRange(String rangeName, String topLeftCellId, String rightBottomCellId) {
         if(rangeMap.containsKey(rangeName)){
-            throw new IllegalArgumentException("This range name already exist");
+            throw new IllegalArgumentException("Range name already exist");
         }
         else{
             Range range = new RangeImpl(rangeName, topLeftCellId, rightBottomCellId, this);
@@ -438,7 +438,7 @@ public class ImplSheet implements Sheet, Serializable  {
             case "PERCENT":
                 if (args.size() != 3){
                     res = false;
-                    throw new NumberFormatException("Error: Incorrect number of arguments. Expected 2 arguments.");
+                    throw new NumberFormatException("Incorrect number of arguments. Expected 2 arguments and got " + (args.size() - 1) + " arguments.");
                 }
                 break;
             case "REF":
@@ -452,14 +452,14 @@ public class ImplSheet implements Sheet, Serializable  {
             case "SUM":
                 if (args.size() != 2){
                     res = false;
-                    throw new NumberFormatException("Error: Incorrect number of arguments. Expected 1 arguments.");
+                    throw new NumberFormatException("Incorrect number of arguments. Expected 1 arguments and got " + (args.size() - 1) +" arguments.");
                 }
                 break;
             case "SUB":
             case"IF":
                 if (args.size() != 4){
                     res = false;
-                    throw new NumberFormatException("Error: Incorrect number of arguments. Expected 3 arguments.");
+                    throw new NumberFormatException("Incorrect number of arguments. Expected 3 arguments and got "+ (args.size() - 1) + " arguments.");
                 }
                 break;
             default:
@@ -498,7 +498,7 @@ public class ImplSheet implements Sheet, Serializable  {
     private Expression rangeHelper(String rangeName, Coordinate coordinate){
         rangeName = rangeName.trim();
         if(!rangeMap.containsKey(rangeName)){
-            return null;
+            throw new NumberFormatException("No such Range '" + rangeName + "' founded.");
         }
         else{
             rangeMap.get(rangeName).getCells().

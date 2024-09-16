@@ -46,21 +46,10 @@ public class RangeComponentController implements Initializable {
 
     @FXML
     void addRangeToSheet(ActionEvent event) {
-        try{
             mainController.addRangeToSheet(rangeNameBox.getText(),TopLeft.getText(), BottomRight.getText());
-            System.out.println("Add Range " + rangeNameBox.getText());
-            //TODO: maybe delete this line if add listener will work
-            //rangeListView.getItems().add(rangeNameBox.getText());
-
-        }catch (Exception e){
-            //TODO: add error message as a pop up
-            System.out.println("Error: " + e.getMessage());
-        }
-        finally {
             TopLeft.clear();
             BottomRight.clear();
             rangeNameBox.clear();
-        }
     }
 
     @FXML
@@ -76,8 +65,6 @@ public class RangeComponentController implements Initializable {
     @FXML
     void deleteRangeAction(ActionEvent event) {
         mainController.deleteRangeFromSheet(rangeListView.getSelectionModel().getSelectedItem());
-        //TODO: maybe delete this line if add listener will work
-        //rangeListView.getItems().remove(rangeListView.getSelectionModel().getSelectedItem());
     }
 
     @Override

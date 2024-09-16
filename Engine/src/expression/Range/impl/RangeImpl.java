@@ -53,10 +53,17 @@ public class RangeImpl implements Range, Serializable{
 
         Coordinate leftCoordinate = new CoordinateImpl(topLeftCellId);
         Coordinate rightCoordinate = new CoordinateImpl(rightBottomCellId);
+        checkTopLeftIsBeforeRightBottom(leftCoordinate, rightCoordinate);
+
         if(leftCoordinate.getRow() > sheetRowCount || leftCoordinate.getColumn() > sheetColumnCount || rightCoordinate.getRow() > sheetRowCount || rightCoordinate.getColumn() > sheetColumnCount){
             return false;
         }
         return true;
+    }
+    private void checkTopLeftIsBeforeRightBottom(Coordinate topLeftCellId, Coordinate rightBottomCellId) {
+        if(topLeftCellId.getRow() > rightBottomCellId.getRow() || topLeftCellId.getColumn() > rightBottomCellId.getColumn()){
+            throw new IllegalArgumentException("Top left cell is not before right bottom cell");
+        }
     }
 
     private void checkValidCoordinate(String cellId) {

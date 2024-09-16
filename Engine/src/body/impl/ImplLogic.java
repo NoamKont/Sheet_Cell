@@ -85,8 +85,9 @@ public class ImplLogic implements Logic,Serializable  {
         }
         InputStream inputStream = new FileInputStream(new File(path));
         STLSheet res = creatGeneratedObject(inputStream);
+        Sheet newSheet = STLSheet2Sheet(res);
         mainSheet.clear();
-        mainSheet.add(STLSheet2Sheet(res));
+        mainSheet.add(newSheet);
     }
 
 //    private Sheet STLSheet2Sheet(STLSheet stlSheet) {
@@ -130,14 +131,24 @@ public class ImplLogic implements Logic,Serializable  {
             String rangeName = range.getName();
             String topLeft = range.getSTLBoundaries().getFrom();
             String bottomRight = range.getSTLBoundaries().getTo();
-            res.addRange(rangeName, topLeft, bottomRight);
+            try{
+                res.addRange(rangeName, topLeft, bottomRight);
+            }catch (Exception e){
+                String errorMessage = "Can't Upload new Sheet!, " + e.getMessage();
+                throw new IllegalArgumentException(errorMessage);
+            }
         }
 
         for (STLCell stlCell : listofSTLCells) {
             res.setVersion(0);
             cellId = stlCell.getColumn() + String.valueOf(stlCell.getRow());
-            res.updateCellDitels(cellId,stlCell.getSTLOriginalValue());
-            res.updateListsOfDependencies(new CoordinateImpl(cellId));
+            try{
+                res.updateCellDitels(cellId,stlCell.getSTLOriginalValue());
+                res.updateListsOfDependencies(new CoordinateImpl(cellId));
+            }catch (Exception e){
+                String errorMessage = "Can't Upload new Sheet!, " + e.getMessage() + " in cell ID: " + cellId;
+                throw new IllegalArgumentException(errorMessage);
+            }
         }
         res.updateCellEffectiveValue(cellId);
         return res;

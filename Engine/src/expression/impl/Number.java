@@ -46,7 +46,6 @@ public class Number implements EffectiveValue, Serializable{
 
     @Override
     public boolean isUndefined() {
-//        throw new NumberFormatException("ERROR!, cant get a number to string function.");
         return false;
     }
 
