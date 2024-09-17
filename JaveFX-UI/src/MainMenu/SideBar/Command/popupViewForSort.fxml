@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22" fx:controller="MainMenu.SideBar.Command.sortPopUPController">
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.SideBar.Command.sortPopUPController">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
          <children>
@@ -29,9 +29,10 @@
                   <TextField fx:id="bottomRightText" promptText="Right Bottom Cell ID" />
                </children>
             </HBox>
-            <GridPane fx:id="GridPaneOfColumns" layoutX="220.0" layoutY="175.0" prefHeight="86.0" prefWidth="150.0">
+            <GridPane fx:id="GridPaneOfColumns" layoutX="194.0" layoutY="168.0" prefHeight="86.0" prefWidth="150.0">
                <columnConstraints>
-                  <ColumnConstraints hgrow="NEVER" minWidth="30.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="NEVER" minWidth="55.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="NEVER" minWidth="50.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="105.0" />
                </columnConstraints>
                <rowConstraints>
@@ -43,13 +44,13 @@
                   <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <ComboBox fx:id="firstColumnPicker" minWidth="105.0" prefWidth="150.0" GridPane.columnIndex="1">
+                  <ComboBox fx:id="firstColumnPicker" minWidth="105.0" prefWidth="150.0" GridPane.columnIndex="2">
                      <GridPane.margin>
                         <Insets bottom="10.0" top="10.0" />
                      </GridPane.margin>
                   </ComboBox>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sort By" />
-                  <Button mnemonicParsing="false" onAction="#addAnotherColumnBtnPressed" text="Add another sort column" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sort By" GridPane.columnIndex="1" />
+                  <Button fx:id="addColumnBtn" mnemonicParsing="false" onAction="#addAnotherColumnBtnPressed" text="Add another sort column" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5" />
                </children>
             </GridPane>
             <Button layoutX="510.0" layoutY="348.0" mnemonicParsing="false" onAction="#SortBtnClicked" prefHeight="36.0" prefWidth="74.0" text="Sort!" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />

@@ -4,9 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -24,6 +22,9 @@ public class sortPopUPController {
 
     @FXML
     private TextField topLeftText;
+
+    @FXML
+    private Button addColumnBtn;
 
     private Integer numberOfColumns = 1;
 
@@ -83,20 +84,45 @@ public class sortPopUPController {
             comboBox.getItems().add(colName);
 
         }
+        Button deleteBtn = new Button("Delete");
+
+        deleteBtn.setOnAction(e -> {
+            int row = GridPane.getRowIndex(deleteBtn);
+            GridPaneOfColumns.getChildren().remove(text);
+            GridPaneOfColumns.getChildren().remove(deleteBtn);
+            GridPaneOfColumns.getChildren().remove(comboBox);
+            numberOfColumns--;
+            if(numberOfColumns < 5){
+                addColumnBtn.setDisable(false);
+            }
+            for(int i = row; i < numberOfColumns; i++){
+                Button b = (Button) getChildFromGridPane(GridPaneOfColumns, i + 1, 0);
+                Text t = (Text) getChildFromGridPane(GridPaneOfColumns, i + 1, 1);
+                ComboBox<String> cb = (ComboBox<String>) getChildFromGridPane(GridPaneOfColumns, i + 1, 2);
+                GridPane.setRowIndex(b, i );
+                GridPane.setRowIndex(t, i);
+                GridPane.setRowIndex(cb, i);
+            }
+        });
         // Set the GridPane row and column index for both elements
-        //int nextRowIndex = getNextRowIndex(GridPaneOfColumns);
+        GridPane.setRowIndex(deleteBtn, numberOfColumns);
+        GridPane.setColumnIndex(deleteBtn, 0);
+
         GridPane.setRowIndex(text, numberOfColumns);
-        GridPane.setColumnIndex(text, 0);
+        GridPane.setColumnIndex(text, 1);
 
         GridPane.setRowIndex(comboBox, numberOfColumns);
-        GridPane.setColumnIndex(comboBox, 1);
+        GridPane.setColumnIndex(comboBox, 2);
 
         // Set margin for the ComboBox
         GridPane.setMargin(comboBox, new Insets(10, 0, 10, 0));
 
         // Add the Text and ComboBox to the GridPane
-        GridPaneOfColumns.getChildren().addAll(text, comboBox);
+        GridPaneOfColumns.getChildren().addAll(deleteBtn, text, comboBox);
         numberOfColumns++;
+        if(numberOfColumns == 5){
+            addColumnBtn.setDisable(true);
+        }
     }
 
     public String getTopLeft() {

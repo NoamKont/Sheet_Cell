@@ -10,22 +10,18 @@ import body.Coordinate;
 import body.Logic;
 import body.impl.CoordinateImpl;
 import body.impl.ImplLogic;
-import jakarta.xml.bind.JAXBException;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+
+import javafx.application.Platform;
+import javafx.beans.property.*;
 import javafx.collections.MapChangeListener;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +36,9 @@ public class AppController {
     private ObjectProperty<UICell> selectedCellProperty = new SimpleObjectProperty<>();
     private ObjectProperty<UIGridPart> selectedRowOrColumn = new SimpleObjectProperty<>();
     private StringProperty selectedRange = new SimpleStringProperty();
-
+    private BooleanProperty isFileOpen = new SimpleBooleanProperty(false);
+    private ProgressBar progressBar = new ProgressBar(100);
+    private Label statusLabel = new Label("Status: Idle");
 
 
     @FXML private ScrollPane headerComponent;
@@ -51,8 +49,6 @@ public class AppController {
 
     @FXML private VBox commandComponent;
     @FXML private CommandComponentController commandComponentController;
-
-
 
     @FXML private BorderPane bodyComponent;
 
@@ -175,17 +171,50 @@ public class AppController {
     }
 
     public void createSheet(String filePath) {
-        // Create a Sheet
+        VBox uploadStatus = new VBox(progressBar, statusLabel);
+        uploadStatus.setAlignment(Pos.CENTER); // Center the VBox contents
+        uploadStatus.setPrefSize(400, 250);
+        bodyComponent.setCenter(uploadStatus);
         try{
-            logic.creatNewSheet(filePath);
-            selectedCell.clearCell();
-            uiSheet = new UISheet(logic.getSheet()); //set the module
-            rangeMapListener();
-            uiSheet.updateSheet(logic.getSheet());
-            createViewSheet();
-            headerComponentController.newSheetHeader();
-            headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
-            System.out.println("Sheet Created");
+            Task<Void> uploadTask = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    for(int i = 0; i < 100; i++){
+                        Thread.sleep(15);
+                        updateProgress(i, 100);
+                        updateMessage("Uploading " + i + "%");
+                    }
+                    // Create a Sheet
+                    logic.creatNewSheet(filePath);
+
+                    Platform.runLater(() -> {
+                        selectedCell.clearCell();
+                        uiSheet = new UISheet(logic.getSheet()); //set the module
+                        rangeMapListener();
+                        uiSheet.updateSheet(logic.getSheet());
+                        createViewSheet();
+                        headerComponentController.newSheetHeader();
+                        headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
+                        isFileOpen.set(true);
+                        System.out.println("Sheet Created");
+                    });
+                    return null;
+                }
+            };
+            progressBar.progressProperty().bind(uploadTask.progressProperty());
+            statusLabel.textProperty().bind(uploadTask.messageProperty());
+            new Thread(uploadTask).start();
+
+            //logic.creatNewSheet(filePath);
+//            selectedCell.clearCell();
+//            uiSheet = new UISheet(logic.getSheet()); //set the module
+//            rangeMapListener();
+//            uiSheet.updateSheet(logic.getSheet());
+//            createViewSheet();
+//            headerComponentController.newSheetHeader();
+//            headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
+//            isFileOpen.set(true);
+//            System.out.println("Sheet Created");
         }catch (Exception e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

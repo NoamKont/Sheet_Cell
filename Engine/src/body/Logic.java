@@ -26,6 +26,7 @@ public interface Logic {
     boolean isCellExist(String cellID);
     SheetDTO sortSheet(String topLeft, String bottomRight, String... columns);
     SheetDTO filterSheet(String topLeft, String bottomRight, List<List<String>> value, List<String> columns);
+    SheetDTO dynamicAnalysis(String cellId, String value);
 
     Set<Coordinate> addRangeToSheet(String rangeName, String topLeft, String bottomRight);
 }

@@ -43,8 +43,12 @@ public class HeaderComponentController implements Initializable {
 
     @FXML
     private ComboBox<String> versionSelectorMenu;
+
     @FXML
     private Button uploadXmlBtn;
+
+    @FXML
+    private Button dynamicAnalysisBtn;
 
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
@@ -109,6 +113,12 @@ public class HeaderComponentController implements Initializable {
     public void newSheetHeader(){
         versionSelectorMenu.getItems().clear();
     }
+
+    @FXML
+    void dynamicAnalysisPress(ActionEvent event) {
+
+    }
+
 
 }
 

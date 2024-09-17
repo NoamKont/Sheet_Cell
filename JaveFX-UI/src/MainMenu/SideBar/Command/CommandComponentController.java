@@ -79,6 +79,7 @@ public class CommandComponentController implements Initializable {
 
     @FXML
     void undoColorChangeBtnPressed(ActionEvent event) {
+        //TODO implement undo color change
     }
     @FXML
     void textColorPickerChoose(ActionEvent event) {
@@ -92,10 +93,7 @@ public class CommandComponentController implements Initializable {
         mainController.changeBackgroundColorForSelectedCell(backgroundColor);
     }
 
-    @FXML
-    void clearSelectionPressed(ActionEvent event) {
-        //TODO: fill clear selection
-    }
+
     @FXML
     void alignmentSelectionListener(ActionEvent event) {
         int selectedIndex = alignmentBox.getSelectionModel().getSelectedIndex();

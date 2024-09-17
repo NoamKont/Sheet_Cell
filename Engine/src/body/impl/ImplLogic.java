@@ -216,6 +216,34 @@ public class ImplLogic implements Logic,Serializable  {
     }
 
     @Override
+    public SheetDTO dynamicAnalysis(String cellId, String value) {
+        Sheet analysVersion = null;
+        Sheet currentVersion = mainSheet.get(mainSheet.size() - 1);
+
+        try {
+            // Step 1: Serialize the object to a byte array
+            ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
+            ObjectOutputStream outStream = new ObjectOutputStream(byteOutStream);
+            outStream.writeObject(currentVersion);
+            outStream.flush();
+
+            // Step 2: Deserialize the byte array into a new object
+            ByteArrayInputStream byteInStream = new ByteArrayInputStream(byteOutStream.toByteArray());
+            ObjectInputStream inStream = new ObjectInputStream(byteInStream);
+
+            analysVersion = (Sheet) inStream.readObject();
+
+            analysVersion.updateCell(cellId, value);
+            return new ImplSheetDTO(analysVersion);
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Can't update cell " + cellId + " with value " + value);
+        }
+
+    }
+
+    @Override
     public Set<Coordinate> addRangeToSheet(String rangeName, String topLeft, String bottomRight) {
         return mainSheet.get(mainSheet.size() - 1).addRange(rangeName, topLeft, bottomRight);
     }

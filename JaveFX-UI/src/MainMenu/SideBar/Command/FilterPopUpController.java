@@ -1,7 +1,11 @@
 package MainMenu.SideBar.Command;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -9,10 +13,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class FilterPopUpController {
+public class FilterPopUpController{
 
     @FXML
     private GridPane GridPaneOfColumns;
@@ -28,6 +34,9 @@ public class FilterPopUpController {
 
     @FXML
     private MenuButton valuePicker;
+
+    @FXML
+    private Button addFilterColumnBtn;
 
     private Integer numberOfColumns2Filter = 1;
 
@@ -90,16 +99,41 @@ public class FilterPopUpController {
                 menuButton.getItems().add(item);
             }
         });
+        Button deleteBtn = new Button("Delete");
+        deleteBtn.setOnAction(e -> {
+            int row = GridPane.getRowIndex(deleteBtn);
+            GridPaneOfColumns.getChildren().remove(text);
+            GridPaneOfColumns.getChildren().remove(columnsComboBox);
+            GridPaneOfColumns.getChildren().remove(menuButton);
+            GridPaneOfColumns.getChildren().remove(deleteBtn);
+            numberOfColumns2Filter--;
+            if(numberOfColumns2Filter < 5){
+                addFilterColumnBtn.setDisable(false);
+            }
+            for(int i = row; i < numberOfColumns2Filter; i++){
+                Button b = (Button) getChildFromGridPane(GridPaneOfColumns, i + 1, 0);
+                Text t = (Text) getChildFromGridPane(GridPaneOfColumns, i + 1, 1);
+                ComboBox<String> cb = (ComboBox<String>) getChildFromGridPane(GridPaneOfColumns, i + 1, 2);
+                MenuButton mb = (MenuButton) getChildFromGridPane(GridPaneOfColumns, i + 1, 3);
+                GridPane.setRowIndex(t, i);
+                GridPane.setRowIndex(cb, i);
+                GridPane.setRowIndex(mb, i);
+                GridPane.setRowIndex(b, i );
+            }
+        });
 
         // Set the GridPane row and column index for both elements
+        GridPane.setRowIndex(deleteBtn, numberOfColumns2Filter);
+        GridPane.setColumnIndex(deleteBtn, 0);
+
         GridPane.setRowIndex(text, numberOfColumns2Filter);
-        GridPane.setColumnIndex(text, 0);
+        GridPane.setColumnIndex(text, 1);
 
         GridPane.setRowIndex(columnsComboBox, numberOfColumns2Filter);
-        GridPane.setColumnIndex(columnsComboBox, 1);
+        GridPane.setColumnIndex(columnsComboBox, 2);
 
         GridPane.setRowIndex(menuButton, numberOfColumns2Filter);
-        GridPane.setColumnIndex(menuButton, 2);
+        GridPane.setColumnIndex(menuButton, 3);
 
         // Set margin for the ComboBox
         GridPane.setMargin(columnsComboBox, new Insets(10, 0, 10, 0));
@@ -108,8 +142,13 @@ public class FilterPopUpController {
         GridPane.setMargin(menuButton, new Insets(10, 0, 10, 0));
 
         // Add the Text and ComboBox to the GridPane
-        GridPaneOfColumns.getChildren().addAll(text, columnsComboBox, menuButton);
+        GridPaneOfColumns.getChildren().addAll(deleteBtn, text, columnsComboBox, menuButton);
         numberOfColumns2Filter++;
+
+        if(numberOfColumns2Filter == 5){
+            addFilterColumnBtn.setDisable(true);
+        }
+
     }
 
     public void setPopupStage(Stage popupStage) {
@@ -186,4 +225,5 @@ public class FilterPopUpController {
         }
         return null; // No child found at specified row and column
     }
+
 }
