@@ -3,6 +3,7 @@ package MainMenu.Header.DynamicAnalysis;
 import MainMenu.Header.HeaderComponentController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -34,6 +35,20 @@ public class dataPopUpController {
             if(min < max){
                 headerComponentController.DynamicAnalysis(min, max, step, popupStage);
             }
+            else{
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error in min and max values");
+                alert.setContentText("Please enter a Min value smaller than Max value");
+                alert.showAndWait();
+            }
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error in input values");
+            alert.setContentText("Please enter all the values");
+            alert.showAndWait();
         }
 
     }

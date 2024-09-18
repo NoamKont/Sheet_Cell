@@ -7,6 +7,7 @@ import expression.Range.api.Range;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 public interface SheetDTO {
@@ -19,5 +20,5 @@ public interface SheetDTO {
     EffectiveValue getEfectivevalueCell(Coordinate coordinate);
     Map<Coordinate, CellDTO> getActiveCells();
     Map<String, Range> getAllRanges();
-    List<String> getValuesFromColumn(Integer columnIndex);
+    Set<String> getValuesFromColumn(Integer columnIndex, int top, int bottom);
 }

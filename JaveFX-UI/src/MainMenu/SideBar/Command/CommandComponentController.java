@@ -29,6 +29,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 
 public class CommandComponentController implements Initializable {
@@ -81,6 +82,7 @@ public class CommandComponentController implements Initializable {
     void undoColorChangeBtnPressed(ActionEvent event) {
         mainController.resetColorForSelectedCell();
     }
+
     @FXML
     void textColorPickerChoose(ActionEvent event) {
         Color textColor = textColorPicker.getValue();
@@ -92,7 +94,6 @@ public class CommandComponentController implements Initializable {
         Color backgroundColor = backgroundColorPicker.getValue();
         mainController.changeBackgroundColorForSelectedCell(backgroundColor);
     }
-
 
     @FXML
     void alignmentSelectionListener(ActionEvent event) {
@@ -160,7 +161,7 @@ public class CommandComponentController implements Initializable {
             UISheet sortedSheet = mainController.sortSheet(topLeft, bottomRight, columns);
             updateStyleSheet(sortedSheet);
             ScrollPane popupLayout = mainController.creatSheetComponent(sortedSheet);
-            Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
+            Scene popupSortedSheet = new Scene(popupLayout, 900, 500);
             popupStage.setScene(popupSortedSheet);
 
     }
@@ -192,17 +193,18 @@ public class CommandComponentController implements Initializable {
     public Spinner<Integer> getWidthSpinner() {
         return widthSpinner;
     }
-    public List<String> getValuesFromColumn(Integer columnIndex) {
-        return mainController.getValuesFromColumns(columnIndex);
+    public Set<String> getValuesFromColumn(Integer columnIndex, int top, int bottom) {
+        return mainController.getValuesFromColumns(columnIndex , top, bottom);
     }
 
     public void filterSheet(String topLeft, String bottomRight, List<List<String>> values, List<String> columns, Stage popupStage) {
         UISheet filterSheet = mainController.filterSheet(topLeft, bottomRight, values, columns);
         updateStyleSheet(filterSheet);
         ScrollPane popupLayout = mainController.creatSheetComponent(filterSheet);
-        Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
+        Scene popupSortedSheet = new Scene(popupLayout, 900, 500);
         popupStage.setScene(popupSortedSheet);
     }
+
     public ColorPicker getBackgroundColorPicker() {
         return backgroundColorPicker;
     }

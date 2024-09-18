@@ -37,7 +37,7 @@ public interface Sheet {
     Sheet filterSheet(String topLeft, String bottomRight, List<List<String>> value, List<String> columns);
 
 
-    List<String> getValuesFromColumn(Integer columnIndex);
+    Set<String> getValuesFromColumn(Integer columnIndex,int top,int bottom);
 
     void checkValidBounds(Coordinate coordinate);
 }

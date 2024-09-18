@@ -133,7 +133,7 @@ public class DynamicAnalysisController implements Initializable {
         this.headerComponentController = headerComponentController;
     }
 
-    public void setMainController(AppController mainController) throws Exception {
+    public void setMainController(AppController mainController){
         this.mainController = mainController;
         setSelectedCell();
         popupBody.setCenter(mainController.creatSheetComponent(mainController.getSheetForDynamicAnalysis()));

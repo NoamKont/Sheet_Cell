@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -158,6 +159,8 @@ public class AppController {
             }
         });
 
+
+
     }
 
     private void rangeMapListener() {
@@ -175,6 +178,7 @@ public class AppController {
     }
 
     public void createSheet(String filePath) {
+        isFileOpen.set(false);
         VBox uploadStatus = new VBox(progressBar, statusLabel);
         uploadStatus.setAlignment(Pos.CENTER); // Center the VBox contents
         uploadStatus.setPrefSize(400, 250);
@@ -250,8 +254,8 @@ public class AppController {
 
     private void bindModuleToUI() {
         // Bind the UI to the module
-        headerComponentController.bindModuleToUI(selectedCell);
-        //rangeComponentController.bindModuleToUI(uiSheet);
+        bodyComponent.getLeft().disableProperty().bind(isFileOpen.not());
+        headerComponentController.bindModuleToUI(selectedCell,isFileOpen);
     }
 
     public ScrollPane creatSheetComponent(UISheet Sheet) {
@@ -442,10 +446,9 @@ public class AppController {
         }
     }
 
-    //TODO: change it only to the range
-    public List<String> getValuesFromColumns(Integer columnIndex) {
+    public Set<String> getValuesFromColumns(Integer columnIndex, int top, int bottom) {
         try{
-            return logic.getSheet().getValuesFromColumn(columnIndex);
+            return logic.getSheet().getValuesFromColumn(columnIndex,top,bottom);
         }catch (Exception e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -453,7 +456,7 @@ public class AppController {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
             e.printStackTrace();
-            return new ArrayList<String>();
+            return new HashSet<>();
         }
     }
 
@@ -483,7 +486,7 @@ public class AppController {
         return selectedCell;
     }
 
-    public UISheet getSheetForDynamicAnalysis() throws IOException, ClassNotFoundException {
+    public UISheet getSheetForDynamicAnalysis() {
         return new UISheet(logic.dynamicAnalysis(selectedCell.idProperty().get(), selectedCell.effectiveValueProperty().get()));
     }
     public UISheet getSheetForDynamicAnalysis(String cellId, String value){

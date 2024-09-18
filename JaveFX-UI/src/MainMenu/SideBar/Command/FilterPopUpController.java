@@ -17,8 +17,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
-public class FilterPopUpController{
+public class FilterPopUpController implements Initializable {
 
     @FXML
     private GridPane GridPaneOfColumns;
@@ -48,6 +49,15 @@ public class FilterPopUpController{
 
     @FXML
     void filterBtnClicked(ActionEvent event) {
+        if(topLeftText.getText().isEmpty() || bottomRightText.getText().isEmpty() || firstColumnPicker.getSelectionModel().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error in filtering sheet");
+            alert.setContentText("Please fill in the top left and bottom right cells");
+            alert.showAndWait();
+            return;
+        }
+
         String topLeft = topLeftText.getText().toUpperCase();
         String bottomRight = bottomRightText.getText().toUpperCase();
         List<String> columns = getColumns();
@@ -92,7 +102,9 @@ public class FilterPopUpController{
         columnsComboBox.setOnAction(e -> {
             menuButton.getItems().clear();
             int col = columnsComboBox.getSelectionModel().getSelectedIndex();
-            List<String> values = commandComponentController.getValuesFromColumn(col + 1);
+            int top = Integer.parseInt(topLeftText.getText().substring(1));
+            int bottom = Integer.parseInt(bottomRightText.getText().substring(1));
+            Set<String> values = commandComponentController.getValuesFromColumn(col + 1,top,bottom);
             for(String value : values){
                 CheckBox checkBox = new CheckBox(value);
                 CustomMenuItem item = new CustomMenuItem(checkBox,false);
@@ -168,7 +180,9 @@ public class FilterPopUpController{
         firstColumnPicker.setOnAction(e -> {
             valuePicker.getItems().clear();
             int col = firstColumnPicker.getSelectionModel().getSelectedIndex();
-            List<String> values = commandComponentController.getValuesFromColumn(col + 1);
+            int top = Integer.parseInt(topLeftText.getText().substring(1));
+            int bottom = Integer.parseInt(bottomRightText.getText().substring(1));
+            Set<String> values = commandComponentController.getValuesFromColumn(col + 1,top,bottom);
             for(String value : values){
                 CheckBox checkBox = new CheckBox(value);
                 CustomMenuItem item = new CustomMenuItem(checkBox,false);
@@ -188,7 +202,7 @@ public class FilterPopUpController{
     public List<String> getColumns() {
         List<String> columns = new ArrayList<>();
         for (int i = 0; i < numberOfColumns2Filter; i++) {
-            ComboBox<String> comboBox = (ComboBox<String>) getChildFromGridPane(GridPaneOfColumns, i, 1);
+            ComboBox<String> comboBox = (ComboBox<String>) getChildFromGridPane(GridPaneOfColumns, i, 2);
             columns.add(comboBox.getValue().substring(7));
         }
         return columns;
@@ -198,7 +212,7 @@ public class FilterPopUpController{
         List<List<String>> values = new ArrayList<>();
         for (int i = 0; i < numberOfColumns2Filter; i++) {
             List<String> columnValues = new ArrayList<>();
-            MenuButton menuButton = (MenuButton) getChildFromGridPane(GridPaneOfColumns, i, 2);
+            MenuButton menuButton = (MenuButton) getChildFromGridPane(GridPaneOfColumns, i, 3);
             menuButton.getItems().forEach(item -> {
                 CustomMenuItem customMenuItem = (CustomMenuItem) item;
                 CheckBox checkBox = (CheckBox) customMenuItem.getContent();
@@ -226,4 +240,8 @@ public class FilterPopUpController{
         return null; // No child found at specified row and column
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
 }

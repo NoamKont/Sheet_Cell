@@ -6,7 +6,9 @@ import MainMenu.Header.DynamicAnalysis.dataPopUpController;
 import MainMenu.SideBar.Command.sortPopUPController;
 import UIbody.UICell;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.StringExpression;
+import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -107,11 +109,16 @@ public class HeaderComponentController implements Initializable {
         actionLine.clear();
     }
 
-    public void bindModuleToUI(UICell selectedCell) {
+    public void bindModuleToUI(UICell selectedCell, BooleanProperty isFileLoaded){
         IdViewer.textProperty().bind(selectedCell.idProperty());
         originalValueViewer.textProperty().bind(selectedCell.originalValueProperty());
         StringExpression sb = Bindings.concat("Last Update Version: ", selectedCell.lastVersionUpdateProperty());
         lastCellVersionUpdateViewer.textProperty().bind(sb);
+        dynamicAnalysisBtn.disableProperty().bind(isFileLoaded.not());
+        versionSelectorMenu.disableProperty().bind(isFileLoaded.not());
+        IdViewer.disableProperty().bind(isFileLoaded.not());
+        originalValueViewer.disableProperty().bind(isFileLoaded.not());
+
     }
 
     public void addVersionToMenu(Integer version){
@@ -126,6 +133,18 @@ public class HeaderComponentController implements Initializable {
     @FXML
     void dynamicAnalysisPress(ActionEvent event) throws IOException {
         Stage popupStage = new Stage();
+        UICell selectedCell = mainController.getSelectedCell();
+
+        try{
+            Double.parseDouble(selectedCell.originalValueProperty().get());
+        }catch (NumberFormatException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Cell value is not a number");
+            alert.setContentText("Please select a cell that his original value is number");
+            alert.showAndWait();
+            return;
+        }
 
         // Set the pop-up window to be modal (blocks interaction with other windows)
         popupStage.initModality(Modality.APPLICATION_MODAL);
@@ -153,7 +172,7 @@ public class HeaderComponentController implements Initializable {
         Parent root = fxmlLoader.load(url.openStream());
         DynamicAnalysisController controller = fxmlLoader.getController();
 
-        Scene popupScene = new Scene(root, 600, 400);
+        Scene popupScene = new Scene(root, 900, 500);
 
         controller.setHeaderComponentController(this);
         controller.setMainController(mainController);

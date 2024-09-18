@@ -48,6 +48,14 @@ public class sortPopUPController {
 
     @FXML
     void SortBtnClicked(ActionEvent event) {
+        if(topLeftText.getText().isEmpty() || bottomRightText.getText().isEmpty() || firstColumnPicker.getSelectionModel().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error in sorting sheet");
+            alert.setContentText("Please fill All in the required fields");
+            alert.showAndWait();
+            return;
+        }
         String topLeft = topLeftText.getText().toUpperCase();
         String bottomRight = bottomRightText.getText().toUpperCase();
         String[] columns = getColumns();
@@ -137,7 +145,7 @@ public class sortPopUPController {
         String[] columns = new String[numberOfColumns];
         //columns[0] = firstColumnPicker.getValue();
         for (int i = 0; i < numberOfColumns; i++) {
-            ComboBox<String> comboBox = (ComboBox<String>) getChildFromGridPane(GridPaneOfColumns, i, 1);
+            ComboBox<String> comboBox = (ComboBox<String>) getChildFromGridPane(GridPaneOfColumns, i, 2);
             columns[i] = comboBox.getValue().substring(7);
         }
         return columns;

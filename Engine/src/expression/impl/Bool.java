@@ -65,6 +65,6 @@ public class Bool implements EffectiveValue, Serializable{
     }
 
     public static boolean CheckIsUnknown(EffectiveValue e1){
-        return e1.isUnknown() || e1.getCellType() == CellType.EMPTY;
+        return e1.isUnknown() || e1.getCellType() == CellType.EMPTY || e1.getCellType() != CellType.BOOLEAN;
     }
 }

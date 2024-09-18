@@ -303,10 +303,10 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
-    public List<String> getValuesFromColumn(Integer columnIndex) {
-        List<String> values = new ArrayList<>();
+    public Set<String> getValuesFromColumn(Integer columnIndex, int top, int bottom) {
+        Set<String> values = new HashSet<>();
         activeCells.forEach((coordinate, cell) -> {
-            if (coordinate.getColumn() == columnIndex) {
+            if (coordinate.getColumn() == columnIndex && coordinate.getRow() >= top && coordinate.getRow() <= bottom) {
                 values.add(cell.getEffectiveValue().toString());
             }
         });
