@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane minHeight="250.0" minWidth="210.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.SideBar.Range.RangeComponentController">
+<GridPane minHeight="250.0" minWidth="210.0" stylesheets="@../../single-cell.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.SideBar.Range.RangeComponentController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />

@@ -8,9 +8,11 @@ import UIbody.UIGridPart;
 import UIbody.UISheet;
 import body.Coordinate;
 import body.Logic;
+import body.Sheet;
 import body.impl.CoordinateImpl;
 import body.impl.ImplLogic;
 
+import dto.impl.ImplSheetDTO;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.MapChangeListener;
@@ -22,6 +24,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -467,5 +471,22 @@ public class AppController {
                 backgroundColor,
                 CornerRadii.EMPTY,
                 javafx.geometry.Insets.EMPTY)));
+    }
+
+    public void resetColorForSelectedCell() {
+        //TODO decide if we need to reset the color to the default
+        selectedCell.getCellLabel().setTextFill(Color.BLACK);
+        selectedCell.getCellLabel().setBackground(Background.EMPTY);
+    }
+
+    public UICell getSelectedCell() {
+        return selectedCell;
+    }
+
+    public UISheet getSheetForDynamicAnalysis() throws IOException, ClassNotFoundException {
+        return new UISheet(logic.dynamicAnalysis(selectedCell.idProperty().get(), selectedCell.effectiveValueProperty().get()));
+    }
+    public UISheet getSheetForDynamicAnalysis(String cellId, String value){
+        return new UISheet(logic.dynamicAnalysis(cellId, value));
     }
 }

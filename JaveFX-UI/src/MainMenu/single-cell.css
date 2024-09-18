@@ -4,7 +4,13 @@
     -fx-border-style: solid;
     -fx-border-radius: 2px;
 }
-
+.scroll-pane{
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #f5f5f5;
+    -fx-border-width: 0px;
+    -fx-border-style: solid;
+    -fx-border-radius: 2px;
+}
 .headers-cell:hover {
     -fx-border-color: #fb6d6d;
     -fx-border-width: 3px;
@@ -50,7 +56,7 @@
     -fx-padding: 5px;                  /* Padding between text and border */
     -fx-end-margin: 3px;
     -fx-start-margin: 3px;
-    -fx-background-color: transparent; /* Keep background transparent */
+    -fx-background-color: transparent; /* Keep background transparent */     /* Text color */
 }
 
 .button {

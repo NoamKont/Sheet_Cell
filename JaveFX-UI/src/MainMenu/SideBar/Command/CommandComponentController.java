@@ -79,7 +79,7 @@ public class CommandComponentController implements Initializable {
 
     @FXML
     void undoColorChangeBtnPressed(ActionEvent event) {
-        //TODO implement undo color change
+        mainController.resetColorForSelectedCell();
     }
     @FXML
     void textColorPickerChoose(ActionEvent event) {

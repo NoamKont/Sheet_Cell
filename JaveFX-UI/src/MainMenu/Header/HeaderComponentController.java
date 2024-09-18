@@ -1,18 +1,27 @@
 package MainMenu.Header;
 
 import MainMenu.AppController;
+import MainMenu.Header.DynamicAnalysis.DynamicAnalysisController;
+import MainMenu.Header.DynamicAnalysis.dataPopUpController;
+import MainMenu.SideBar.Command.sortPopUPController;
 import UIbody.UICell;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -115,10 +124,48 @@ public class HeaderComponentController implements Initializable {
     }
 
     @FXML
-    void dynamicAnalysisPress(ActionEvent event) {
+    void dynamicAnalysisPress(ActionEvent event) throws IOException {
+        Stage popupStage = new Stage();
 
+        // Set the pop-up window to be modal (blocks interaction with other windows)
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setTitle("Dynamic Analysis");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL url = getClass().getResource("DynamicAnalysis/dataPopUpforanalysis.fxml");
+        fxmlLoader.setLocation(url);
+        Parent root = fxmlLoader.load(url.openStream());
+        dataPopUpController controller = fxmlLoader.getController();
+
+        Scene popupScene = new Scene(root, 600, 400);
+
+        controller.setHeaderComponentController(this);
+        controller.setPopupStage(popupStage);
+
+        popupStage.setScene(popupScene);
+        popupStage.showAndWait();
     }
 
+    public void DynamicAnalysis(int min, int max, int stepSize, Stage popupStage) throws Exception {
+        // Set the pop-up window to be modal (blocks interaction with other windows)
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL url = getClass().getResource("DynamicAnalysis/dynamicPopUp.fxml");
+        fxmlLoader.setLocation(url);
+        Parent root = fxmlLoader.load(url.openStream());
+        DynamicAnalysisController controller = fxmlLoader.getController();
+
+        Scene popupScene = new Scene(root, 600, 400);
+
+        controller.setHeaderComponentController(this);
+        controller.setMainController(mainController);
+
+        controller.setPopupStage(popupStage);
+        controller.setMin(min);
+        controller.setMax(max);
+        controller.setStepSize(stepSize);
+
+        popupStage.setScene(popupScene);
+
+    }
 
 }
 
