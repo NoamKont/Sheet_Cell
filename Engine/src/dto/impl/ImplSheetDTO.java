@@ -81,7 +81,7 @@ public class ImplSheetDTO implements SheetDTO {
     }
 
     @Override
-    public Set<String> getValuesFromColumn(Integer columnIndex, int top, int bottom) {
+    public List<String> getValuesFromColumn(Integer columnIndex, int top, int bottom) {
         return currSheet.getValuesFromColumn(columnIndex,top,bottom);
     }
 

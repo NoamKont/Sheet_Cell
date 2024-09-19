@@ -41,6 +41,7 @@
          <children>
             <Button mnemonicParsing="false" onAction="#sortSheetBtnClicked" text="Sort" />
             <Button mnemonicParsing="false" onAction="#filterSheetBtnClicked" text="Filter" />
+            <Button mnemonicParsing="false" onAction="#graphPressed" text="Graph" />
          </children>
       </HBox>
       <GridPane alignment="CENTER" vgap="5.0">

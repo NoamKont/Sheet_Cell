@@ -8,11 +8,9 @@ import UIbody.UIGridPart;
 import UIbody.UISheet;
 import body.Coordinate;
 import body.Logic;
-import body.Sheet;
 import body.impl.CoordinateImpl;
 import body.impl.ImplLogic;
 
-import dto.impl.ImplSheetDTO;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.MapChangeListener;
@@ -25,7 +23,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -446,7 +443,22 @@ public class AppController {
         }
     }
 
-    public Set<String> getValuesFromColumns(Integer columnIndex, int top, int bottom) {
+    public Set<String> getValuesFromColumnsAsSet(Integer columnIndex, int top, int bottom) {
+        try{
+            List<String> column = logic.getSheet().getValuesFromColumn(columnIndex,top,bottom);
+            return new HashSet<>(column);
+        }catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error in getting values from column");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            e.printStackTrace();
+            return new HashSet<>();
+        }
+    }
+
+    public List<String> getValuesFromColumnsAsList(Integer columnIndex, int top, int bottom) {
         try{
             return logic.getSheet().getValuesFromColumn(columnIndex,top,bottom);
         }catch (Exception e){
@@ -456,7 +468,7 @@ public class AppController {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
             e.printStackTrace();
-            return new HashSet<>();
+            return new ArrayList<>();
         }
     }
 
@@ -489,6 +501,7 @@ public class AppController {
     public UISheet getSheetForDynamicAnalysis() {
         return new UISheet(logic.dynamicAnalysis(selectedCell.idProperty().get(), selectedCell.effectiveValueProperty().get()));
     }
+
     public UISheet getSheetForDynamicAnalysis(String cellId, String value){
         return new UISheet(logic.dynamicAnalysis(cellId, value));
     }

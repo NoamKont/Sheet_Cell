@@ -2,11 +2,11 @@ package MainMenu.SideBar.Command;
 
 
 import MainMenu.AppController;
+import MainMenu.VisualUtils.GraphMakerController;
 import UIbody.UICell;
 import UIbody.UISheet;
 import body.Coordinate;
 import body.impl.CoordinateImpl;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,8 +17,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -81,6 +79,27 @@ public class CommandComponentController implements Initializable {
     @FXML
     void undoColorChangeBtnPressed(ActionEvent event) {
         mainController.resetColorForSelectedCell();
+    }
+
+
+    @FXML
+    void graphPressed(ActionEvent event) throws IOException {
+        Stage popupStage = new Stage();
+
+        // Set the pop-up window to be modal (blocks interaction with other windows)
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setTitle("Graph");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL url = getClass().getResource("/MainMenu/VisualUtils/graph.fxml");
+        fxmlLoader.setLocation(url);
+        Parent root = fxmlLoader.load(url.openStream());
+        GraphMakerController controller = fxmlLoader.getController();
+        Scene popupScene = new Scene(root, 600, 400);
+        controller.setMainController(mainController);
+        controller.setStage(popupStage);
+
+        popupStage.setScene(popupScene);
+        popupStage.showAndWait();
     }
 
     @FXML
@@ -194,7 +213,7 @@ public class CommandComponentController implements Initializable {
         return widthSpinner;
     }
     public Set<String> getValuesFromColumn(Integer columnIndex, int top, int bottom) {
-        return mainController.getValuesFromColumns(columnIndex , top, bottom);
+        return mainController.getValuesFromColumnsAsSet(columnIndex , top, bottom);
     }
 
     public void filterSheet(String topLeft, String bottomRight, List<List<String>> values, List<String> columns, Stage popupStage) {

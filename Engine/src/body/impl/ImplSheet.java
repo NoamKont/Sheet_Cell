@@ -303,8 +303,11 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
-    public Set<String> getValuesFromColumn(Integer columnIndex, int top, int bottom) {
-        Set<String> values = new HashSet<>();
+    public List<String> getValuesFromColumn(Integer columnIndex, int top, int bottom) {
+        List<String> values = new ArrayList<>();
+        if(top > bottom){
+            throw new IllegalArgumentException("Top value can't be bigger than bottom value");
+        }
         activeCells.forEach((coordinate, cell) -> {
             if (coordinate.getColumn() == columnIndex && coordinate.getRow() >= top && coordinate.getRow() <= bottom) {
                 values.add(cell.getEffectiveValue().toString());

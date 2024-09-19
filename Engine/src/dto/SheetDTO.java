@@ -20,5 +20,5 @@ public interface SheetDTO {
     EffectiveValue getEfectivevalueCell(Coordinate coordinate);
     Map<Coordinate, CellDTO> getActiveCells();
     Map<String, Range> getAllRanges();
-    Set<String> getValuesFromColumn(Integer columnIndex, int top, int bottom);
+    List<String> getValuesFromColumn(Integer columnIndex, int top, int bottom);
 }
