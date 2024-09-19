@@ -162,7 +162,11 @@ public class ImplLogic implements Logic,Serializable  {
 
     @Override
     public SheetDTO getSheet() {
-        return new ImplSheetDTO(mainSheet.get(mainSheet.size() - 1));
+        try {
+            return new ImplSheetDTO(mainSheet.get(mainSheet.size() - 1));
+        }catch (Exception e){
+            return null;
+        }
     }
 
     public List<Integer> getNumberOfUpdatePerVersion(){

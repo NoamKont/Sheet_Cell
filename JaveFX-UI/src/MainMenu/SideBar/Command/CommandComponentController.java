@@ -33,7 +33,7 @@ import java.util.Set;
 public class CommandComponentController implements Initializable {
 
     @FXML
-    private Text chosenColumnRow;
+    private Label chosenColumnRow;
 
     @FXML
     private Spinner<Integer> thicknessSpinner;
@@ -203,7 +203,7 @@ public class CommandComponentController implements Initializable {
         labelDest.setAlignment(labelSrc.getAlignment());
     }
 
-    public Text getChosenColumnRow() {
+    public Label getChosenColumnRow() {
         return chosenColumnRow;
     }
     public Spinner<Integer> getThicknessSpinner() {

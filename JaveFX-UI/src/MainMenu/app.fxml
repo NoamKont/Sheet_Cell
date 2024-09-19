@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<BorderPane fx:id="bodyComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="650.0" minWidth="-Infinity" prefHeight="677.0" prefWidth="1005.0" stylesheets="@single-cell.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.AppController">
+<BorderPane fx:id="bodyComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="650.0" minWidth="-Infinity" prefHeight="677.0" prefWidth="1005.0" stylesheets="@../resorce/defultTheme/defult.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenu.AppController">
    <opaqueInsets>
       <Insets />
    </opaqueInsets>
@@ -14,7 +13,7 @@
       <fx:include fx:id="headerComponent" minWidth="100.0" prefHeight="100.0" source="Header/header.fxml" />
    </top>
    <left>
-      <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" BorderPane.alignment="CENTER">
+      <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" prefHeight="601.0" prefWidth="250.0" BorderPane.alignment="CENTER">
          <content>
             <AnchorPane minHeight="570.0">
                <children>

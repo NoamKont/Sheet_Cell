@@ -67,13 +67,6 @@ public class HeaderComponentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        actionLine.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(actionLine.getText().isEmpty()){
-                updateValueBtn.setDisable(true);
-                return;
-            }
-            updateValueBtn.setDisable(false);
-        });
 
     }
 
@@ -97,8 +90,9 @@ public class HeaderComponentController implements Initializable {
         if(selectedFile != null){
             System.out.println("File selected: " + selectedFile.getName());
             mainController.createSheet(selectedFile.getAbsolutePath());
+            pathView.visibleProperty().bind(mainController.isFileOpenProperty());
             pathView.setText(selectedFile.getAbsolutePath());
-            pathView.setVisible(true);
+
         }
     }
 
@@ -118,16 +112,15 @@ public class HeaderComponentController implements Initializable {
         versionSelectorMenu.disableProperty().bind(isFileLoaded.not());
         IdViewer.disableProperty().bind(isFileLoaded.not());
         originalValueViewer.disableProperty().bind(isFileLoaded.not());
+        updateValueBtn.disableProperty().bind(isFileLoaded.not());
 
     }
 
     public void addVersionToMenu(Integer version){
-        //versionSelectorMenu.getItems().add(new MenuItem("Version " + version.toString()));
-        versionSelectorMenu.getItems().add("Version " + version.toString());
-    }
-
-    public void newSheetHeader(){
         versionSelectorMenu.getItems().clear();
+        for(Integer i = 1; i <= version; i++){
+            versionSelectorMenu.getItems().add("Version " + i.toString());
+        }
     }
 
     @FXML

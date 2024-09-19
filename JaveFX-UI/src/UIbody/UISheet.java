@@ -31,7 +31,8 @@ public class UISheet {
     public UISheet(SheetDTO sheetDTO) {
         thickness.setValue(sheetDTO.getThickness());
         width.setValue(sheetDTO.getWidth());
-        sheetVersion.setValue(sheetDTO.getVersion());
+        //sheetVersion.setValue(sheetDTO.getVersion());
+
         //range map and add the all ranges as entry
         for (Map.Entry<String, Range> entry : sheetDTO.getAllRanges().entrySet()) {
             if(!ranges.containsKey(entry.getKey())){

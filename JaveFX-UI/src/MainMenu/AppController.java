@@ -11,6 +11,7 @@ import body.Logic;
 import body.impl.CoordinateImpl;
 import body.impl.ImplLogic;
 
+import dto.SheetDTO;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.MapChangeListener;
@@ -56,6 +57,9 @@ public class AppController {
 
     @FXML
     public void initialize() {
+      bodyComponent.getLeft().getStyleClass().add("left-menu");
+      bodyComponent.getTop().getStyleClass().add("top-menu");
+
         if(headerComponentController != null && rangeComponentController != null && commandComponentController != null){
             headerComponentController.setMainController(this);
             rangeComponentController.setMainController(this);
@@ -180,62 +184,54 @@ public class AppController {
         uploadStatus.setAlignment(Pos.CENTER); // Center the VBox contents
         uploadStatus.setPrefSize(400, 250);
         bodyComponent.setCenter(uploadStatus);
-        try{
             Task<Void> uploadTask = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    for(int i = 0; i < 100; i++){
+                    for(int i = 0; i <= 100; i++){
                         Thread.sleep(15);
                         updateProgress(i, 100);
                         updateMessage("Uploading " + i + "%");
                     }
+                    try{
                     // Create a Sheet
                     logic.creatNewSheet(filePath);
-
-                    Platform.runLater(() -> {
-                        selectedCell.clearCell();
-                        uiSheet = new UISheet(logic.getSheet()); //set the module
-                        rangeMapListener();
-                        uiSheet.updateSheet(logic.getSheet());
-                        createViewSheet();
-                        headerComponentController.newSheetHeader();
-                        headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
-                        isFileOpen.set(true);
-                        System.out.println("Sheet Created");
-                    });
+                    }catch (Exception e){
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("Error in creating new Sheet");
+                            alert.setContentText(e.getMessage());
+                            alert.showAndWait();
+                            e.printStackTrace();
+                        });
+                    }finally {
+                        Platform.runLater(() -> {
+                            selectedCell.clearCell();
+                            if(logic.getSheet() == null){
+                                bodyComponent.setCenter(null);
+                                return;
+                            }
+                            uiSheet = new UISheet(logic.getSheet()); //set the module
+                            rangeMapListener();
+                            versionSelectorMenuListener();
+                            uiSheet.updateSheet(logic.getSheet());
+                            createViewSheet();
+                            isFileOpen.set(true);
+                            System.out.println("Sheet Created");
+                        });
+                    }
                     return null;
                 }
             };
             progressBar.progressProperty().bind(uploadTask.progressProperty());
             statusLabel.textProperty().bind(uploadTask.messageProperty());
             new Thread(uploadTask).start();
-
-            //logic.creatNewSheet(filePath);
-//            selectedCell.clearCell();
-//            uiSheet = new UISheet(logic.getSheet()); //set the module
-//            rangeMapListener();
-//            uiSheet.updateSheet(logic.getSheet());
-//            createViewSheet();
-//            headerComponentController.newSheetHeader();
-//            headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
-//            isFileOpen.set(true);
-//            System.out.println("Sheet Created");
-        }catch (Exception e){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error in Upload new Sheet");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            e.printStackTrace();
-        }
-
     }
 
     public void updateCell(String input){
         try{
             logic.updateCell(selectedCell.idProperty().getValue(), input);
             uiSheet.updateSheet(logic.getSheet());
-            headerComponentController.addVersionToMenu(uiSheet.sheetVersionProperty().getValue());
             selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
             selectedCell.updateUICell(selectedCellProperty.get());
 
@@ -247,6 +243,14 @@ public class AppController {
             alert.showAndWait();
             e.printStackTrace();
         }
+    }
+
+    private void versionSelectorMenuListener() {
+        uiSheet.sheetVersionProperty().addListener((observableValue, oldValue, newValue) -> {
+            if(newValue != null){
+                headerComponentController.addVersionToMenu((Integer) newValue);
+            }
+        });
     }
 
     private void bindModuleToUI() {
@@ -346,6 +350,7 @@ public class AppController {
 
     private void createViewSheet() {
             ScrollPane scrollPane = creatSheetComponent(uiSheet);
+            scrollPane.getStyleClass().add("center-menu");
             bodyComponent.setCenter(scrollPane);
             bodyComponent.setMinWidth(0);
             bodyComponent.setMinHeight(0);
@@ -489,7 +494,6 @@ public class AppController {
     }
 
     public void resetColorForSelectedCell() {
-        //TODO decide if we need to reset the color to the default
         selectedCell.getCellLabel().setTextFill(Color.BLACK);
         selectedCell.getCellLabel().setBackground(Background.EMPTY);
     }
@@ -504,5 +508,9 @@ public class AppController {
 
     public UISheet getSheetForDynamicAnalysis(String cellId, String value){
         return new UISheet(logic.dynamicAnalysis(cellId, value));
+    }
+
+    public BooleanProperty isFileOpenProperty() {
+        return isFileOpen;
     }
 }
