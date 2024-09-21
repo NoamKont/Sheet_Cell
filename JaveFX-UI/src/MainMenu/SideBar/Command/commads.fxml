@@ -46,7 +46,7 @@
                <graphic>
                   <ImageView>
                      <image>
-                        <Image url="@../../../resorce/filter_fill.png" />
+                        <Image url="@../../resources/filter_fill.png" />
                      </image>
                   </ImageView>
                </graphic></Button>

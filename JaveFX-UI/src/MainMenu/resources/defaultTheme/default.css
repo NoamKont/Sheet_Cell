@@ -8,7 +8,10 @@
     -fx-border-style: solid;
     -fx-border-radius: 0px;
 }
-
+.root{
+    -fx-font-weight: Normal;
+    -fx-font-size: 12px;
+}
 .single-cell:hover {
     -fx-border-color: #dd0909;
     -fx-border-width: 3px;

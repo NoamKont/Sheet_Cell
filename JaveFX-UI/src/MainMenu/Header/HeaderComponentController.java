@@ -61,13 +61,21 @@ public class HeaderComponentController implements Initializable {
     @FXML
     private Button dynamicAnalysisBtn;
 
+    @FXML
+    private ComboBox<String> modeComboBox;
+
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        modeComboBox.getItems().addAll("Default", "Classic Blue", "Deadpool");
+    }
 
+    @FXML
+    void ModeChangePressed(ActionEvent event) {
+        String mode = modeComboBox.getValue();
+        mainController.changeMode(mode);
     }
 
     @FXML

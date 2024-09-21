@@ -11,7 +11,6 @@ import body.Logic;
 import body.impl.CoordinateImpl;
 import body.impl.ImplLogic;
 
-import dto.SheetDTO;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.MapChangeListener;
@@ -32,7 +31,7 @@ import java.util.Set;
 
 public class AppController {
 
-    private GridPane mainSheet;
+    private Scene scene;
     private final Logic logic = new ImplLogic();
     private UISheet uiSheet = new UISheet();
     private final UICell selectedCell = new UICell();
@@ -162,6 +161,10 @@ public class AppController {
 
 
 
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
     }
 
     private void rangeMapListener() {
@@ -512,5 +515,23 @@ public class AppController {
 
     public BooleanProperty isFileOpenProperty() {
         return isFileOpen;
+    }
+
+    public void changeMode(String mode) {
+        scene.getStylesheets().clear();
+        switch (mode){
+            case "Classic Blue":
+                scene.getStylesheets().add(getClass().getResource("resources/theme1/classicBlue.css").toExternalForm());
+                break;
+            case "Deadpool":
+                scene.getStylesheets().add(getClass().getResource("resources/theme2/theme2.css").toExternalForm());
+                break;
+            case "Default":
+                scene.getStylesheets().add(getClass().getResource("resources/defaultTheme/default.css").toExternalForm());
+                break;
+            default:
+                System.out.println("No such theme");
+                break;
+        }
     }
 }

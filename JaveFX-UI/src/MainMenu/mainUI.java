@@ -18,10 +18,14 @@ public class mainUI extends Application{
         FXMLLoader fxmlLoader = new FXMLLoader();
         URL url = getClass().getResource("app.fxml");
         fxmlLoader.setLocation(url);
-
         Parent root = fxmlLoader.load(url.openStream());
+        AppController controller = fxmlLoader.getController();
 
         Scene scene = new Scene(root, 1010, 680);
+
+        controller.setScene(scene);
+        scene.getStylesheets().add(getClass().getResource("resources/defaultTheme/default.css").toExternalForm());
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
