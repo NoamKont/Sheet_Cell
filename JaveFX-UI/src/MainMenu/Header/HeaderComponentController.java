@@ -3,10 +3,8 @@ package MainMenu.Header;
 import MainMenu.AppController;
 import MainMenu.Header.DynamicAnalysis.DynamicAnalysisController;
 import MainMenu.Header.DynamicAnalysis.dataPopUpController;
-import MainMenu.SideBar.Command.sortPopUPController;
 import UIbody.UICell;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
@@ -121,6 +119,7 @@ public class HeaderComponentController implements Initializable {
         IdViewer.disableProperty().bind(isFileLoaded.not());
         originalValueViewer.disableProperty().bind(isFileLoaded.not());
         updateValueBtn.disableProperty().bind(isFileLoaded.not());
+        actionLine.disableProperty().bind(isFileLoaded.not());
 
     }
 
