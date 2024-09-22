@@ -117,14 +117,14 @@ public class DynamicAnalysisController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         valueSliderLabel.setText(String.valueOf(valueSlider.getValue()));
         valueSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            valueSliderLabel.setText(String.valueOf(newValue.doubleValue()));
+            valueSliderLabel.setText(String.valueOf(newValue.intValue()));
 
         });
         valueSliderLabel.textProperty().addListener((observable, oldValue, newValue) -> {
             int row = GridPane.getRowIndex(valueSliderLabel);
             String cellId = ((Label) FilterPopUpController.getChildFromGridPane(cellsValue, row, 0)).getText();
             String value = ((Label) FilterPopUpController.getChildFromGridPane(cellsValue, row, 2)).getText();
-            popupBody.setCenter(mainController.creatSheetComponent(mainController.getSheetForDynamicAnalysis(cellId,value)));
+            popupBody.setCenter(mainController.creatSheetComponent(mainController.getSheetForDynamicAnalysis(cellId,value), false));
             valueSlider.setValue(Double.parseDouble(newValue));
         });
     }
@@ -136,7 +136,7 @@ public class DynamicAnalysisController implements Initializable {
     public void setMainController(AppController mainController){
         this.mainController = mainController;
         setSelectedCell();
-        popupBody.setCenter(mainController.creatSheetComponent(mainController.getSheetForDynamicAnalysis()));
+        popupBody.setCenter(mainController.creatSheetComponent(mainController.getSheetForDynamicAnalysis(), false));
     }
 
     public void setPopupStage(Stage popupStage) {

@@ -262,7 +262,7 @@ public class AppController {
         headerComponentController.bindModuleToUI(selectedCell,isFileOpen);
     }
 
-    public ScrollPane creatSheetComponent(UISheet Sheet) {
+    public ScrollPane creatSheetComponent(UISheet Sheet,boolean isActive) {
         GridPane dynamicGrid = new GridPane();
         //add '1' for the header
 
@@ -326,13 +326,14 @@ public class AppController {
                     AnchorPane.setLeftAnchor(label, 0.0);
                     AnchorPane.setRightAnchor(label, 0.0);
                     anchorPane.getChildren().add(label);
-
-                    // Set click event handler
-                    label.setOnMouseClicked(event -> {
-                        System.out.println("Label clicked: " + label.getText());
-                        selectedCellProperty.set(Sheet.getCell(new CoordinateImpl(cellID)));
-                        selectedCell.updateUICell(selectedCellProperty.get());
-                    });
+                    if(isActive){
+                        // Set click event handler
+                        label.setOnMouseClicked(event -> {
+                            System.out.println("Label clicked: " + label.getText());
+                            selectedCellProperty.set(Sheet.getCell(new CoordinateImpl(cellID)));
+                            selectedCell.updateUICell(selectedCellProperty.get());
+                        });
+                    }
                 }
                 dynamicGrid.add(anchorPane, col, row);
             }
@@ -352,7 +353,7 @@ public class AppController {
     }
 
     private void createViewSheet() {
-            ScrollPane scrollPane = creatSheetComponent(uiSheet);
+            ScrollPane scrollPane = creatSheetComponent(uiSheet,true);
             scrollPane.getStyleClass().add("center-menu");
             bodyComponent.setCenter(scrollPane);
             bodyComponent.setMinWidth(0);
@@ -437,7 +438,7 @@ public class AppController {
         Stage popupStage = new Stage();
         try{
             UISheet versionSheet = new UISheet(logic.getSheetbyVersion(i-1));
-            ScrollPane popupLayout = creatSheetComponent(versionSheet);
+            ScrollPane popupLayout = creatSheetComponent(versionSheet,false);
             Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
             popupStage.setScene(popupSortedSheet);
             popupStage.showAndWait();

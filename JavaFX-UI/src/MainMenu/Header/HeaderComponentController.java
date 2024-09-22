@@ -89,9 +89,6 @@ public class HeaderComponentController implements Initializable {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("XML Files", "*.xml"));
 
-        //TODO change before submit
-        fileChooser.setInitialDirectory(new File("C:\\Users\\Noam\\Downloads\\Ex2 example"));
-
         File selectedFile = fileChooser.showOpenDialog(null);
         if(selectedFile != null){
             System.out.println("File selected: " + selectedFile.getName());

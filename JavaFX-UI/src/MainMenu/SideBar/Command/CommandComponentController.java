@@ -179,7 +179,7 @@ public class CommandComponentController implements Initializable {
     public void sortSheet(String topLeft, String bottomRight, String[] columns,Stage popupStage) {
             UISheet sortedSheet = mainController.sortSheet(topLeft, bottomRight, columns);
             updateStyleSheet(sortedSheet);
-            ScrollPane popupLayout = mainController.creatSheetComponent(sortedSheet);
+            ScrollPane popupLayout = mainController.creatSheetComponent(sortedSheet, false);
             Scene popupSortedSheet = new Scene(popupLayout, 900, 500);
             popupStage.setScene(popupSortedSheet);
 
@@ -219,7 +219,7 @@ public class CommandComponentController implements Initializable {
     public void filterSheet(String topLeft, String bottomRight, List<List<String>> values, List<String> columns, Stage popupStage) {
         UISheet filterSheet = mainController.filterSheet(topLeft, bottomRight, values, columns);
         updateStyleSheet(filterSheet);
-        ScrollPane popupLayout = mainController.creatSheetComponent(filterSheet);
+        ScrollPane popupLayout = mainController.creatSheetComponent(filterSheet, false);
         Scene popupSortedSheet = new Scene(popupLayout, 900, 500);
         popupStage.setScene(popupSortedSheet);
     }
