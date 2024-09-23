@@ -78,6 +78,7 @@ public class ImplLogic implements Logic,Serializable  {
         }
 
     }
+
     @Override
     public void creatNewSheet(String path)throws JAXBException, FileNotFoundException {
         if(!checkPostFix(path)){
@@ -85,6 +86,7 @@ public class ImplLogic implements Logic,Serializable  {
         }
         InputStream inputStream = new FileInputStream(new File(path));
         STLSheet res = creatGeneratedObject(inputStream);
+
         Sheet newSheet = STLSheet2Sheet(res);
         mainSheet.clear();
         mainSheet.add(newSheet);

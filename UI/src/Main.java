@@ -17,7 +17,6 @@ public class Main {
     public static void main(String[] args) {
 
         Logic logic = new ImplLogic();
-
         boolean loaded = false;
         while (true) {
             MainMenu.printMenu();

@@ -19,7 +19,9 @@ public interface Sheet {
     Map<Coordinate, Cell> getActiveCells();
     Map<String, Range> getAllRanges();
     Set<Cell> getRangeCells(String rangeName);
+    String getUsername();
 
+    void setUsername(String username);
     void setVersion(int version);
     void setUpdateCellCount(int countUpdateCell);
 

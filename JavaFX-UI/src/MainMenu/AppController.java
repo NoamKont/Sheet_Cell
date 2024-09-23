@@ -1,6 +1,7 @@
 package MainMenu;
 
 import MainMenu.Header.HeaderComponentController;
+import MainMenu.Login.LoginController;
 import MainMenu.SideBar.Command.CommandComponentController;
 import MainMenu.SideBar.Range.RangeComponentController;
 import UIbody.UICell;
@@ -16,7 +17,9 @@ import javafx.beans.property.*;
 import javafx.collections.MapChangeListener;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -52,12 +55,15 @@ public class AppController {
     @FXML private VBox commandComponent;
     @FXML private CommandComponentController commandComponentController;
 
+    private BorderPane loginComponent;
+    private LoginController loginController;
+
     @FXML private BorderPane bodyComponent;
 
     @FXML
     public void initialize() {
-      bodyComponent.getLeft().getStyleClass().add("left-menu");
-      bodyComponent.getTop().getStyleClass().add("top-menu");
+        bodyComponent.getLeft().getStyleClass().add("left-menu");
+        bodyComponent.getTop().getStyleClass().add("top-menu");
 
         if(headerComponentController != null && rangeComponentController != null && commandComponentController != null){
             headerComponentController.setMainController(this);

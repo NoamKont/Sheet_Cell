@@ -24,6 +24,7 @@ public class mainUI extends Application{
         Scene scene = new Scene(root, 1010, 680);
 
         controller.setScene(scene);
+
         scene.getStylesheets().add(getClass().getResource("resources/defaultTheme/default.css").toExternalForm());
 
         primaryStage.setScene(scene);
