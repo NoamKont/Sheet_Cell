@@ -1,7 +1,9 @@
 package MainMenu.SideBar.Command;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,6 +41,9 @@ public class FilterPopUpController implements Initializable {
     @FXML
     private Button addFilterColumnBtn;
 
+    @FXML
+    private Button filterBtn;
+
     private Integer numberOfColumns2Filter = 1;
 
     private CommandComponentController commandComponentController;
@@ -46,6 +51,8 @@ public class FilterPopUpController implements Initializable {
     private Stage popupStage;
 
     private int columnsNumberInSheet;
+
+    private BooleanProperty rangeFilled = new SimpleBooleanProperty(false);
 
     @FXML
     void filterBtnClicked(ActionEvent event) {
@@ -242,6 +249,8 @@ public class FilterPopUpController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        rangeFilled.bind(Bindings.createBooleanBinding(() -> !topLeftText.getText().isEmpty() && !bottomRightText.getText().isEmpty(), topLeftText.textProperty(), bottomRightText.textProperty()));
+        filterBtn.disableProperty().bind(rangeFilled.not());
+        GridPaneOfColumns.disableProperty().bind(rangeFilled.not());
     }
 }

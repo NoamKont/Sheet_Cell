@@ -30,7 +30,7 @@
                   <TextField fx:id="bottomRightText" promptText="Right Bottom Cell ID" />
                </children>
             </HBox>
-            <GridPane fx:id="GridPaneOfColumns" hgap="5.0" layoutX="117.0" layoutY="175.0" prefHeight="177.0" prefWidth="264.0" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="217.0">
+            <GridPane fx:id="GridPaneOfColumns" disable="true" hgap="5.0" layoutX="117.0" layoutY="175.0" prefHeight="177.0" prefWidth="264.0" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="217.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="NEVER" minWidth="55.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="NEVER" minWidth="50.0" prefWidth="100.0" />
@@ -56,7 +56,7 @@
                   <MenuButton fx:id="valuePicker" alignment="CENTER" minWidth="105.0" mnemonicParsing="false" prefWidth="105.0" text="Values" GridPane.columnIndex="3" />
                </children>
             </GridPane>
-            <Button layoutX="510.0" layoutY="348.0" mnemonicParsing="false" onAction="#filterBtnClicked" prefHeight="36.0" prefWidth="74.0" text="Filter!" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+            <Button fx:id="filterBtn" disable="true" layoutX="510.0" layoutY="348.0" mnemonicParsing="false" onAction="#filterBtnClicked" prefHeight="36.0" prefWidth="74.0" text="Filter!" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          </children></AnchorPane>
   </content>
 </ScrollPane>
