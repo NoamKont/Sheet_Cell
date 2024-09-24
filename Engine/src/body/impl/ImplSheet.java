@@ -34,7 +34,7 @@ public class ImplSheet implements Sheet, Serializable  {
     private Graph graph;
     private int countUpdateCell = 0;
     private Map<String, Range> rangeMap = new HashMap<>();
-    private String username;
+    private String owner;
 
 
     public ImplSheet(String sheetName, int thickness, int width, int row, int col) {
@@ -50,13 +50,13 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
-    public String getUsername() {
-        return username;
+    public String getOwner() {
+        return owner;
     }
 
     @Override
-    public void setUsername(String username) {
-        this.username = username;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     @Override
@@ -162,7 +162,6 @@ public class ImplSheet implements Sheet, Serializable  {
             throw new IllegalArgumentException("Can't remove the range! cells : " + cells + "depends on it");
         }
     }
-
 
     @Override
     public void updateCellDitels(String cellId, String value){
@@ -558,6 +557,17 @@ public class ImplSheet implements Sheet, Serializable  {
         }
     }
 
+    @Override
+    public Graph getGraph() {
+        return graph;
+    }
+
+    @Override
+    public String getPermission() {
+        //TODO !!!!
+        return null;
+    }
+
     private void validInputBracket(String input){
         if(input.charAt(0) == '{') {
             if(!isValidBracket(input)){
@@ -626,4 +636,10 @@ public class ImplSheet implements Sheet, Serializable  {
         };
     }
 
+    public void setAllRanges(Map<String, Range> ranges) {
+        this.rangeMap = ranges;
+    }
+    public void setAllActiveCells(Map<Coordinate, Cell> activeCells) {
+        this.activeCells = activeCells;
+    }
 }

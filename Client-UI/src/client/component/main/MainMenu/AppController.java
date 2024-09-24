@@ -14,6 +14,9 @@ import client.component.main.MainMenu.SideBar.Range.RangeComponentController;
 import client.component.main.UIbody.UICell;
 import client.component.main.UIbody.UIGridPart;
 import client.component.main.UIbody.UISheet;
+import client.util.Constants;
+import client.util.http.HttpClientUtil;
+import com.google.gson.reflect.TypeToken;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.MapChangeListener;
@@ -27,6 +30,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URL;
@@ -34,6 +39,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static client.util.Constants.GSON_INSTANCE;
 
 
 public class AppController {
@@ -212,47 +219,65 @@ public class AppController {
     }
 
     public void createSheet(String filePath) {
-        isFileOpen.set(false);
-        VBox uploadStatus = new VBox(progressBar, statusLabel);
-        uploadStatus.setAlignment(Pos.CENTER); // Center the VBox contents
-        uploadStatus.setPrefSize(400, 250);
-        bodyComponent.setCenter(uploadStatus);
+//        VBox uploadStatus = new VBox(progressBar, statusLabel);
+//        uploadStatus.setAlignment(Pos.CENTER); // Center the VBox contents
+//        uploadStatus.setPrefSize(400, 250);
+//        bodyComponent.setCenter(uploadStatus);
             Task<Void> uploadTask = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    for(int i = 0; i <= 100; i++){
-                        Thread.sleep(15);
-                        updateProgress(i, 100);
-                        updateMessage("Uploading " + i + "%");
-                    }
-                    try{
+//                    for(int i = 0; i <= 100; i++){
+//                        Thread.sleep(15);
+//                        updateProgress(i, 100);
+//                        updateMessage("Uploading " + i + "%");
+//                    }
+
                     // Create a Sheet
-                    logic.creatNewSheet(filePath);
-                    }catch (Exception e){
-                        Platform.runLater(() -> {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Error");
-                            alert.setHeaderText("Error in creating new Sheet");
-                            alert.setContentText(e.getMessage());
-                            alert.showAndWait();
-                            e.printStackTrace();
-                        });
-                    }finally {
-                        Platform.runLater(() -> {
-                            selectedCell.clearCell();
-                            if(logic.getSheet() == null){
-                                bodyComponent.setCenter(null);
-                                return;
+                    // Create the request body
+                    RequestBody body = new FormBody.Builder()
+                            .add("FilePath", filePath)
+                            .build();
+
+
+                    HttpClientUtil.runPostAsync(body ,Constants.NEW_SHEET , new Callback() {
+                        @Override
+                        public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                            Platform.runLater(() -> {
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle("Error");
+                                alert.setHeaderText("Error in creating new Sheet");
+                                alert.setContentText(e.getMessage());
+                                alert.showAndWait();
+                                e.printStackTrace();
+                            });
+                        }
+
+                        @Override
+                        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                            System.out.println("got response");
+                            if(response.isSuccessful()){
+                                System.out.println("Response is successful");
+
+                            }else{
+                                System.out.println("Response is not successful");
                             }
-                            uiSheet = new UISheet(logic.getSheet()); //set the module
-                            rangeMapListener();
-                            versionSelectorMenuListener();
-                            uiSheet.updateSheet(logic.getSheet());
-                            createViewSheet();
-                            isFileOpen.set(true);
-                            System.out.println("Sheet Created");
-                        });
-                    }
+                        }
+                    });
+
+                    Platform.runLater(() -> {
+                        selectedCell.clearCell();
+                        if (logic.getSheet() == null) {
+                            bodyComponent.setCenter(null);
+                            return;
+                        }
+                        uiSheet = new UISheet(logic.getSheet()); //set the module
+                        rangeMapListener();
+                        versionSelectorMenuListener();
+                        uiSheet.updateSheet(logic.getSheet());
+                        createViewSheet();
+                        isFileOpen.set(true);
+                        System.out.println("Sheet Created");
+                    });
                     return null;
                 }
             };
@@ -597,6 +622,7 @@ public class AppController {
 
     public void switchToDashboard() {
         setMainPanelTo(dashboardComponent);
+        dashboardController.startListRefresher();
     }
 }
 

@@ -1,7 +1,6 @@
 package MainMenu;
 
 import MainMenu.Header.HeaderComponentController;
-import MainMenu.Login.LoginController;
 import MainMenu.SideBar.Command.CommandComponentController;
 import MainMenu.SideBar.Range.RangeComponentController;
 import UIbody.UICell;
@@ -54,9 +53,6 @@ public class AppController {
 
     @FXML private VBox commandComponent;
     @FXML private CommandComponentController commandComponentController;
-
-    private BorderPane loginComponent;
-    private LoginController loginController;
 
     @FXML private BorderPane bodyComponent;
 

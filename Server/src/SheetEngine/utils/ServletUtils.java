@@ -37,7 +37,7 @@ public class ServletUtils {
 
 		synchronized (sheetManagerLock) {
 			if (servletContext.getAttribute(SHEET_MANAGER_ATTRIBUTE_NAME) == null) {
-				servletContext.setAttribute(SHEET_MANAGER_ATTRIBUTE_NAME, new UserManager());
+				servletContext.setAttribute(SHEET_MANAGER_ATTRIBUTE_NAME, new SheetsManager());
 			}
 		}
 		return (SheetsManager) servletContext.getAttribute(SHEET_MANAGER_ATTRIBUTE_NAME);

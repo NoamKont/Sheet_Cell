@@ -11,14 +11,17 @@ import java.util.Set;
 
 
 public interface SheetDTO {
+    String getOwner();
     String getSheetName();
     int getVersion();
     int getThickness();
     int getWidth();
     int getRowCount();
     int getColumnCount();
+    String getPermission();
     EffectiveValue getEfectivevalueCell(Coordinate coordinate);
     Map<Coordinate, CellDTO> getActiveCells();
     Map<String, Range> getAllRanges();
+
     List<String> getValuesFromColumn(Integer columnIndex, int top, int bottom);
 }

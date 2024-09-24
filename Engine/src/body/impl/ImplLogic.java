@@ -4,6 +4,7 @@ import body.Cell;
 import body.Coordinate;
 import body.Logic;
 import body.Sheet;
+import body.permission.PermissionManager;
 import dto.SheetDTO;
 import dto.impl.CellDTO;
 import dto.impl.ImplSheetDTO;
@@ -28,13 +29,22 @@ import body.Coordinate;
 
 
 public class ImplLogic implements Logic,Serializable  {
-
+    private String owner;
     private List<Sheet> mainSheet = new ArrayList<>();
-
+    private final PermissionManager permissionManager = new PermissionManager();
 
 
     public ImplLogic() { }
 
+    public PermissionManager getPermissionManager() {
+        return permissionManager;
+    }
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+    public String getOwner() {
+        return owner;
+    }
     public CellDTO getCell(String cellID) {
         Cell temp = mainSheet.get(mainSheet.size() - 1).getCell(cellID);
         return new CellDTO(temp);
@@ -88,6 +98,7 @@ public class ImplLogic implements Logic,Serializable  {
         STLSheet res = creatGeneratedObject(inputStream);
 
         Sheet newSheet = STLSheet2Sheet(res);
+        newSheet.setOwner(owner);
         mainSheet.clear();
         mainSheet.add(newSheet);
     }

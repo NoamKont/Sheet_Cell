@@ -3,7 +3,6 @@ package dto.impl;
 import body.Coordinate;
 import body.Sheet;
 import dto.SheetDTO;
-import body.impl.ImplSheet;
 import expression.Range.api.Range;
 import expression.api.EffectiveValue;
 import body.Cell;
@@ -16,6 +15,11 @@ public class ImplSheetDTO implements SheetDTO {
 
     public ImplSheetDTO(Sheet sheet) {
         this.currSheet = sheet;
+    }
+
+    @Override
+    public String getOwner() {
+        return currSheet.getOwner();
     }
 
     @Override
@@ -46,6 +50,11 @@ public class ImplSheetDTO implements SheetDTO {
     @Override
     public int getColumnCount() {
         return currSheet.getColumnCount();
+    }
+
+    @Override
+    public String getPermission() {
+        return currSheet.getPermission();
     }
 
     @Override

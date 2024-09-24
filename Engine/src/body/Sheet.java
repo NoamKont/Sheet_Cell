@@ -1,5 +1,6 @@
 package body;
 
+import body.impl.Graph;
 import expression.Range.api.Range;
 
 import java.util.List;
@@ -19,9 +20,9 @@ public interface Sheet {
     Map<Coordinate, Cell> getActiveCells();
     Map<String, Range> getAllRanges();
     Set<Cell> getRangeCells(String rangeName);
-    String getUsername();
+    String getOwner();
 
-    void setUsername(String username);
+    void setOwner(String owner);
     void setVersion(int version);
     void setUpdateCellCount(int countUpdateCell);
 
@@ -42,4 +43,8 @@ public interface Sheet {
     List<String> getValuesFromColumn(Integer columnIndex,int top,int bottom);
 
     void checkValidBounds(Coordinate coordinate);
+
+    Graph getGraph();
+
+    String getPermission();
 }
