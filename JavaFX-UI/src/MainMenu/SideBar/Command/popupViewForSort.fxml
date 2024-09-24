@@ -29,7 +29,7 @@
                   <TextField fx:id="bottomRightText" promptText="Right Bottom Cell ID" />
                </children>
             </HBox>
-            <GridPane fx:id="GridPaneOfColumns" layoutX="194.0" layoutY="168.0" prefHeight="86.0" prefWidth="150.0">
+            <GridPane fx:id="GridPaneOfColumns" disable="true" layoutX="194.0" layoutY="168.0" prefHeight="86.0" prefWidth="150.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="NEVER" minWidth="55.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="NEVER" minWidth="50.0" prefWidth="100.0" />
@@ -53,7 +53,7 @@
                   <Button fx:id="addColumnBtn" mnemonicParsing="false" onAction="#addAnotherColumnBtnPressed" text="Add another sort column" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5" />
                </children>
             </GridPane>
-            <Button layoutX="510.0" layoutY="348.0" mnemonicParsing="false" onAction="#SortBtnClicked" prefHeight="36.0" prefWidth="74.0" text="Sort!" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+            <Button fx:id="sortBtn" disable="true" layoutX="510.0" layoutY="348.0" mnemonicParsing="false" onAction="#SortBtnClicked" prefHeight="36.0" prefWidth="74.0" text="Sort!" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          </children></AnchorPane>
   </content>
 </ScrollPane>
