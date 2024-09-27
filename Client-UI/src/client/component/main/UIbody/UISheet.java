@@ -24,12 +24,18 @@ public class UISheet {
     private MapProperty<String, Set<Coordinate>> ranges =  new SimpleMapProperty<>(FXCollections.observableHashMap());
     private Map<String, UIGridPart> rows = new HashMap<>();
     private Map<String, UIGridPart> columns = new HashMap<>();
+    private int rowsNumber;
+    private int columnsNumber;
+    private String sheetName;
 
 
 
     public UISheet(){}
 
     public UISheet(SheetDTO sheetDTO) {
+        sheetName = sheetDTO.getSheetName();
+        rowsNumber = sheetDTO.getRowCount();
+        columnsNumber = sheetDTO.getColumnCount();
         thickness.setValue(sheetDTO.getThickness());
         width.setValue(sheetDTO.getWidth());
         //sheetVersion.setValue(sheetDTO.getVersion());
@@ -133,6 +139,16 @@ public class UISheet {
 
     public UIGridPart getColumn(String text) {
         return columns.get(text);
+    }
+
+    public int getRowsNumber() {
+        return rowsNumber;
+    }
+    public int getColumnsNumber() {
+        return columnsNumber;
+    }
+    public String getSheetName() {
+        return sheetName;
     }
 }
 

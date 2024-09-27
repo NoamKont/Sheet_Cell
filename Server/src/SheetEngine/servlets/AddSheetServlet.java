@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import static SheetEngine.utils.ServletUtils.getEngine;
 import static SheetEngine.utils.ServletUtils.getSheetManager;
@@ -21,23 +22,25 @@ import static SheetEngine.utils.ServletUtils.getSheetManager;
 public class AddSheetServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String usernameFromSession = SessionUtils.getUsername(request);
-        if(usernameFromSession == null){
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        }
-        else{
-            String sheetPath = request.getParameter("FilePath");
-            response.setStatus(HttpServletResponse.SC_OK);
-            SheetsManager sheetManager = getSheetManager(getServletContext());
-            try{
-                sheetManager.addSheet(sheetPath, usernameFromSession);
-            }catch (Exception e){
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.getOutputStream().println(e.getMessage());
+        try (PrintWriter out = response.getWriter()) {
+            String usernameFromSession = SessionUtils.getUsername(request);
+            if (usernameFromSession == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            } else {
+                String sheetPath = request.getParameter("FilePath");
+                response.setStatus(HttpServletResponse.SC_OK);
+                SheetsManager sheetManager = getSheetManager(getServletContext());
+                try {
+                    sheetManager.addSheet(sheetPath, usernameFromSession);
+                } catch (Exception e) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    out.println(e.getMessage());
+                    out.flush();
+                }
             }
+
         }
-
-
     }
 }

@@ -7,10 +7,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox alignment="CENTER" prefHeight="500.0" prefWidth="180.0" spacing="20.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" prefHeight="500.0" prefWidth="180.0" spacing="20.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.component.dashboard.sideBar.DashCommandsController">
    <children>
-      <Button mnemonicParsing="false" text="View Sheet" />
+      <Button fx:id="viewSheetBtn" mnemonicParsing="false" onAction="#viewSheetPressed" text="View Sheet" />
       <Button mnemonicParsing="false" text="Request Premission" />
       <GridPane alignment="CENTER" gridLinesVisible="true">
         <columnConstraints>

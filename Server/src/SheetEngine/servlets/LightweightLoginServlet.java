@@ -54,7 +54,8 @@ public class LightweightLoginServlet extends HttpServlet {
 
                         // stands for unauthorized as there is already such user with this name
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.getOutputStream().print(errorMessage);
+                        response.getWriter().println(errorMessage);
+                        //response.getOutputStream().print(errorMessage);
                     }
                     else {
                         //add the new user to the users list

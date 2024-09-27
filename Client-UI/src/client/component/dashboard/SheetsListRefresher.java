@@ -71,6 +71,7 @@ public class SheetsListRefresher extends TimerTask {
                 System.out.println("got response");
                 String jsonArrayOfUsersNames = response.body().string();
                 Set<Logic> sheetsList = GSON_INSTANCE.fromJson(jsonArrayOfUsersNames, new TypeToken<Set<Logic>>(){}.getType());
+                //for debugging
                 System.out.println(sheetsList.size());
                 List<SheetInfo> sheetInfo = new ArrayList<>();
                 for (Logic logic : sheetsList) {

@@ -17,6 +17,7 @@ import client.component.main.UIbody.UISheet;
 import client.util.Constants;
 import client.util.http.HttpClientUtil;
 import com.google.gson.reflect.TypeToken;
+import dto.SheetDTO;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.MapChangeListener;
@@ -59,14 +60,20 @@ public class AppController {
     private Label statusLabel = new Label("Status: Idle");
 
 
-    @FXML private ScrollPane headerComponent;
-    @FXML private HeaderComponentController headerComponentController;
+    @FXML
+    private ScrollPane headerComponent;
+    @FXML
+    private HeaderComponentController headerComponentController;
 
-    @FXML private GridPane rangeComponent;
-    @FXML private RangeComponentController rangeComponentController;
+    @FXML
+    private GridPane rangeComponent;
+    @FXML
+    private RangeComponentController rangeComponentController;
 
-    @FXML private VBox commandComponent;
-    @FXML private CommandComponentController commandComponentController;
+    @FXML
+    private VBox commandComponent;
+    @FXML
+    private CommandComponentController commandComponentController;
 
     private BorderPane loginComponent;
     private LoginController loginController;
@@ -74,7 +81,8 @@ public class AppController {
     private Parent dashboardComponent;
     private DashboardController dashboardController;
 
-    @FXML private BorderPane bodyComponent;
+    @FXML
+    private BorderPane bodyComponent;
 
     @FXML
     public void initialize() {
@@ -82,7 +90,7 @@ public class AppController {
         bodyComponent.getLeft().getStyleClass().add("left-menu");
         bodyComponent.getTop().getStyleClass().add("top-menu");
 
-        if(headerComponentController != null && rangeComponentController != null && commandComponentController != null){
+        if (headerComponentController != null && rangeComponentController != null && commandComponentController != null) {
             headerComponentController.setMainController(this);
             rangeComponentController.setMainController(this);
             commandComponentController.setMainController(this);
@@ -92,12 +100,12 @@ public class AppController {
         bindModuleToUI();
 
         selectedCell.cellsDependsOnThemProperty().addListener((observableValue, oldList, newList) -> {
-            if(newList != null){
+            if (newList != null) {
                 newList.stream().forEach(coordinate -> {
                     uiSheet.getCell(coordinate).getCellLabel().getStyleClass().add("depends-on-cell");
                 });
             }
-            if(oldList != null){
+            if (oldList != null) {
                 oldList.stream().forEach(coordinate -> {
                     uiSheet.getCell(coordinate).getCellLabel().getStyleClass().remove("depends-on-cell");
                 });
@@ -105,12 +113,12 @@ public class AppController {
         });
 
         selectedCell.cellsDependsOnHimProperty().addListener((observableValue, oldList, newList) -> {
-            if(newList != null){
+            if (newList != null) {
                 newList.stream().forEach(coordinate -> {
                     uiSheet.getCell(coordinate).getCellLabel().getStyleClass().add("influence-on-cell");
                 });
             }
-            if(oldList != null){
+            if (oldList != null) {
                 oldList.stream().forEach(coordinate -> {
                     uiSheet.getCell(coordinate).getCellLabel().getStyleClass().remove("influence-on-cell");
                 });
@@ -126,12 +134,12 @@ public class AppController {
                 if (background != null && !background.getFills().isEmpty()) {
                     BackgroundFill fill = background.getFills().get(0);
                     commandComponentController.getBackgroundColorPicker().setValue((Color) fill.getFill());
-                }else{
+                } else {
                     commandComponentController.getBackgroundColorPicker().setValue(Color.WHITE);
                 }
 
             }
-            if(oldCell != null){
+            if (oldCell != null) {
                 oldCell.getCellLabel().setId(null);
             }
         });
@@ -144,7 +152,7 @@ public class AppController {
                 });
                 System.out.println("Selected Range: " + newValue);
             }
-            if(oldValue != null){
+            if (oldValue != null) {
                 uiSheet.getCoordinatesOfRange(oldValue).forEach(coordinate -> {
                     uiSheet.getCell(coordinate).getCellLabel().getStyleClass().remove("selected-range");
                 });
@@ -156,10 +164,9 @@ public class AppController {
         selectedRowOrColumn.addListener((observableValue, oldValue, newValue) -> {
             if (newValue != null) {
                 String title;
-                if(newValue.getIsRow()){
+                if (newValue.getIsRow()) {
                     title = "Row: " + newValue.getName();
-                }
-                else{
+                } else {
                     title = "Column: " + newValue.getName();
                 }
                 commandComponentController.getChosenColumnRow().setText(title);
@@ -181,7 +188,6 @@ public class AppController {
                 changeThickness(newValue);
             }
         });
-
 
 
     }
@@ -223,89 +229,115 @@ public class AppController {
 //        uploadStatus.setAlignment(Pos.CENTER); // Center the VBox contents
 //        uploadStatus.setPrefSize(400, 250);
 //        bodyComponent.setCenter(uploadStatus);
-            Task<Void> uploadTask = new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
+        Task<Void> uploadTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
 //                    for(int i = 0; i <= 100; i++){
 //                        Thread.sleep(15);
 //                        updateProgress(i, 100);
 //                        updateMessage("Uploading " + i + "%");
 //                    }
 
-                    // Create a Sheet
-                    // Create the request body
-                    RequestBody body = new FormBody.Builder()
-                            .add("FilePath", filePath)
-                            .build();
+                // Create a Sheet
+                // Create the request body
+                RequestBody body = new FormBody.Builder()
+                        .add("FilePath", filePath)
+                        .build();
 
 
-                    HttpClientUtil.runPostAsync(body ,Constants.NEW_SHEET , new Callback() {
-                        @Override
-                        public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                HttpClientUtil.runPostAsync(body, Constants.NEW_SHEET, new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        System.out.println("Response is Failed");
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        System.out.println("got response");
+                        String rawBody = response.body().string();
+                        if (response.isSuccessful()) {
+                            System.out.println("Response is successful");
+
+                        } else {
                             Platform.runLater(() -> {
                                 Alert alert = new Alert(Alert.AlertType.ERROR);
                                 alert.setTitle("Error");
                                 alert.setHeaderText("Error in creating new Sheet");
-                                alert.setContentText(e.getMessage());
+                                alert.setContentText(rawBody);
                                 alert.showAndWait();
-                                e.printStackTrace();
                             });
-                        }
 
-                        @Override
-                        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                            System.out.println("got response");
-                            if(response.isSuccessful()){
-                                System.out.println("Response is successful");
-
-                            }else{
-                                System.out.println("Response is not successful");
-                            }
                         }
-                    });
+                    }
+                });
 
-                    Platform.runLater(() -> {
-                        selectedCell.clearCell();
-                        if (logic.getSheet() == null) {
-                            bodyComponent.setCenter(null);
-                            return;
-                        }
-                        uiSheet = new UISheet(logic.getSheet()); //set the module
-                        rangeMapListener();
-                        versionSelectorMenuListener();
-                        uiSheet.updateSheet(logic.getSheet());
-                        createViewSheet();
-                        isFileOpen.set(true);
-                        System.out.println("Sheet Created");
-                    });
-                    return null;
-                }
-            };
-            progressBar.progressProperty().bind(uploadTask.progressProperty());
-            statusLabel.textProperty().bind(uploadTask.messageProperty());
-            new Thread(uploadTask).start();
+//                    Platform.runLater(() -> {
+//                        selectedCell.clearCell();
+//                        if (logic.getSheet() == null) {
+//                            bodyComponent.setCenter(null);
+//                            return;
+//                        }
+//                        uiSheet = new UISheet(logic.getSheet()); //set the module
+//                        rangeMapListener();
+//                        versionSelectorMenuListener();
+//                        uiSheet.updateSheet(logic.getSheet());
+//                        createViewSheet();
+//                        isFileOpen.set(true);
+//                        System.out.println("Sheet Created");
+//                    });
+                return null;
+            }
+        };
+        progressBar.progressProperty().bind(uploadTask.progressProperty());
+        statusLabel.textProperty().bind(uploadTask.messageProperty());
+        new Thread(uploadTask).start();
     }
 
-    public void updateCell(String input){
-        try{
-            logic.updateCell(selectedCell.idProperty().getValue(), input);
-            uiSheet.updateSheet(logic.getSheet());
-            selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
-            selectedCell.updateUICell(selectedCellProperty.get());
+    public void updateCell(String input) {
+        //noinspection ConstantConditions
+        String finalUrl = HttpUrl
+                .parse(Constants.UPDATE_CELL)
+                .newBuilder()
+                .addQueryParameter("sheetName", uiSheet.getSheetName())
+                .addQueryParameter("cellId", selectedCell.idProperty().getValue())
+                .addQueryParameter("value", input)
+                .build()
+                .toString();
 
-        }catch (Exception e){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error in updating cell");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            e.printStackTrace();
-        }
+        HttpClientUtil.runAsync(finalUrl, new Callback(){
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    String responseBody = response.body().string();
+                    if(response.isSuccessful()) {
+                        System.out.println("UpdateSheet is successful now bringing the update Sheet");
+                        SheetDTO updateSheet = GSON_INSTANCE.fromJson(responseBody, SheetDTO.class);
+                        Platform.runLater(() -> {
+                            updateUISheet(updateSheet, uiSheet);
+                        });
+                    }
+                    else {
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("Error in updating cell");
+                            alert.setContentText(responseBody);
+                            alert.showAndWait();
+                        });
+                    }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println("Response is Failed");
+            }
+        });
+
     }
 
     private void versionSelectorMenuListener() {
         uiSheet.sheetVersionProperty().addListener((observableValue, oldValue, newValue) -> {
-            if(newValue != null){
+            if (newValue != null) {
                 headerComponentController.addVersionToMenu((Integer) newValue);
             }
         });
@@ -314,21 +346,21 @@ public class AppController {
     private void bindModuleToUI() {
         // Bind the UI to the module
         bodyComponent.getLeft().disableProperty().bind(isFileOpen.not());
-        headerComponentController.bindModuleToUI(selectedCell,isFileOpen);
+        headerComponentController.bindModuleToUI(selectedCell, isFileOpen);
     }
 
-    public ScrollPane creatSheetComponent(UISheet Sheet,boolean isActive) {
+    public ScrollPane creatSheetComponent(UISheet Sheet, boolean isActive) {
         GridPane dynamicGrid = new GridPane();
         //add '1' for the header
 
-        int numRows = logic.getRowsNumber() + 1;
-        int numCols = logic.getColumnsNumber()+ 1;
+        int numRows = uiSheet.getRowsNumber() + 1;
+        int numCols = uiSheet.getColumnsNumber() + 1;
 
         // Add RowConstraints and ColumnConstraints
         for (int i = 0; i < numRows; i++) {
             RowConstraints row = new RowConstraints();
 
-            row.setPrefHeight(logic.getSheet().getThickness());
+            row.setPrefHeight(uiSheet.thicknessProperty().get());
             row.setMinHeight(Region.USE_PREF_SIZE);
             row.setMaxHeight(Region.USE_PREF_SIZE);
             row.setVgrow(Priority.ALWAYS);
@@ -337,7 +369,7 @@ public class AppController {
 
         for (int i = 0; i < numCols; i++) {
             ColumnConstraints col = new ColumnConstraints();
-            col.setPrefWidth(logic.getSheet().getWidth());
+            col.setPrefWidth(uiSheet.widthProperty().get());
             col.setMinWidth(Region.USE_PREF_SIZE);
             col.setMaxWidth(Region.USE_PREF_SIZE);
             col.setHgrow(Priority.ALWAYS);
@@ -354,7 +386,7 @@ public class AppController {
                     dynamicGrid.getColumnConstraints().get(col).prefWidthProperty().bind(Sheet.getColumn(label.getText()).widthProperty());
                     // Set click event handler
                     label.setOnMouseClicked(event -> {
-                        System.out.println("Label " + label.getText() +" clicked: " + label.getText());
+                        System.out.println("Label " + label.getText() + " clicked: " + label.getText());
                         selectedRowOrColumn.set(Sheet.getColumn(label.getText()));
                     });
                     setHeaderLabel(anchorPane, label);
@@ -364,7 +396,7 @@ public class AppController {
                     dynamicGrid.getRowConstraints().get(row).prefHeightProperty().bind(Sheet.getRow(label.getText()).thicknessProperty());
                     // Set click event handler
                     label.setOnMouseClicked(event -> {
-                        System.out.println("Label " + label.getText() +" clicked: " + label.getText());
+                        System.out.println("Label " + label.getText() + " clicked: " + label.getText());
                         selectedRowOrColumn.set(Sheet.getRow(label.getText()));
                     });
                     setHeaderLabel(anchorPane, label);
@@ -381,7 +413,7 @@ public class AppController {
                     AnchorPane.setLeftAnchor(label, 0.0);
                     AnchorPane.setRightAnchor(label, 0.0);
                     anchorPane.getChildren().add(label);
-                    if(isActive){
+                    if (isActive) {
                         // Set click event handler
                         label.setOnMouseClicked(event -> {
                             System.out.println("Label clicked: " + label.getText());
@@ -408,11 +440,11 @@ public class AppController {
     }
 
     private void createViewSheet() {
-            ScrollPane scrollPane = creatSheetComponent(uiSheet,true);
-            scrollPane.getStyleClass().add("center-menu");
-            bodyComponent.setCenter(scrollPane);
-            bodyComponent.setMinWidth(0);
-            bodyComponent.setMinHeight(0);
+        ScrollPane scrollPane = creatSheetComponent(uiSheet, true);
+        scrollPane.getStyleClass().add("center-menu");
+        bodyComponent.setCenter(scrollPane);
+        bodyComponent.setMinWidth(0);
+        bodyComponent.setMinHeight(0);
     }
 
     private void setHeaderLabel(AnchorPane anchorPane, Label label) {
@@ -426,8 +458,8 @@ public class AppController {
         anchorPane.getChildren().add(label);
     }
 
-    private String fromDotToCellID(int row, int col){
-        return String.valueOf((char)('A' + col - 1)) + (row);
+    private String fromDotToCellID(int row, int col) {
+        return String.valueOf((char) ('A' + col - 1)) + (row);
     }
 
     public UISheet getUiSheet() {
@@ -435,17 +467,50 @@ public class AppController {
     }
 
     public void addRangeToSheet(String rangeName, String topLeft, String bottomRight) {
-        try{
-            Set<Coordinate> coordinates = logic.addRangeToSheet(rangeName,topLeft,bottomRight);
-            uiSheet.addRange(rangeName, coordinates);
-        }catch (Exception e){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error in adding range");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            e.printStackTrace();
-        }
+        //noinspection ConstantConditions
+        String finalUrl = HttpUrl
+                .parse(Constants.ADD_RANGE)
+                .newBuilder()
+                .addQueryParameter("sheetName", uiSheet.getSheetName())
+                .addQueryParameter("rangeName", rangeName)
+                .addQueryParameter("topLeft", topLeft)
+                .addQueryParameter("bottomRight", bottomRight)
+                .build()
+                .toString();
+
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseBody = response.body().string();
+                if(response.isSuccessful()) {
+                    System.out.println("UpdateSheet is successful now bringing the update Sheet");
+                    Set<Coordinate> rangeCoordinates = GSON_INSTANCE.fromJson(responseBody, new TypeToken<Set<Coordinate>>(){}.getType());
+                    Platform.runLater(() -> {
+                        uiSheet.addRange(rangeName, rangeCoordinates);
+                    });
+                }
+                else {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Error in adding range");
+                        alert.setContentText(responseBody);
+                        alert.showAndWait();
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Error in adding range");
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
+                });
+            }
+        });
     }
 
     public void setSelectedRange(String newValue) {
@@ -466,23 +531,53 @@ public class AppController {
 
     public void deleteRangeFromSheet(String selectedItem) {
         selectedRange.set(null);
-        try {
-            logic.deleteRange(selectedItem);
-            uiSheet.deleteRange(selectedItem);
+        //noinspection ConstantConditions
+        String finalUrl = HttpUrl
+                .parse(Constants.DELETE_RANGE)
+                .newBuilder()
+                .addQueryParameter("sheetName", uiSheet.getSheetName())
+                .addQueryParameter("rangeName", selectedItem)
+                .build()
+                .toString();
 
-        }catch (Exception e){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error in deleting range");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            //System.out.println("Error: " + e.getMessage());
-        }
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseBody = response.body().string();
+                if(response.isSuccessful()) {
+                    System.out.println("delete range is successful");
+                    Platform.runLater(() -> {
+                        uiSheet.deleteRange(selectedItem);
+                    });
+                }
+                else {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Error in deleting range");
+                        alert.setContentText(responseBody);
+                        alert.showAndWait();
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Error in deleting range");
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
+                });
+            }
+        });
     }
 
-    public UISheet sortSheet(String topLeft, String bottomRight,String... columns) {
-            UISheet sortedSheet = new UISheet(logic.sortSheet(topLeft,bottomRight,columns));
-            return sortedSheet;
+    public UISheet sortSheet(String topLeft, String bottomRight, String... columns) {
+        UISheet sortedSheet = new UISheet(logic.sortSheet(topLeft, bottomRight, columns));
+        return sortedSheet;
     }
 
     public int getColumnsNumber() {
@@ -491,13 +586,13 @@ public class AppController {
 
     public void showVersion(int i) {
         Stage popupStage = new Stage();
-        try{
-            UISheet versionSheet = new UISheet(logic.getSheetbyVersion(i-1));
-            ScrollPane popupLayout = creatSheetComponent(versionSheet,false);
+        try {
+            UISheet versionSheet = new UISheet(logic.getSheetbyVersion(i - 1));
+            ScrollPane popupLayout = creatSheetComponent(versionSheet, false);
             Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
             popupStage.setScene(popupSortedSheet);
             popupStage.showAndWait();
-        }catch (Exception e) {
+        } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Error in showing version");
@@ -508,10 +603,10 @@ public class AppController {
     }
 
     public Set<String> getValuesFromColumnsAsSet(Integer columnIndex, int top, int bottom) {
-        try{
-            List<String> column = logic.getSheet().getValuesFromColumn(columnIndex,top,bottom);
+        try {
+            List<String> column = logic.getSheet().getValuesFromColumn(columnIndex, top, bottom);
             return new HashSet<>(column);
-        }catch (Exception e){
+        } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Error in getting values from column");
@@ -523,9 +618,9 @@ public class AppController {
     }
 
     public List<String> getValuesFromColumnsAsList(Integer columnIndex, int top, int bottom) {
-        try{
-            return logic.getSheet().getValuesFromColumn(columnIndex,top,bottom);
-        }catch (Exception e){
+        try {
+            return logic.getSheet().getValuesFromColumn(columnIndex, top, bottom);
+        } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Error in getting values from column");
@@ -537,8 +632,8 @@ public class AppController {
     }
 
     public UISheet filterSheet(String topLeft, String bottomRight, List<List<String>> values, List<String> columns) {
-            UISheet filterSheet = new UISheet(logic.filterSheet(topLeft,bottomRight,values,columns));
-            return filterSheet;
+        UISheet filterSheet = new UISheet(logic.filterSheet(topLeft, bottomRight, values, columns));
+        return filterSheet;
     }
 
     public void changeTextColorForSelectedCell(Color textColor) {
@@ -565,7 +660,7 @@ public class AppController {
         return new UISheet(logic.dynamicAnalysis(selectedCell.idProperty().get(), selectedCell.effectiveValueProperty().get()));
     }
 
-    public UISheet getSheetForDynamicAnalysis(String cellId, String value){
+    public UISheet getSheetForDynamicAnalysis(String cellId, String value) {
         return new UISheet(logic.dynamicAnalysis(cellId, value));
     }
 
@@ -575,7 +670,7 @@ public class AppController {
 
     public void changeMode(String mode) {
         scene.getStylesheets().clear();
-        switch (mode){
+        switch (mode) {
             case "Classic Blue":
                 scene.getStylesheets().add(getClass().getResource("resources/theme1/classicBlue.css").toExternalForm());
                 break;
@@ -590,6 +685,7 @@ public class AppController {
                 break;
         }
     }
+
     public void loadLoginPage() {
         URL loginPageUrl = getClass().getResource("/client/component/login/login.fxml");
         try {
@@ -616,6 +712,7 @@ public class AppController {
             e.printStackTrace();
         }
     }
+
     private void setMainPanelTo(Parent Component) {
         scene.setRoot(Component);
     }
@@ -624,5 +721,52 @@ public class AppController {
         setMainPanelTo(dashboardComponent);
         dashboardController.startListRefresher();
     }
-}
 
+    public void switchToSheetView(String sheetName) {
+        //TODO for now sheet name is hardcoded always open car insurance sheet
+        //noinspection ConstantConditions
+        String finalUrl = HttpUrl
+                .parse(Constants.GET_SHEET)
+                .newBuilder()
+                .addQueryParameter("sheetName", "Car Insurance")
+                .build()
+                .toString();
+
+        System.out.println("New request is launched for: " + finalUrl);
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println("Response is Failed");
+            }
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                System.out.println("got response");
+                String jsonSheetDTO = response.body().string();
+                SheetDTO sheet = GSON_INSTANCE.fromJson(jsonSheetDTO, SheetDTO.class);
+                if (sheet == null) {
+                    Platform.runLater(() -> {
+                        bodyComponent.setCenter(null);
+                    });
+                    return;
+                }
+                uiSheet = new UISheet(sheet); //set the module
+                selectedCell.clearCell();
+                rangeMapListener();
+                versionSelectorMenuListener();
+                uiSheet.updateSheet(sheet);
+                isFileOpen.set(true);
+                System.out.println("Sheet Created");
+
+                Platform.runLater(() -> {
+                    setMainPanelTo(bodyComponent);
+                    createViewSheet();
+                });
+            }
+        });
+    }
+
+    public void updateUISheet(SheetDTO newSheet, UISheet uiSheet) {
+        uiSheet.updateSheet(newSheet);
+    }
+
+}

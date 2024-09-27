@@ -20,7 +20,10 @@ public class SheetDeserializer implements JsonDeserializer<Sheet> {
     public Sheet deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
         ImplSheet res = context.deserialize(json, ImplSheet.class);
+
+        int sheetVersion = res.getVersion() - 1 ;
         res.getActiveCells().entrySet().forEach(entry -> {
+            res.setVersion(sheetVersion);
             res.updateCellDitels(entry.getValue().getId(), entry.getValue().getOriginalValue());
             res.updateListsOfDependencies(new CoordinateImpl(entry.getKey()));
         });

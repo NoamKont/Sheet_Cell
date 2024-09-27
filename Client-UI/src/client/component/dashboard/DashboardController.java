@@ -1,5 +1,6 @@
 package client.component.dashboard;
 
+import client.component.dashboard.sideBar.DashCommandsController;
 import client.component.main.MainMenu.AppController;
 import client.component.main.UIbody.SheetInfo;
 import javafx.application.Platform;
@@ -51,6 +52,10 @@ public class DashboardController {
     private TableColumn<SheetInfo, String> sheetSizeCol;
 
     private final BooleanProperty autoUpdate = new SimpleBooleanProperty(true);
+
+    @FXML private VBox commandsComponent;
+    @FXML private DashCommandsController commandsComponentController;
+
     @FXML
     public void initialize() {
         // Set up the columns
@@ -58,6 +63,9 @@ public class DashboardController {
         sheetNameCol.setCellValueFactory(new PropertyValueFactory<>("sheetName"));
         sheetSizeCol.setCellValueFactory(new PropertyValueFactory<>("sheetSize"));
         permissionCol.setCellValueFactory(new PropertyValueFactory<>("permission"));
+         if(commandsComponent != null){
+            commandsComponentController.setDashController(this);
+        }
 
 
     }
@@ -75,6 +83,7 @@ public class DashboardController {
             appController.createSheet(selectedFile.getAbsolutePath());
         }
     }
+
     private void updateSheetsList(List<SheetInfo> sheetsInfo) {
         Platform.runLater(() -> {
             ObservableList<SheetInfo> items = availableSheets.getItems();
@@ -88,6 +97,15 @@ public class DashboardController {
                 this::updateSheetsList);
         Timer timer = new Timer();
         timer.schedule(listRefresher, REFRESH_RATE, REFRESH_RATE);
+    }
+
+
+    public void sheetChosen() {
+        String selectedSheetName = null;
+        appController.switchToSheetView(selectedSheetName);
+    }
+    public String getSelectedSheetName() {
+        return availableSheets.getSelectionModel().getSelectedItem().getSheetName();
     }
 
     public void setAppMainController(AppController appController) {

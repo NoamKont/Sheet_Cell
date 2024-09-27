@@ -60,6 +60,10 @@ public class SheetsManager {
         return sheetsSet;
     }
 
+    public synchronized Logic getSheet(String sheetName) {
+        return sheetsSet.stream().filter(sheet -> sheet.getSheet().getSheetName().equals(sheetName)).findFirst().orElse(null);
+    }
+
     public boolean isSheetExists(String sheetName) {
         return sheetsSet.stream().filter(sheet -> sheet.getSheet().getSheetName().equals(sheetName)).count() > 0;
 

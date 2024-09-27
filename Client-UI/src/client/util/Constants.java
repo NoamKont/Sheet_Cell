@@ -42,6 +42,11 @@ public class Constants {
     public final static String SHEETS_LIST = FULL_SERVER_PATH + "/sheetslist";
 
     public final static String NEW_SHEET = FULL_SERVER_PATH + "/sheetslist/new";
+    public final static String GET_SHEET = FULL_SERVER_PATH + "/sheetslist/sheet";
+    public final static String UPDATE_CELL = FULL_SERVER_PATH + "/sheetslist/sheet/updateCell";
+
+    public final static String ADD_RANGE = FULL_SERVER_PATH + "/range/add";
+    public final static String DELETE_RANGE = FULL_SERVER_PATH + "/range/delete";
 
 
     public final static String LOGOUT = FULL_SERVER_PATH + "/chat/logout";
