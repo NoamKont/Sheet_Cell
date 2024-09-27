@@ -7,6 +7,8 @@ import UIbody.UICell;
 import UIbody.UISheet;
 import body.Coordinate;
 import body.impl.CoordinateImpl;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -70,6 +72,8 @@ public class CommandComponentController implements Initializable {
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 200);
         thicknessSpinner.setValueFactory(thicknessValueFactory);
 
+
+
     }
 
     public void setMainController(AppController mainController) {
@@ -80,7 +84,6 @@ public class CommandComponentController implements Initializable {
     void undoColorChangeBtnPressed(ActionEvent event) {
         mainController.resetColorForSelectedCell();
     }
-
 
     @FXML
     void graphPressed(ActionEvent event) throws IOException {
@@ -215,6 +218,9 @@ public class CommandComponentController implements Initializable {
     public Set<String> getValuesFromColumn(Integer columnIndex, int top, int bottom) {
         return mainController.getValuesFromColumnsAsSet(columnIndex , top, bottom);
     }
+    public ComboBox<String> getAlignmentBox() {
+        return alignmentBox;
+    }
 
     public void filterSheet(String topLeft, String bottomRight, List<List<String>> values, List<String> columns, Stage popupStage) {
         UISheet filterSheet = mainController.filterSheet(topLeft, bottomRight, values, columns);
@@ -230,6 +236,5 @@ public class CommandComponentController implements Initializable {
     public ColorPicker getTextColorPicker() {
         return textColorPicker;
     }
-
 }
 

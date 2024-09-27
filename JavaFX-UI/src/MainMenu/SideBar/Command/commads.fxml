@@ -22,19 +22,19 @@
             <Label fx:id="chosenColumnRow" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="180.0" styleClass="header-label" text="Choosen Column/Row" />
          </children>
       </HBox>
-      <ComboBox fx:id="alignmentBox" onAction="#alignmentSelectionListener" prefWidth="150.0" promptText="Alignment" />
+      <ComboBox fx:id="alignmentBox" disable="true" onAction="#alignmentSelectionListener" prefWidth="150.0" promptText="Alignment" />
       <HBox alignment="CENTER" spacing="10.0">
          <children>
             <VBox>
                <children>
                   <Label text="Width" />
-                  <Spinner fx:id="widthSpinner" editable="true" maxWidth="100.0" />
+                  <Spinner fx:id="widthSpinner" disable="true" editable="true" maxWidth="100.0" />
                </children>
             </VBox>
             <VBox>
                <children>
                   <Label text="Length" />
-                  <Spinner fx:id="thicknessSpinner" editable="true" maxWidth="100.0" />
+                  <Spinner fx:id="thicknessSpinner" disable="true" editable="true" maxWidth="100.0" />
                </children>
             </VBox>
          </children>

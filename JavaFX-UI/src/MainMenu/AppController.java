@@ -144,6 +144,7 @@ public class AppController {
                 commandComponentController.getThicknessSpinner().getValueFactory().setValue(newValue.getThickness());
                 commandComponentController.getWidthSpinner().setDisable(newValue.getIsRow());
                 commandComponentController.getThicknessSpinner().setDisable(!newValue.getIsRow());
+                commandComponentController.getAlignmentBox().setDisable(false);
             }
         });
 

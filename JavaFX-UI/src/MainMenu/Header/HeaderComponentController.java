@@ -68,6 +68,12 @@ public class HeaderComponentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         modeComboBox.getItems().addAll("Default", "Classic Blue", "Deadpool");
+        versionSelectorMenu.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                // Call the function to handle the selected version
+                selectedVersionToShow();
+            }
+        });
     }
 
     @FXML
@@ -76,8 +82,8 @@ public class HeaderComponentController implements Initializable {
         mainController.changeMode(mode);
     }
 
-    @FXML
-    void selectedVersionToShow(ActionEvent event) {
+
+    void selectedVersionToShow() {
         String version = versionSelectorMenu.getValue().substring(8);
         mainController.showVersion(Integer.parseInt(version));
     }

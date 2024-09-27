@@ -78,7 +78,7 @@ public class RangeComponentController implements Initializable {
             }
 
         });
-
+        addRange.disableProperty().bind(rangeNameBox.textProperty().isEmpty().or(TopLeft.textProperty().isEmpty().or(BottomRight.textProperty().isEmpty())));
     }
 
     @FXML

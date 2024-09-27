@@ -58,7 +58,7 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <ComboBox fx:id="versionSelectorMenu" onAction="#selectedVersionToShow" prefWidth="150.0" promptText="Select Version" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                  <ComboBox fx:id="versionSelectorMenu" prefWidth="150.0" promptText="Select Version" GridPane.columnIndex="5" GridPane.rowIndex="1" />
                   <Button fx:id="dynamicAnalysisBtn" mnemonicParsing="false" onAction="#dynamicAnalysisPress" text="Dynamic analysis" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                   <ComboBox fx:id="modeComboBox" onAction="#ModeChangePressed" prefWidth="150.0" promptText="Mode" GridPane.columnIndex="5" />
                </children>
