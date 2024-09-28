@@ -16,6 +16,7 @@ import client.component.main.UIbody.UIGridPart;
 import client.component.main.UIbody.UISheet;
 import client.util.Constants;
 import client.util.http.HttpClientUtil;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import dto.SheetDTO;
 import javafx.application.Platform;
@@ -42,6 +43,7 @@ import java.util.List;
 import java.util.Set;
 
 import static client.util.Constants.GSON_INSTANCE;
+import static client.util.Constants.SORT_SHEET;
 
 
 public class AppController {
@@ -313,7 +315,8 @@ public class AppController {
                         System.out.println("UpdateSheet is successful now bringing the update Sheet");
                         SheetDTO updateSheet = GSON_INSTANCE.fromJson(responseBody, SheetDTO.class);
                         Platform.runLater(() -> {
-                            updateUISheet(updateSheet, uiSheet);
+//                            updateUISheet(updateSheet, uiSheet);
+                            uiSheet.updateSheet(updateSheet);
                         });
                     }
                     else {
@@ -575,13 +578,59 @@ public class AppController {
         });
     }
 
-    public UISheet sortSheet(String topLeft, String bottomRight, String... columns) {
-        UISheet sortedSheet = new UISheet(logic.sortSheet(topLeft, bottomRight, columns));
-        return sortedSheet;
-    }
+//    public UISheet sortSheet(String topLeft, String bottomRight, String... columns) {
+//        //Send as json body
+//        JsonObject jsonObject = new JsonObject();
+//        jsonObject.addProperty("topLeft", topLeft);
+//        jsonObject.addProperty("bottomRight", bottomRight);
+//        jsonObject.addProperty("columns", GSON_INSTANCE.toJson(columns));
+//
+//        String jsonBody = GSON_INSTANCE.toJson(jsonObject);
+//        RequestBody body = RequestBody.create(jsonBody, MediaType.parse("application/json"));
+//
+//        HttpClientUtil.runPostAsync(body,SORT_SHEET, new Callback() {
+//
+//            @Override
+//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+//                String responseBody = response.body().string();
+//                if(response.isSuccessful()) {
+//                    System.out.println("SortSheet is successful now bringing the update Sheet");
+//                    SheetDTO sortedSheet = GSON_INSTANCE.fromJson(responseBody, SheetDTO.class);
+//
+//                    Platform.runLater(() -> {
+//
+//                    });
+//                }
+//                else {
+//                    Platform.runLater(() -> {
+//                        Alert alert = new Alert(Alert.AlertType.ERROR);
+//                        alert.setTitle("Error");
+//                        alert.setHeaderText("Error in sorting sheet");
+//                        alert.setContentText(responseBody);
+//                        alert.showAndWait();
+//                    });
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+//                Platform.runLater(() -> {
+//                    Alert alert = new Alert(Alert.AlertType.ERROR);
+//                    alert.setTitle("Error");
+//                    alert.setHeaderText("Error in sorting sheet");
+//                    alert.setContentText(e.getMessage());
+//                    alert.showAndWait();
+//                });
+//            }
+//        });
+//
+//        UISheet sortedSheet = new UISheet(logic.sortSheet(topLeft, bottomRight, columns));
+//        return sortedSheet;
+//    }
 
     public int getColumnsNumber() {
-        return logic.getColumnsNumber();
+        //return logic.getColumnsNumber();
+        return uiSheet.getColumnsNumber();
     }
 
     public void showVersion(int i) {
@@ -769,4 +818,7 @@ public class AppController {
         uiSheet.updateSheet(newSheet);
     }
 
+    public String getSheetName() {
+        return uiSheet.getSheetName();
+    }
 }

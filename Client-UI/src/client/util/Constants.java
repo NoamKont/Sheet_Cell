@@ -48,6 +48,11 @@ public class Constants {
     public final static String ADD_RANGE = FULL_SERVER_PATH + "/range/add";
     public final static String DELETE_RANGE = FULL_SERVER_PATH + "/range/delete";
 
+    public final static String SORT_SHEET = FULL_SERVER_PATH + "/utils/sort";
+    public final static String FILTER_SHEET = FULL_SERVER_PATH + "/utils/filter";
+
+
+
 
     public final static String LOGOUT = FULL_SERVER_PATH + "/chat/logout";
 
