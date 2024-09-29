@@ -25,7 +25,7 @@ public class SheetDeserializer implements JsonDeserializer<Sheet> {
         res.getActiveCells().entrySet().forEach(entry -> {
             res.setVersion(sheetVersion);
             res.updateCellDitels(entry.getKey().toString(), entry.getValue().getOriginalValue());
-            res.updateListsOfDependencies(entry.getValue().getCoordinate());
+            res.updateListsOfDependencies(entry.getKey());
         });
         res.updateCellEffectiveValue("Z1");
 

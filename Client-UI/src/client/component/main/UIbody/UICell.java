@@ -26,8 +26,19 @@ public class UICell {
         lastVersionUpdate.setValue(Cell.getLastVersionUpdate());
         originalValue.setValue(Cell.getOriginalValue());
         effectiveValue.setValue(Cell.getOriginalEffectiveValue().toString());
-        cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
-        cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
+        if(Cell.getCellsDependsOnThem() == null){
+            cellsDependsOnThem = new SimpleListProperty<>();
+        }
+        else{
+            cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
+        }
+        if(Cell.getCellsDependsOnHim() == null){
+            cellsDependsOnHim = new SimpleListProperty<>();
+        }
+        else{
+            cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
+
+        }
         initCellLabel();
 
     }

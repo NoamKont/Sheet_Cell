@@ -635,58 +635,58 @@ public class AppController {
         });
     }
 
-    public Set<String> getValuesFromColumnsAsSet(Integer columnIndex, Integer top, Integer bottom) {
-//        //noinspection ConstantConditions
-//        String finalUrl = HttpUrl
-//                .parse(Constants.GET_VALUES_FROM_COLUMN)
-//                .newBuilder()
-//                .addQueryParameter("sheetName", uiSheet.getSheetName())
-//                .addQueryParameter("columnIndex", columnIndex.toString())
-//                .addQueryParameter("top", top.toString())
-//                .addQueryParameter("bottom", bottom.toString())
-//                .build()
-//                .toString();
-//        HttpClientUtil.runAsync(finalUrl, new Callback(){
+//    public Set<String> getValuesFromColumnsAsSet(Integer columnIndex, Integer top, Integer bottom) {
+////        //noinspection ConstantConditions
+////        String finalUrl = HttpUrl
+////                .parse(Constants.GET_VALUES_FROM_COLUMN)
+////                .newBuilder()
+////                .addQueryParameter("sheetName", uiSheet.getSheetName())
+////                .addQueryParameter("columnIndex", columnIndex.toString())
+////                .addQueryParameter("top", top.toString())
+////                .addQueryParameter("bottom", bottom.toString())
+////                .build()
+////                .toString();
+////        HttpClientUtil.runAsync(finalUrl, new Callback(){
+////
+////            @Override
+////            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+////                String responseBody = response.body().string();
+////                if(response.isSuccessful()) {
+////                    System.out.println("Response is successful");
+////                    List<String> column = GSON_INSTANCE.fromJson(responseBody, new TypeToken<List<String>>(){}.getType());
+////                }
+////                else {
+////                    Platform.runLater(() -> {
+////                        Alert alert = new Alert(Alert.AlertType.ERROR);
+////                        alert.setTitle("Error");
+////                        alert.setHeaderText("Error in getting values from column");
+////                        alert.setContentText(responseBody);
+////                        alert.showAndWait();
+////                    });
+////                }
+////            }
+////
+////            @Override
+////            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+////
+////            }
+////        });
 //
-//            @Override
-//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-//                String responseBody = response.body().string();
-//                if(response.isSuccessful()) {
-//                    System.out.println("Response is successful");
-//                    List<String> column = GSON_INSTANCE.fromJson(responseBody, new TypeToken<Set<String>>(){}.getType());
-//                }
-//                else {
-//                    Platform.runLater(() -> {
-//                        Alert alert = new Alert(Alert.AlertType.ERROR);
-//                        alert.setTitle("Error");
-//                        alert.setHeaderText("Error in getting values from column");
-//                        alert.setContentText(responseBody);
-//                        alert.showAndWait();
-//                    });
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//
-//            }
-//        });
 //
 //
-//
-        try {
-            List<String> column = logic.getSheet().getValuesFromColumn(columnIndex, top, bottom);
-            return new HashSet<>(column);
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error in getting values from column");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            e.printStackTrace();
-            return new HashSet<>();
-        }
-    }
+//        try {
+//            List<String> column = logic.getSheet().getValuesFromColumn(columnIndex, top, bottom);
+//            return new HashSet<>(column);
+//        } catch (Exception e) {
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setTitle("Error");
+//            alert.setHeaderText("Error in getting values from column");
+//            alert.setContentText(e.getMessage());
+//            alert.showAndWait();
+//            e.printStackTrace();
+//            return new HashSet<>();
+//        }
+//    }
 
     public List<String> getValuesFromColumnsAsList(Integer columnIndex, int top, int bottom) {
         try {

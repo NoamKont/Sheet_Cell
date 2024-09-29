@@ -51,7 +51,7 @@ public class Constants {
 
     public final static String SORT_SHEET = FULL_SERVER_PATH + "/utils/sort";
     public final static String FILTER_SHEET = FULL_SERVER_PATH + "/utils/filter";
-    public static final String GET_VALUES_FROM_COLUMN = "/utils/getValuesFromColumn";
+    public static final String GET_VALUES_FROM_COLUMN =FULL_SERVER_PATH +  "/utils/getValuesFromColumn";
 
 
 

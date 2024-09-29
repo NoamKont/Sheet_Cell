@@ -63,10 +63,10 @@ public class SheetsListRefresher extends TimerTask {
 
         final int finalRequestNumber = ++requestNumber;
 
-//        //for debugging
-//        if(finalRequestNumber == 2){
-//            shouldUpdate.setValue(false);
-//        }
+        //for debugging
+        if(finalRequestNumber == 2){
+            shouldUpdate.setValue(false);
+        }
 
 
         HttpClientUtil.runAsync(Constants.SHEETS_LIST, new Callback() {

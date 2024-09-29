@@ -170,7 +170,7 @@ public class ImplSheet implements Sheet, Serializable  {
         activeCells.putIfAbsent(currCoord, new ImplCell(cellId));
         Cell cell = activeCells.get(currCoord);
 
-        currCoord = cell.getCoordinate();
+        //currCoord = cell.getCoordinate();
 
         graph.addVertex(currCoord);
         sheetVersion = sheetVersion + 1;
@@ -361,8 +361,8 @@ public class ImplSheet implements Sheet, Serializable  {
     @Override
     public void updateListsOfDependencies(Coordinate coord) {
             Cell cell = activeCells.get(coord);
-            cell.setDependsOnHim(graph.getNeighbors(coord));
-            cell.setDependsOnThem(graph.getSources(coord));
+            cell.setDependsOnHim(graph.getNeighbors(cell.getCoordinate()));
+            cell.setDependsOnThem(graph.getSources(cell.getCoordinate()));
     }
 
     private Expression stringToExpression(String input,Coordinate coordinate) {

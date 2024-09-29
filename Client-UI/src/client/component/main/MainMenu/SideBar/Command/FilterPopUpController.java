@@ -1,6 +1,10 @@
 package client.component.main.MainMenu.SideBar.Command;
 
 
+import client.util.Constants;
+import client.util.http.HttpClientUtil;
+import com.google.gson.reflect.TypeToken;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,12 +14,17 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+
+import static client.util.Constants.GSON_INSTANCE;
 
 public class FilterPopUpController implements Initializable {
 
@@ -98,16 +107,17 @@ public class FilterPopUpController implements Initializable {
         menuButton.setPrefWidth(150.0);
         menuButton.setAlignment(javafx.geometry.Pos.CENTER);
         columnsComboBox.setOnAction(e -> {
-            menuButton.getItems().clear();
-            int col = columnsComboBox.getSelectionModel().getSelectedIndex();
-            int top = Integer.parseInt(topLeftText.getText().substring(1));
-            int bottom = Integer.parseInt(bottomRightText.getText().substring(1));
-            Set<String> values = commandComponentController.getValuesFromColumn(col + 1,top,bottom);
-            for(String value : values){
-                CheckBox checkBox = new CheckBox(value);
-                CustomMenuItem item = new CustomMenuItem(checkBox,false);
-                menuButton.getItems().add(item);
-            }
+            creatValuesBtn(menuButton,columnsComboBox);
+//            menuButton.getItems().clear();
+//            int col = columnsComboBox.getSelectionModel().getSelectedIndex();
+//            int top = Integer.parseInt(topLeftText.getText().substring(1));
+//            int bottom = Integer.parseInt(bottomRightText.getText().substring(1));
+//            Set<String> values = commandComponentController.getValuesFromColumn(col + 1,top,bottom);
+//            for(String value : values){
+//                CheckBox checkBox = new CheckBox(value);
+//                CustomMenuItem item = new CustomMenuItem(checkBox,false);
+//                menuButton.getItems().add(item);
+//            }
         });
         Button deleteBtn = new Button("Delete");
         deleteBtn.setOnAction(e -> {
@@ -171,20 +181,69 @@ public class FilterPopUpController implements Initializable {
 
     public void setColumnsNumberInSheet(int columnsNumber) {
         this.columnsNumberInSheet = columnsNumber;
+        
         for(int col = 0; col < columnsNumber; col++){
             String colName = "Column " + Character.toString('A' + col);
             firstColumnPicker.getItems().add(colName);
         }
         firstColumnPicker.setOnAction(e -> {
-            valuePicker.getItems().clear();
-            int col = firstColumnPicker.getSelectionModel().getSelectedIndex();
-            int top = Integer.parseInt(topLeftText.getText().substring(1));
-            int bottom = Integer.parseInt(bottomRightText.getText().substring(1));
-            Set<String> values = commandComponentController.getValuesFromColumn(col + 1,top,bottom);
-            for(String value : values){
-                CheckBox checkBox = new CheckBox(value);
-                CustomMenuItem item = new CustomMenuItem(checkBox,false);
-                valuePicker.getItems().add(item);
+            creatValuesBtn(valuePicker,firstColumnPicker);
+        });
+    }
+
+    private void creatValuesBtn(MenuButton valuePicker,ComboBox<String> selectedColumn) {
+        valuePicker.getItems().clear();
+        Integer col = selectedColumn.getSelectionModel().getSelectedIndex() + 1 ;
+        String top = topLeftText.getText().substring(1);
+        String bottom = bottomRightText.getText().substring(1);
+
+        //noinspection ConstantConditions
+        String finalUrl = HttpUrl
+                .parse(Constants.GET_VALUES_FROM_COLUMN)
+                .newBuilder()
+                .addQueryParameter("sheetName", commandComponentController.getSheetName())
+                .addQueryParameter("columnIndex", col.toString())
+                .addQueryParameter("top", top)
+                .addQueryParameter("bottom", bottom)
+                .build()
+                .toString();
+        HttpClientUtil.runAsync(finalUrl, new Callback(){
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseBody = response.body().string();
+                if(response.isSuccessful()) {
+                    System.out.println("Response is successful");
+                    List<String> column = GSON_INSTANCE.fromJson(responseBody, new TypeToken<List<String>>(){}.getType());
+                    Set<String> values = Set.copyOf(column);
+                    Platform.runLater(() -> {
+                        for(String value : values){
+                            CheckBox checkBox = new CheckBox(value);
+                            CustomMenuItem item = new CustomMenuItem(checkBox,false);
+                            valuePicker.getItems().add(item);
+                        }
+                    });
+                }
+                else {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Error in getting values from column");
+                        alert.setContentText(responseBody);
+                        alert.showAndWait();
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Error in getting values from column");
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
+                });
             }
         });
     }

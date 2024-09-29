@@ -317,15 +317,18 @@ public class CommandComponentController implements Initializable {
         return widthSpinner;
     }
 
-    public Set<String> getValuesFromColumn(Integer columnIndex, int top, int bottom) {
-        return mainController.getValuesFromColumnsAsSet(columnIndex , top, bottom);
-    }
+//    public Set<String> getValuesFromColumn(Integer columnIndex, int top, int bottom) {
+//        return mainController.getValuesFromColumnsAsSet(columnIndex , top, bottom);
+//    }
 
     public ColorPicker getBackgroundColorPicker() {
         return backgroundColorPicker;
     }
     public ColorPicker getTextColorPicker() {
         return textColorPicker;
+    }
+    public String getSheetName() {
+        return mainController.getSheetName();
     }
 
 }
