@@ -16,7 +16,6 @@ import client.component.main.UIbody.UIGridPart;
 import client.component.main.UIbody.UISheet;
 import client.util.Constants;
 import client.util.http.HttpClientUtil;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import dto.SheetDTO;
 import javafx.application.Platform;
@@ -43,7 +42,6 @@ import java.util.List;
 import java.util.Set;
 
 import static client.util.Constants.GSON_INSTANCE;
-import static client.util.Constants.SORT_SHEET;
 
 
 public class AppController {
@@ -480,7 +478,6 @@ public class AppController {
                 .addQueryParameter("bottomRight", bottomRight)
                 .build()
                 .toString();
-
         HttpClientUtil.runAsync(finalUrl, new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -578,52 +575,7 @@ public class AppController {
         });
     }
 
-//    public UISheet sortSheet(String topLeft, String bottomRight, String... columns) {
-//        //Send as json body
-//        JsonObject jsonObject = new JsonObject();
-//        jsonObject.addProperty("topLeft", topLeft);
-//        jsonObject.addProperty("bottomRight", bottomRight);
-//        jsonObject.addProperty("columns", GSON_INSTANCE.toJson(columns));
-//
-//        String jsonBody = GSON_INSTANCE.toJson(jsonObject);
-//        RequestBody body = RequestBody.create(jsonBody, MediaType.parse("application/json"));
-//
-//        HttpClientUtil.runPostAsync(body,SORT_SHEET, new Callback() {
-//
-//            @Override
-//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-//                String responseBody = response.body().string();
-//                if(response.isSuccessful()) {
-//                    System.out.println("SortSheet is successful now bringing the update Sheet");
-//                    SheetDTO sortedSheet = GSON_INSTANCE.fromJson(responseBody, SheetDTO.class);
-//
-//                    Platform.runLater(() -> {
-//
-//                    });
-//                }
-//                else {
-//                    Platform.runLater(() -> {
-//                        Alert alert = new Alert(Alert.AlertType.ERROR);
-//                        alert.setTitle("Error");
-//                        alert.setHeaderText("Error in sorting sheet");
-//                        alert.setContentText(responseBody);
-//                        alert.showAndWait();
-//                    });
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//                Platform.runLater(() -> {
-//                    Alert alert = new Alert(Alert.AlertType.ERROR);
-//                    alert.setTitle("Error");
-//                    alert.setHeaderText("Error in sorting sheet");
-//                    alert.setContentText(e.getMessage());
-//                    alert.showAndWait();
-//                });
-//            }
-//        });
-//
+//    public UISheet sortSheet(String topLeft, String bottomRight, String... columns) {//
 //        UISheet sortedSheet = new UISheet(logic.sortSheet(topLeft, bottomRight, columns));
 //        return sortedSheet;
 //    }
@@ -633,25 +585,95 @@ public class AppController {
         return uiSheet.getColumnsNumber();
     }
 
-    public void showVersion(int i) {
-        Stage popupStage = new Stage();
-        try {
-            UISheet versionSheet = new UISheet(logic.getSheetbyVersion(i - 1));
-            ScrollPane popupLayout = creatSheetComponent(versionSheet, false);
-            Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
-            popupStage.setScene(popupSortedSheet);
-            popupStage.showAndWait();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error in showing version");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            e.printStackTrace();
-        }
+    public void showVersion(Integer i) {
+        //noinspection ConstantConditions
+        String finalUrl = HttpUrl
+                .parse(Constants.GET_VERSION)
+                .newBuilder()
+                .addQueryParameter("sheetName", uiSheet.getSheetName())
+                .addQueryParameter("version", i.toString())
+                .build()
+                .toString();
+        HttpClientUtil.runAsync(finalUrl, new Callback(){
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseBody = response.body().string();
+                if(response.isSuccessful()) {
+                    System.out.println("Response is successful");
+                    Platform.runLater(() -> {
+                    Stage popupStage = new Stage();
+                    SheetDTO versionSheet = GSON_INSTANCE.fromJson(responseBody, SheetDTO.class);
+                    UISheet sheet = new UISheet(versionSheet);
+                    ScrollPane popupLayout = creatSheetComponent(sheet, false);
+                    Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
+                        popupStage.setScene(popupSortedSheet);
+                        popupStage.showAndWait();
+                    });
+                }
+                else {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Error in showing version");
+                        alert.setContentText(responseBody);
+                        alert.showAndWait();
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Error in showing version");
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
+                });
+            }
+        });
     }
 
-    public Set<String> getValuesFromColumnsAsSet(Integer columnIndex, int top, int bottom) {
+    public Set<String> getValuesFromColumnsAsSet(Integer columnIndex, Integer top, Integer bottom) {
+//        //noinspection ConstantConditions
+//        String finalUrl = HttpUrl
+//                .parse(Constants.GET_VALUES_FROM_COLUMN)
+//                .newBuilder()
+//                .addQueryParameter("sheetName", uiSheet.getSheetName())
+//                .addQueryParameter("columnIndex", columnIndex.toString())
+//                .addQueryParameter("top", top.toString())
+//                .addQueryParameter("bottom", bottom.toString())
+//                .build()
+//                .toString();
+//        HttpClientUtil.runAsync(finalUrl, new Callback(){
+//
+//            @Override
+//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+//                String responseBody = response.body().string();
+//                if(response.isSuccessful()) {
+//                    System.out.println("Response is successful");
+//                    List<String> column = GSON_INSTANCE.fromJson(responseBody, new TypeToken<Set<String>>(){}.getType());
+//                }
+//                else {
+//                    Platform.runLater(() -> {
+//                        Alert alert = new Alert(Alert.AlertType.ERROR);
+//                        alert.setTitle("Error");
+//                        alert.setHeaderText("Error in getting values from column");
+//                        alert.setContentText(responseBody);
+//                        alert.showAndWait();
+//                    });
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+//
+//            }
+//        });
+//
+//
+//
         try {
             List<String> column = logic.getSheet().getValuesFromColumn(columnIndex, top, bottom);
             return new HashSet<>(column);
@@ -680,10 +702,10 @@ public class AppController {
         }
     }
 
-    public UISheet filterSheet(String topLeft, String bottomRight, List<List<String>> values, List<String> columns) {
-        UISheet filterSheet = new UISheet(logic.filterSheet(topLeft, bottomRight, values, columns));
-        return filterSheet;
-    }
+//    public UISheet filterSheet(String topLeft, String bottomRight, List<List<String>> values, List<String> columns) {
+//        UISheet filterSheet = new UISheet(logic.filterSheet(topLeft, bottomRight, values, columns));
+//        return filterSheet;
+//    }
 
     public void changeTextColorForSelectedCell(Color textColor) {
         selectedCell.getCellLabel().setTextFill(textColor);
@@ -777,7 +799,7 @@ public class AppController {
         String finalUrl = HttpUrl
                 .parse(Constants.GET_SHEET)
                 .newBuilder()
-                .addQueryParameter("sheetName", "Car Insurance")
+                .addQueryParameter("sheetName", sheetName)
                 .build()
                 .toString();
 

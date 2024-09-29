@@ -3,6 +3,7 @@ package SheetEngine.servlets.utils;
 import SheetEngine.utils.SessionUtils;
 
 import body.Sheets.SheetsManager;
+import com.google.gson.Gson;
 import dto.SheetDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,7 +21,7 @@ import static SheetEngine.utils.ServletUtils.getSheetManager;
 public class SortSheetServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try (PrintWriter out = response.getWriter()) {
+            PrintWriter out = response.getWriter();
             String usernameFromSession = SessionUtils.getUsername(request);
             if (usernameFromSession == null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -30,9 +31,10 @@ public class SortSheetServlet extends HttpServlet {
             String topLeft = request.getParameter("topLeft");
             String bottomRight = request.getParameter("bottomRight");
             String columns = request.getParameter("columns");
+            String[] columnsArray = GSON_INSTANCE.fromJson(columns, String[].class);
             SheetsManager sheetManager = getSheetManager(getServletContext());
             try {
-                SheetDTO sortedSheet = sheetManager.getSheet(sheetName).sortSheet(topLeft, bottomRight, columns);
+                SheetDTO sortedSheet = sheetManager.getSheet(sheetName).sortSheet(topLeft, bottomRight, columnsArray);
                 response.setStatus(HttpServletResponse.SC_OK);
                 String sortedSheetJson = GSON_INSTANCE.toJson(sortedSheet);
                 out.println(sortedSheetJson);
@@ -42,7 +44,5 @@ public class SortSheetServlet extends HttpServlet {
                 out.println(e.getMessage());
                 out.flush();
             }
-
-        }
     }
 }

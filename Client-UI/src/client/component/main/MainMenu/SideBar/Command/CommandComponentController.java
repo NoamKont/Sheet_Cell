@@ -37,8 +37,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import static client.util.Constants.GSON_INSTANCE;
-import static client.util.Constants.SORT_SHEET;
+import static client.util.Constants.*;
 
 
 public class CommandComponentController implements Initializable {
@@ -164,17 +163,6 @@ public class CommandComponentController implements Initializable {
     }
 
     public void sortSheet(String topLeft, String bottomRight, String[] columns,Stage popupStage) {
-
-//        //Send as json body
-//        JsonObject jsonObject = new JsonObject();
-//        jsonObject.addProperty("sheetName", mainController.getSheetName());
-//        jsonObject.addProperty("topLeft", topLeft);
-//        jsonObject.addProperty("bottomRight", bottomRight);
-//        jsonObject.addProperty("columns", GSON_INSTANCE.toJson(columns));
-//
-//        String jsonBody = GSON_INSTANCE.toJson(jsonObject);
-//        RequestBody body = RequestBody.create(jsonBody, MediaType.parse("application/json"));
-
         RequestBody body = new FormBody.Builder()
                 .add("sheetName", mainController.getSheetName())
                 .add("topLeft", topLeft)
@@ -188,7 +176,7 @@ public class CommandComponentController implements Initializable {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String responseBody = response.body().string();
                 if(response.isSuccessful()) {
-                    System.out.println("SortSheet is successful now bringing the update Sheet");
+                    System.out.println("Sort Sheet is successful now bringing the Sheet");
                     SheetDTO sortedSheetDTO = GSON_INSTANCE.fromJson(responseBody, SheetDTO.class);
                     UISheet sortedSheet = new UISheet(sortedSheetDTO);
                     updateStyleSheet(sortedSheet);
@@ -220,19 +208,6 @@ public class CommandComponentController implements Initializable {
                 });
             }
         });
-//
-//
-//
-//
-//
-//
-//
-//
-//        UISheet sortedSheet = mainController.sortSheet(topLeft, bottomRight, columns);
-//        updateStyleSheet(sortedSheet);
-//        ScrollPane popupLayout = mainController.creatSheetComponent(sortedSheet, false);
-//        Scene popupSortedSheet = new Scene(popupLayout, 900, 500);
-//        popupStage.setScene(popupSortedSheet);
 
     }
 
@@ -260,11 +235,59 @@ public class CommandComponentController implements Initializable {
     }
 
     public void filterSheet(String topLeft, String bottomRight, List<List<String>> values, List<String> columns, Stage popupStage) {
-        UISheet filterSheet = mainController.filterSheet(topLeft, bottomRight, values, columns);
-        updateStyleSheet(filterSheet);
-        ScrollPane popupLayout = mainController.creatSheetComponent(filterSheet, false);
-        Scene popupSortedSheet = new Scene(popupLayout, 900, 500);
-        popupStage.setScene(popupSortedSheet);
+        RequestBody body = new FormBody.Builder()
+                .add("sheetName", mainController.getSheetName())
+                .add("topLeft", topLeft)
+                .add("bottomRight", bottomRight)
+                .add("values", GSON_INSTANCE.toJson(values))
+                .add("columns", GSON_INSTANCE.toJson(columns))
+                .build();
+
+        HttpClientUtil.runPostAsync(body,FILTER_SHEET, new Callback() {
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseBody = response.body().string();
+                if(response.isSuccessful()) {
+                    System.out.println("Filter Sheet is successful now bringing the Sheet");
+                    SheetDTO filterSheetDTO = GSON_INSTANCE.fromJson(responseBody, SheetDTO.class);
+                    UISheet filteredSheet = new UISheet(filterSheetDTO);
+                    updateStyleSheet(filteredSheet);
+                    ScrollPane popupLayout = mainController.creatSheetComponent(filteredSheet, false);
+                    Scene popupSortedSheet = new Scene(popupLayout, 900, 500);
+                    Platform.runLater(() -> {
+                        popupStage.setScene(popupSortedSheet);
+                    });
+                }
+                else {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Error in filtering sheet");
+                        alert.setContentText(responseBody);
+                        alert.showAndWait();
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Error in filtering sheet");
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
+                });
+            }
+        });
+//
+//
+//        UISheet filterSheet = mainController.filterSheet(topLeft, bottomRight, values, columns);
+//        updateStyleSheet(filterSheet);
+//        ScrollPane popupLayout = mainController.creatSheetComponent(filterSheet, false);
+//        Scene popupSortedSheet = new Scene(popupLayout, 900, 500);
+//        popupStage.setScene(popupSortedSheet);
     }
 
     private void updateStyleSheet(UISheet newSheet) {

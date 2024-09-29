@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -27,8 +28,6 @@ public class LoginController {
 
     private AppController mainController;
 
-    private final StringProperty errorMessageProperty = new SimpleStringProperty();
-
     @FXML
     public void initialize() {
     }
@@ -38,7 +37,12 @@ public class LoginController {
 
         String userName = userNameTextField.getText();
         if (userName.isEmpty()) {
-            errorMessageProperty.set("User name is empty. You can't login with empty user name");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Login failed");
+            alert.setContentText("User name is empty. You can't login with empty user name");
+            alert.showAndWait();
+
             return;
         }
 
@@ -56,18 +60,26 @@ public class LoginController {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Platform.runLater(() ->
-                        errorMessageProperty.set("Something went wrong: " + e.getMessage())
-                );
+                Platform.runLater(() -> {
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle("Error");
+                                alert.setHeaderText("Login failed");
+                                alert.setContentText(e.getMessage());
+                                alert.showAndWait();
+                            });
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseBody = response.body().string();
                 if (response.code() != 200) {
-                    String responseBody = response.body().string();
-                    Platform.runLater(() ->
-                            errorMessageProperty.set("Something went wrong: " + responseBody)
-                    );
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Login failed");
+                        alert.setContentText(responseBody);
+                        alert.showAndWait();
+                    });
                 } else {
                     Platform.runLater(() -> {
                         mainController.setUsername(userName);

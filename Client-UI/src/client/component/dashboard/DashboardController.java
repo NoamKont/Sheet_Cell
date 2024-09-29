@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -91,19 +92,21 @@ public class DashboardController {
             items.addAll(sheetsInfo);
         });
     }
+
     public void startListRefresher() {
         TimerTask listRefresher = new SheetsListRefresher(
                 autoUpdate,
-                this::updateSheetsList);
+                this::updateSheetsList,
+                availableSheets.getItems());
         Timer timer = new Timer();
         timer.schedule(listRefresher, REFRESH_RATE, REFRESH_RATE);
     }
 
-
     public void sheetChosen() {
-        String selectedSheetName = null;
+        String selectedSheetName = getSelectedSheetName();
         appController.switchToSheetView(selectedSheetName);
     }
+
     public String getSelectedSheetName() {
         return availableSheets.getSelectionModel().getSelectedItem().getSheetName();
     }
@@ -112,4 +115,7 @@ public class DashboardController {
         this.appController = appController;
     }
 
+    public TableView<SheetInfo> getAvailableSheets() {
+        return availableSheets;
+    }
 }

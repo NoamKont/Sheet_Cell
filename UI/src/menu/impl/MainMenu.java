@@ -159,7 +159,7 @@ public enum MainMenu implements Menu {
                         break;
                     }
                     if(option > 0 && option <= CellsPerVersion.size()){
-                        SheetDTO sheet = logic.getSheetbyVersion(option - 1);
+                        SheetDTO sheet = logic.getSheetbyVersion(option);
                         printSheet(sheet);
                         break;
 

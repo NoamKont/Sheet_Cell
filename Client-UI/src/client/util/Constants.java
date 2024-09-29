@@ -43,6 +43,7 @@ public class Constants {
 
     public final static String NEW_SHEET = FULL_SERVER_PATH + "/sheetslist/new";
     public final static String GET_SHEET = FULL_SERVER_PATH + "/sheetslist/sheet";
+    public static final String GET_VERSION = FULL_SERVER_PATH + "/sheetslist/sheet/version";
     public final static String UPDATE_CELL = FULL_SERVER_PATH + "/sheetslist/sheet/updateCell";
 
     public final static String ADD_RANGE = FULL_SERVER_PATH + "/range/add";
@@ -50,6 +51,7 @@ public class Constants {
 
     public final static String SORT_SHEET = FULL_SERVER_PATH + "/utils/sort";
     public final static String FILTER_SHEET = FULL_SERVER_PATH + "/utils/filter";
+    public static final String GET_VALUES_FROM_COLUMN = "/utils/getValuesFromColumn";
 
 
 

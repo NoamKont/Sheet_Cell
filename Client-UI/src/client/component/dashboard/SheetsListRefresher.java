@@ -21,6 +21,7 @@ import dto.impl.CellDTO;
 import expression.Range.api.Range;
 import expression.Range.impl.RangeImpl;
 import javafx.beans.property.BooleanProperty;
+import javafx.collections.ObservableList;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -43,11 +44,13 @@ public class SheetsListRefresher extends TimerTask {
     private final Consumer<List<SheetInfo>> SheetsListConsumer;
     private int requestNumber;
     private final BooleanProperty shouldUpdate;
+    private final ObservableList<SheetInfo> currentSheets;
 
 
-    public SheetsListRefresher(BooleanProperty shouldUpdate, Consumer<List<SheetInfo>> sheetsListConsumer) {
+    public SheetsListRefresher(BooleanProperty shouldUpdate, Consumer<List<SheetInfo>> sheetsListConsumer, ObservableList<SheetInfo> currentSheets) {
         this.shouldUpdate = shouldUpdate;
         this.SheetsListConsumer = sheetsListConsumer;
+        this.currentSheets = currentSheets;
         requestNumber = 0;
     }
 
@@ -59,6 +62,12 @@ public class SheetsListRefresher extends TimerTask {
         }
 
         final int finalRequestNumber = ++requestNumber;
+
+//        //for debugging
+//        if(finalRequestNumber == 2){
+//            shouldUpdate.setValue(false);
+//        }
+
 
         HttpClientUtil.runAsync(Constants.SHEETS_LIST, new Callback() {
 
@@ -72,12 +81,15 @@ public class SheetsListRefresher extends TimerTask {
                 String jsonArrayOfUsersNames = response.body().string();
                 Set<Logic> sheetsList = GSON_INSTANCE.fromJson(jsonArrayOfUsersNames, new TypeToken<Set<Logic>>(){}.getType());
                 //for debugging
-                System.out.println(sheetsList.size());
+                System.out.println("Number of Sheets in the System: " + sheetsList.size());
                 List<SheetInfo> sheetInfo = new ArrayList<>();
                 for (Logic logic : sheetsList) {
                     sheetInfo.add(new SheetInfo(logic.getSheet()));
                 }
-                SheetsListConsumer.accept(sheetInfo);
+
+                if(!sheetInfo.equals(currentSheets)){
+                    SheetsListConsumer.accept(sheetInfo);
+                }
             }
         });
     }

@@ -24,10 +24,10 @@ public class SheetDeserializer implements JsonDeserializer<Sheet> {
         int sheetVersion = res.getVersion() - 1 ;
         res.getActiveCells().entrySet().forEach(entry -> {
             res.setVersion(sheetVersion);
-            res.updateCellDitels(entry.getValue().getId(), entry.getValue().getOriginalValue());
-            res.updateListsOfDependencies(new CoordinateImpl(entry.getKey()));
+            res.updateCellDitels(entry.getKey().toString(), entry.getValue().getOriginalValue());
+            res.updateListsOfDependencies(entry.getValue().getCoordinate());
         });
-        res.updateCellEffectiveValue("A1");
+        res.updateCellEffectiveValue("Z1");
 
         res.getAllRanges().entrySet().forEach(entry -> {
             entry.getValue().setSheet(res);

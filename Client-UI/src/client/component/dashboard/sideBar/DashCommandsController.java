@@ -23,11 +23,11 @@ public class DashCommandsController implements Initializable {
 
     @FXML
     void viewSheetPressed(ActionEvent event) {
-        //String sheetName = dashController.getSelectedSheetName();
         dashController.sheetChosen();
     }
 
     public void setDashController(DashboardController dashController) {
         this.dashController = dashController;
+        viewSheetBtn.disableProperty().bind(dashController.getAvailableSheets().getSelectionModel().selectedItemProperty().isNull());
     }
 }

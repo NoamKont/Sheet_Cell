@@ -168,13 +168,15 @@ public class ImplSheet implements Sheet, Serializable  {
         Coordinate currCoord = new CoordinateImpl(cellId);
         checkValidBounds(currCoord);
         activeCells.putIfAbsent(currCoord, new ImplCell(cellId));
+        Cell cell = activeCells.get(currCoord);
+
+        currCoord = cell.getCoordinate();
+
         graph.addVertex(currCoord);
         sheetVersion = sheetVersion + 1;
         graph.removeEntryEdges(currCoord);
-        Cell cell = activeCells.get(currCoord);
 
-        //why we need it?
-        //cell.setEffectiveValue(null);
+
         Expression currExpression = stringToExpression(value,currCoord);
         cell.setOriginalValue(currExpression.toString());
         cell.setExpression(currExpression);

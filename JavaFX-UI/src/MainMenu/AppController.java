@@ -439,7 +439,7 @@ public class AppController {
     public void showVersion(int i) {
         Stage popupStage = new Stage();
         try{
-            UISheet versionSheet = new UISheet(logic.getSheetbyVersion(i-1));
+            UISheet versionSheet = new UISheet(logic.getSheetbyVersion(i));
             ScrollPane popupLayout = creatSheetComponent(versionSheet,false);
             Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
             popupStage.setScene(popupSortedSheet);

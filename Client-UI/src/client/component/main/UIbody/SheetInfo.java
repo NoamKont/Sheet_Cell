@@ -2,6 +2,8 @@ package client.component.main.UIbody;
 
 import dto.SheetDTO;
 
+import java.util.Objects;
+
 public class SheetInfo {
     private String sheetOwner;
     private String sheetName;
@@ -45,5 +47,21 @@ public class SheetInfo {
 
     public String getSheetSize() {
         return rows + "x" + columns;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SheetInfo that = (SheetInfo) o;
+        return Objects.equals(sheetName, that.sheetName) &&
+                Objects.equals(sheetOwner, that.sheetOwner)&&
+                Objects.equals(sheetSize, that.sheetSize)&&
+                Objects.equals(permission, that.permission);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sheetName, sheetOwner);
     }
 }

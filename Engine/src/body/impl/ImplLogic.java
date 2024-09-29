@@ -192,7 +192,7 @@ public class ImplLogic implements Logic,Serializable  {
 
     @Override
     public SheetDTO getSheetbyVersion(int version) {
-        return new ImplSheetDTO(mainSheet.get(version));
+        return new ImplSheetDTO(mainSheet.get(version - 1));
     }
 
     private boolean checkPostFix(String fullPath) {

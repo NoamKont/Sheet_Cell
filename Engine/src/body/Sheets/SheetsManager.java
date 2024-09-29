@@ -43,7 +43,7 @@ public class SheetsManager {
         newSheet.setOwner(owner);
         newSheet.creatNewSheet(path);
         if(isSheetExists(newSheet.getSheet().getSheetName())){
-            throw new IllegalArgumentException("Sheet with this name is already exists! Please choose another name");
+            throw new IllegalArgumentException("Sheet with this name is already exists! Please choose another sheet or rename the existing one");
         }
         sheetsSet.add(newSheet);
     }
