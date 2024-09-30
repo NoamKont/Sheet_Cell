@@ -4,24 +4,33 @@ package client.component.main.MainMenu.Header.DynamicAnalysis;
 import client.component.main.MainMenu.AppController;
 import client.component.main.MainMenu.Header.HeaderComponentController;
 import client.component.main.MainMenu.SideBar.Command.FilterPopUpController;
+import client.component.main.UIbody.UISheet;
+import client.util.Constants;
+import client.util.http.HttpClientUtil;
+import dto.SheetDTO;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static client.util.Constants.*;
+import static client.util.Constants.SORT_SHEET;
 
 public class DynamicAnalysisController implements Initializable {
 
@@ -125,8 +134,61 @@ public class DynamicAnalysisController implements Initializable {
             int row = GridPane.getRowIndex(valueSliderLabel);
             String cellId = ((Label) FilterPopUpController.getChildFromGridPane(cellsValue, row, 0)).getText();
             String value = ((Label) FilterPopUpController.getChildFromGridPane(cellsValue, row, 2)).getText();
-            popupBody.setCenter(mainController.creatSheetComponent(mainController.getSheetForDynamicAnalysis(cellId,value), false));
-            valueSlider.setValue(Double.parseDouble(newValue));
+
+            RequestBody body = new FormBody.Builder()
+                    .add("sheetName", mainController.getSheetName())
+                    .add("cellID", cellId)
+                    .add("value", value)
+                    .build();
+
+            HttpClientUtil.runPostAsync(body, DYNAMIC_SHEET, new Callback(){
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    String responseBody = response.body().string();
+                    if(response.isSuccessful()) {
+                        System.out.println("Dynamic Sheet is successful now bringing the Sheet");
+                        SheetDTO sortedSheetDTO = GSON_INSTANCE.fromJson(responseBody, SheetDTO.class);
+                        UISheet sortedSheet = new UISheet(sortedSheetDTO);
+                        ScrollPane popupLayout = mainController.creatSheetComponent(sortedSheet, false);
+                        Platform.runLater(() -> {
+                            popupBody.setCenter(popupLayout);
+                            valueSlider.setValue(Double.parseDouble(newValue));
+                        });
+                    }
+                    else {
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("Error in Creating Dynamic sheet");
+                            alert.setContentText(responseBody);
+                            alert.showAndWait();
+                        });
+                    }
+                }
+
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Error in Creating Dynamic sheet");
+                        alert.setContentText(e.getMessage());
+                        alert.showAndWait();
+                    });
+                }
+            });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//            popupBody.setCenter(mainController.creatSheetComponent(mainController.getSheetForDynamicAnalysis(cellId,value), false));
+//            valueSlider.setValue(Double.parseDouble(newValue));
         });
     }
 
@@ -137,7 +199,54 @@ public class DynamicAnalysisController implements Initializable {
     public void setMainController(AppController mainController){
         this.mainController = mainController;
         setSelectedCell();
-        popupBody.setCenter(mainController.creatSheetComponent(mainController.getSheetForDynamicAnalysis(), false));
+
+        //noinspection ConstantConditions
+        RequestBody body = new FormBody.Builder()
+                .add("sheetName", mainController.getSheetName())
+                .add("cellID", mainController.getSelectedCell().idProperty().get())
+                .add("value", mainController.getSelectedCell().effectiveValueProperty().get())
+                .build();
+
+        HttpClientUtil.runPostAsync(body, DYNAMIC_SHEET, new Callback(){
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseBody = response.body().string();
+                if(response.isSuccessful()) {
+                    System.out.println("Dynamic Sheet is successful now bringing the Sheet");
+                    SheetDTO sortedSheetDTO = GSON_INSTANCE.fromJson(responseBody, SheetDTO.class);
+                    UISheet sortedSheet = new UISheet(sortedSheetDTO);
+                    ScrollPane popupLayout = mainController.creatSheetComponent(sortedSheet, false);
+                    Platform.runLater(() -> {
+                        popupBody.setCenter(popupLayout);
+                    });
+                }
+                else {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Error in Creating Dynamic sheet");
+                        alert.setContentText(responseBody);
+                        alert.showAndWait();
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Error in Creating Dynamic sheet");
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
+                });
+            }
+        });
+
+
+
+        //popupBody.setCenter(mainController.creatSheetComponent(mainController.getSheetForDynamicAnalysis(), false));
     }
 
     public void setPopupStage(Stage popupStage) {

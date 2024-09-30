@@ -19,9 +19,10 @@ public class REF extends UnaryExpression implements Serializable {
     protected EffectiveValue evaluate(EffectiveValue evaluate) throws NumberFormatException {
         return new Reference(cell);
     }
-
+//TODO change back if not working
     @Override
     public String toString() {
-        return "{REF," + cell.getId() + "}";
+        //return "{REF," + cell.getId() + "}";
+        return "{REF," + getExpression() + "}";
     }
 }

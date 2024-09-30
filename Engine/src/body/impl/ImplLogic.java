@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import body.Coordinate;
-
 
 public class ImplLogic implements Logic,Serializable  {
     private String owner;
@@ -156,7 +154,7 @@ public class ImplLogic implements Logic,Serializable  {
             res.setVersion(0);
             cellId = stlCell.getColumn() + String.valueOf(stlCell.getRow());
             try{
-                res.updateCellDitels(cellId,stlCell.getSTLOriginalValue());
+                res.updateCellDetails(cellId,stlCell.getSTLOriginalValue());
                 res.updateListsOfDependencies(new CoordinateImpl(cellId));
             }catch (Exception e){
                 String errorMessage = "Can't Upload new Sheet!, " + e.getMessage() + " in cell ID: " + cellId;

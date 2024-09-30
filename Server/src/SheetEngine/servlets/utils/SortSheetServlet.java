@@ -32,6 +32,7 @@ public class SortSheetServlet extends HttpServlet {
             String bottomRight = request.getParameter("bottomRight");
             String columns = request.getParameter("columns");
             String[] columnsArray = GSON_INSTANCE.fromJson(columns, String[].class);
+            //String[] columnsArray = {"C", "D"};
             SheetsManager sheetManager = getSheetManager(getServletContext());
             try {
                 SheetDTO sortedSheet = sheetManager.getSheet(sheetName).sortSheet(topLeft, bottomRight, columnsArray);

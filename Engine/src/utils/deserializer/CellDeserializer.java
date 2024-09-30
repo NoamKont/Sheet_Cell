@@ -5,6 +5,7 @@ import body.Coordinate;
 import body.Logic;
 import body.impl.ImplCell;
 import body.impl.ImplLogic;
+import body.impl.ImplSheet;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
@@ -16,6 +17,7 @@ public class CellDeserializer implements JsonDeserializer<Cell> {
     @Override
     public Cell deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
+
         ImplCell res = new ImplCell(json.getAsJsonObject().get("Id").getAsString());
         res.setLastVersionUpdate(json.getAsJsonObject().get("lastVersionUpdate").getAsInt());
         String originalValue = json.getAsJsonObject().get("originalValue").getAsString();

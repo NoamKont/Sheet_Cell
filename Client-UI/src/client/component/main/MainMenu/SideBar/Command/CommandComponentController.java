@@ -52,7 +52,7 @@ public class CommandComponentController implements Initializable {
     private Spinner<Integer> widthSpinner;
 
     @FXML
-    private ComboBox<String> alignmentBox;
+    private MenuButton alignmentBox;
 
     @FXML
     private ColorPicker textColorPicker;
@@ -64,11 +64,6 @@ public class CommandComponentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        // alignment box
-        ObservableList<String> options =
-                FXCollections.observableArrayList( "Left", "Center", "Right" );
-        alignmentBox.setItems(options);
 
         //width spinners
         SpinnerValueFactory<Integer> widthValueFactory =
@@ -84,6 +79,7 @@ public class CommandComponentController implements Initializable {
 
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
+        initAlignment();
     }
 
     @FXML
@@ -124,19 +120,24 @@ public class CommandComponentController implements Initializable {
     }
 
     @FXML
-    void alignmentSelectionListener(ActionEvent event) {
-        int selectedIndex = alignmentBox.getSelectionModel().getSelectedIndex();
-        switch (selectedIndex) {
-            case 0:
-                mainController.alignCells(Pos.CENTER_LEFT);
-                break;
-            case 1:
-                mainController.alignCells(Pos.CENTER);
-                break;
-            case 2:
-                mainController.alignCells(Pos.CENTER_RIGHT);
-                break;
-        }
+    void initAlignment() {
+        MenuItem menuItem = new MenuItem("Left");
+        menuItem.setOnAction(e -> {
+            mainController.alignCells(Pos.CENTER_LEFT);
+        });
+        alignmentBox.getItems().add(menuItem);
+
+        menuItem = new MenuItem("Center");
+        menuItem.setOnAction(e -> {
+            mainController.alignCells(Pos.CENTER);
+        });
+        alignmentBox.getItems().add(menuItem);
+
+        menuItem = new MenuItem("Right");
+        menuItem.setOnAction(e -> {
+            mainController.alignCells(Pos.CENTER_RIGHT);
+        });
+        alignmentBox.getItems().add(menuItem);
     }
 
     @FXML

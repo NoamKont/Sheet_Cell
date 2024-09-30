@@ -2,6 +2,10 @@ package client.component.main.MainMenu.VisualUtils;
 
 
 import client.component.main.MainMenu.AppController;
+import client.util.Constants;
+import client.util.http.HttpClientUtil;
+import com.google.gson.reflect.TypeToken;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,17 +13,23 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
+
+import static client.util.Constants.GSON_INSTANCE;
 
 public class GraphMakerController implements Initializable {
 
@@ -157,17 +167,18 @@ public class GraphMakerController implements Initializable {
     }
 
     private void analyzeData(String xAxisCol, String yAxisCol, String xAxisBounds, String yAxisBounds, String graphType) {
-        int xColIndex = xAxisCol.substring(7).charAt(0) - 'A' + 1;
-        int yColIndex = yAxisCol.substring(7).charAt(0) - 'A' + 1;
+        Integer xColIndex = xAxisCol.substring(7).charAt(0) - 'A' + 1;
+        Integer yColIndex = yAxisCol.substring(7).charAt(0) - 'A' + 1;
 
-        int xTopBound = Integer.parseInt(xAxisBounds.split(":")[0]);
-        int xBottomBound = Integer.parseInt(xAxisBounds.split(":")[1]);
+        Integer xTopBound = Integer.parseInt(xAxisBounds.split(":")[0]);
+        Integer xBottomBound = Integer.parseInt(xAxisBounds.split(":")[1]);
 
-        int yTopBound = Integer.parseInt(yAxisBounds.split(":")[0]);
-        int yBottomBound = Integer.parseInt(yAxisBounds.split(":")[1]);
+        Integer yTopBound = Integer.parseInt(yAxisBounds.split(":")[0]);
+        Integer yBottomBound = Integer.parseInt(yAxisBounds.split(":")[1]);
 
         xAxis = mainController.getValuesFromColumnsAsList(xColIndex, xTopBound, xBottomBound);
         yAxis = mainController.getValuesFromColumnsAsList(yColIndex, yTopBound, yBottomBound);
+
 
         if(xAxis.size() != yAxis.size()){
             throw new IllegalArgumentException("X and Y axis must have the same number of values");

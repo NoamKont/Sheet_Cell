@@ -21,17 +21,19 @@ public interface Sheet {
     Map<String, Range> getAllRanges();
     Set<Cell> getRangeCells(String rangeName);
     String getOwner();
+    Graph getGraph();
 
     void setOwner(String owner);
     void setVersion(int version);
     void setUpdateCellCount(int countUpdateCell);
+    void setGraph(Graph graph);
 
     Set<Coordinate> addRange(String rangeName, String topLeftCellId, String rightBottomCellId);
     void deleteRange(String rangeName);
 
     void updateCell(String cellId, String value);
     void updateListsOfDependencies(Coordinate coord);
-    void updateCellDitels(String cellId, String value);
+    void updateCellDetails(String cellId, String value);
     void updateCellEffectiveValue(String cellId);
 
     boolean isCellExist(String cellID);
@@ -44,7 +46,6 @@ public interface Sheet {
 
     void checkValidBounds(Coordinate coordinate);
 
-    Graph getGraph();
 
     String getPermission();
 }

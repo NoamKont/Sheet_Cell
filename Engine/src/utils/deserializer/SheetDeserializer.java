@@ -1,18 +1,10 @@
 package utils.deserializer;
 
-import body.Cell;
-import body.Coordinate;
-import body.Logic;
 import body.Sheet;
-import body.impl.CoordinateImpl;
-import body.impl.ImplLogic;
 import body.impl.ImplSheet;
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import expression.Range.api.Range;
 
 import java.lang.reflect.Type;
-import java.util.Map;
 
 public class SheetDeserializer implements JsonDeserializer<Sheet> {
 
@@ -20,12 +12,11 @@ public class SheetDeserializer implements JsonDeserializer<Sheet> {
     public Sheet deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
         ImplSheet res = context.deserialize(json, ImplSheet.class);
-
         int sheetVersion = res.getVersion() - 1 ;
+
         res.getActiveCells().entrySet().forEach(entry -> {
             res.setVersion(sheetVersion);
-            res.updateCellDitels(entry.getKey().toString(), entry.getValue().getOriginalValue());
-            res.updateListsOfDependencies(entry.getKey());
+            res.updateCellDetails(entry.getKey().toString(), entry.getValue().getOriginalValue());
         });
         res.updateCellEffectiveValue("Z1");
 

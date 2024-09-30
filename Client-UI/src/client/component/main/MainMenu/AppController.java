@@ -36,17 +36,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static client.util.Constants.GSON_INSTANCE;
+import static client.util.Constants.REFRESH_RATE;
 
 
 public class AppController {
 
-    private String username;
+    private StringProperty username = new SimpleStringProperty();
     private Stage stage;
     private Scene scene;
     private final Logic logic = new ImplLogic();
@@ -202,12 +200,11 @@ public class AppController {
     }
 
     public void setUsername(String username) {
-        this.username = username;
-        bodyComponent.setCenter(new Label("Welcome " + username));
+        this.username.set(username);
     }
 
     public String getUsername() {
-        return username;
+        return username.get();
     }
 
     private void rangeMapListener() {
@@ -313,7 +310,6 @@ public class AppController {
                         System.out.println("UpdateSheet is successful now bringing the update Sheet");
                         SheetDTO updateSheet = GSON_INSTANCE.fromJson(responseBody, SheetDTO.class);
                         Platform.runLater(() -> {
-//                            updateUISheet(updateSheet, uiSheet);
                             uiSheet.updateSheet(updateSheet);
                         });
                     }
@@ -575,11 +571,6 @@ public class AppController {
         });
     }
 
-//    public UISheet sortSheet(String topLeft, String bottomRight, String... columns) {//
-//        UISheet sortedSheet = new UISheet(logic.sortSheet(topLeft, bottomRight, columns));
-//        return sortedSheet;
-//    }
-
     public int getColumnsNumber() {
         //return logic.getColumnsNumber();
         return uiSheet.getColumnsNumber();
@@ -602,11 +593,11 @@ public class AppController {
                 if(response.isSuccessful()) {
                     System.out.println("Response is successful");
                     Platform.runLater(() -> {
-                    Stage popupStage = new Stage();
-                    SheetDTO versionSheet = GSON_INSTANCE.fromJson(responseBody, SheetDTO.class);
-                    UISheet sheet = new UISheet(versionSheet);
-                    ScrollPane popupLayout = creatSheetComponent(sheet, false);
-                    Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
+                        Stage popupStage = new Stage();
+                        SheetDTO versionSheet = GSON_INSTANCE.fromJson(responseBody, SheetDTO.class);
+                        UISheet sheet = new UISheet(versionSheet);
+                        ScrollPane popupLayout = creatSheetComponent(sheet, false);
+                        Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
                         popupStage.setScene(popupSortedSheet);
                         popupStage.showAndWait();
                     });
@@ -635,59 +626,7 @@ public class AppController {
         });
     }
 
-//    public Set<String> getValuesFromColumnsAsSet(Integer columnIndex, Integer top, Integer bottom) {
-////        //noinspection ConstantConditions
-////        String finalUrl = HttpUrl
-////                .parse(Constants.GET_VALUES_FROM_COLUMN)
-////                .newBuilder()
-////                .addQueryParameter("sheetName", uiSheet.getSheetName())
-////                .addQueryParameter("columnIndex", columnIndex.toString())
-////                .addQueryParameter("top", top.toString())
-////                .addQueryParameter("bottom", bottom.toString())
-////                .build()
-////                .toString();
-////        HttpClientUtil.runAsync(finalUrl, new Callback(){
-////
-////            @Override
-////            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-////                String responseBody = response.body().string();
-////                if(response.isSuccessful()) {
-////                    System.out.println("Response is successful");
-////                    List<String> column = GSON_INSTANCE.fromJson(responseBody, new TypeToken<List<String>>(){}.getType());
-////                }
-////                else {
-////                    Platform.runLater(() -> {
-////                        Alert alert = new Alert(Alert.AlertType.ERROR);
-////                        alert.setTitle("Error");
-////                        alert.setHeaderText("Error in getting values from column");
-////                        alert.setContentText(responseBody);
-////                        alert.showAndWait();
-////                    });
-////                }
-////            }
-////
-////            @Override
-////            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-////
-////            }
-////        });
-//
-//
-//
-//        try {
-//            List<String> column = logic.getSheet().getValuesFromColumn(columnIndex, top, bottom);
-//            return new HashSet<>(column);
-//        } catch (Exception e) {
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setTitle("Error");
-//            alert.setHeaderText("Error in getting values from column");
-//            alert.setContentText(e.getMessage());
-//            alert.showAndWait();
-//            e.printStackTrace();
-//            return new HashSet<>();
-//        }
-//    }
-
+//TODO: if graph not needed may delete this method
     public List<String> getValuesFromColumnsAsList(Integer columnIndex, int top, int bottom) {
         try {
             return logic.getSheet().getValuesFromColumn(columnIndex, top, bottom);
@@ -701,11 +640,6 @@ public class AppController {
             return new ArrayList<>();
         }
     }
-
-//    public UISheet filterSheet(String topLeft, String bottomRight, List<List<String>> values, List<String> columns) {
-//        UISheet filterSheet = new UISheet(logic.filterSheet(topLeft, bottomRight, values, columns));
-//        return filterSheet;
-//    }
 
     public void changeTextColorForSelectedCell(Color textColor) {
         selectedCell.getCellLabel().setTextFill(textColor);
@@ -727,13 +661,6 @@ public class AppController {
         return selectedCell;
     }
 
-    public UISheet getSheetForDynamicAnalysis() {
-        return new UISheet(logic.dynamicAnalysis(selectedCell.idProperty().get(), selectedCell.effectiveValueProperty().get()));
-    }
-
-    public UISheet getSheetForDynamicAnalysis(String cellId, String value) {
-        return new UISheet(logic.dynamicAnalysis(cellId, value));
-    }
 
     public BooleanProperty isFileOpenProperty() {
         return isFileOpen;
@@ -794,7 +721,6 @@ public class AppController {
     }
 
     public void switchToSheetView(String sheetName) {
-        //TODO for now sheet name is hardcoded always open car insurance sheet
         //noinspection ConstantConditions
         String finalUrl = HttpUrl
                 .parse(Constants.GET_SHEET)
@@ -820,27 +746,42 @@ public class AppController {
                     });
                     return;
                 }
-                uiSheet = new UISheet(sheet); //set the module
-                selectedCell.clearCell();
-                rangeMapListener();
-                versionSelectorMenuListener();
-                uiSheet.updateSheet(sheet);
-                isFileOpen.set(true);
-                System.out.println("Sheet Created");
 
                 Platform.runLater(() -> {
+                    uiSheet = new UISheet(sheet); //set the module
+                    selectedCell.clearCell();
+                    rangeMapListener();
+                    versionSelectorMenuListener();
+                    uiSheet.updateSheet(sheet);
+                    isFileOpen.set(true);
+                    System.out.println("Sheet Created");
                     setMainPanelTo(bodyComponent);
                     createViewSheet();
+                    startSimultaneityChangesRefresher();
                 });
             }
         });
     }
 
-    public void updateUISheet(SheetDTO newSheet, UISheet uiSheet) {
-        uiSheet.updateSheet(newSheet);
+    private void startSimultaneityChangesRefresher() {
+        TimerTask listRefresher = new SimultaneityChangesRefresher(
+                uiSheet.getSheetName(),
+                uiSheet.sheetVersionProperty(),
+                headerComponentController::newVersionExist
+        );
+        Timer timer = new Timer();
+        timer.schedule(listRefresher, 0, REFRESH_RATE);
+    }
+
+   public void updateSheet(SheetDTO sheet) {
+        uiSheet.updateSheet(sheet);
     }
 
     public String getSheetName() {
         return uiSheet.getSheetName();
+    }
+
+    public Object usernameProperty() {
+        return username;
     }
 }

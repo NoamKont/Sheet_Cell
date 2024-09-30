@@ -6,6 +6,7 @@ import client.component.main.MainMenu.AppController;
 import client.component.main.MainMenu.Header.DynamicAnalysis.DynamicAnalysisController;
 import client.component.main.MainMenu.Header.DynamicAnalysis.dataPopUpController;
 import client.component.main.UIbody.UICell;
+import dto.SheetDTO;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.BooleanProperty;
@@ -17,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -26,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 public class HeaderComponentController implements Initializable {
 
@@ -53,10 +56,7 @@ public class HeaderComponentController implements Initializable {
     private Button updateValueBtn;
 
     @FXML
-    private ComboBox<String> versionSelectorMenu;
-
-    @FXML
-    private Button uploadXmlBtn;
+    private Button updateVersionBtn;
 
     @FXML
     private Button dynamicAnalysisBtn;
@@ -64,24 +64,42 @@ public class HeaderComponentController implements Initializable {
     @FXML
     private ComboBox<String> modeComboBox;
 
+    @FXML
+    private Label usernameLabel;
+
+    @FXML
+    private MenuButton versionSelectorMenu;
+
+    @FXML
+    private StackPane notification;
+
+    private SheetDTO newestSheet;
+
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
+
+    public void newVersionExist(SheetDTO s){
+        newestSheet = s;
+        updateVersionBtn.setDisable(false);
+        notification.setVisible(true);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         modeComboBox.getItems().addAll("Default", "Classic Blue", "Deadpool");
+
+        updateVersionBtn.setOnAction(e -> {
+            updateVersionBtn.setDisable(true);
+            notification.setVisible(false);
+            mainController.updateSheet(newestSheet);
+        });
     }
 
     @FXML
     void ModeChangePressed(ActionEvent event) {
         String mode = modeComboBox.getValue();
         mainController.changeMode(mode);
-    }
-
-    @FXML
-    void selectedVersionToShow(ActionEvent event) {
-        String version = versionSelectorMenu.getValue().substring(8);
-        mainController.showVersion(Integer.parseInt(version));
     }
 
     @FXML
@@ -113,6 +131,8 @@ public class HeaderComponentController implements Initializable {
         originalValueViewer.textProperty().bind(selectedCell.originalValueProperty());
         StringExpression sb = Bindings.concat("Last Update Version: ", selectedCell.lastVersionUpdateProperty());
         lastCellVersionUpdateViewer.textProperty().bind(sb);
+        StringExpression usernameHelloText = Bindings.concat("Hello ", mainController.usernameProperty());
+        usernameLabel.textProperty().bind(usernameHelloText);
         dynamicAnalysisBtn.disableProperty().bind(isFileLoaded.not());
         versionSelectorMenu.disableProperty().bind(isFileLoaded.not());
         IdViewer.disableProperty().bind(isFileLoaded.not());
@@ -125,7 +145,12 @@ public class HeaderComponentController implements Initializable {
     public void addVersionToMenu(Integer version){
         versionSelectorMenu.getItems().clear();
         for(Integer i = 1; i <= version; i++){
-            versionSelectorMenu.getItems().add("Version " + i.toString());
+            MenuItem menuItem = new MenuItem("Version " + i.toString());
+            menuItem.setOnAction(e -> {
+                String versionNumber = menuItem.getText().substring(8);
+                mainController.showVersion(Integer.parseInt(versionNumber));
+            });
+            versionSelectorMenu.getItems().add(menuItem);
         }
     }
 

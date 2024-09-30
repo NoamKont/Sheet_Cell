@@ -123,6 +123,11 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
+    public void setGraph(Graph graph) {
+        this.graph = graph;
+    }
+
+    @Override
     public Set<Coordinate> addRange(String rangeName, String topLeftCellId, String rightBottomCellId) {
         if(rangeMap.containsKey(rangeName)){
             throw new IllegalArgumentException("Range name already exist");
@@ -164,19 +169,17 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
-    public void updateCellDitels(String cellId, String value){
+    public void updateCellDetails(String cellId, String value){
         Coordinate currCoord = new CoordinateImpl(cellId);
         checkValidBounds(currCoord);
         activeCells.putIfAbsent(currCoord, new ImplCell(cellId));
         Cell cell = activeCells.get(currCoord);
 
-        //currCoord = cell.getCoordinate();
+        currCoord = cell.getCoordinate();
 
         graph.addVertex(currCoord);
         sheetVersion = sheetVersion + 1;
         graph.removeEntryEdges(currCoord);
-
-
         Expression currExpression = stringToExpression(value,currCoord);
         cell.setOriginalValue(currExpression.toString());
         cell.setExpression(currExpression);
@@ -191,15 +194,17 @@ public class ImplSheet implements Sheet, Serializable  {
 
         for(Coordinate coord : topologicalSorted){
             Cell currCell = activeCells.get(coord);
+            //Cell currCell = getCellByCoordinate(coord);
+
             if(neighbors.contains(coord) && !coord.equals(new CoordinateImpl(cellId))){
                 currCell.setLastVersionUpdate(sheetVersion);
                 countUpdateCell++;
             }
             String value = currCell.getOriginalValue();
-            Expression currExpression = stringToExpression(value,coord);
+            Expression currExpression = stringToExpression(value,currCell.getCoordinate());
             currCell.setExpression(currExpression);
             currCell.setEffectiveValue(currCell.getExpression().evaluate());
-            updateListsOfDependencies(coord);
+            updateListsOfDependencies(currCell.getCoordinate());
         }
     }
 
@@ -354,7 +359,7 @@ public class ImplSheet implements Sheet, Serializable  {
 
     @Override
     public void updateCell(String cellId, String value) {
-        updateCellDitels(cellId, value);
+        updateCellDetails(cellId, value);
         updateCellEffectiveValue(cellId);
     }
 
@@ -643,5 +648,13 @@ public class ImplSheet implements Sheet, Serializable  {
     }
     public void setAllActiveCells(Map<Coordinate, Cell> activeCells) {
         this.activeCells = activeCells;
+    }
+    public Cell getCellByCoordinate(Coordinate coordinate){
+        return activeCells.entrySet().stream()
+                .filter(entry -> entry.getValue().getCoordinate().equals(coordinate))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElseThrow();
+        //return activeCells.get(coordinate);
     }
 }
