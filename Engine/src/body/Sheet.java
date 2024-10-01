@@ -31,10 +31,10 @@ public interface Sheet {
     Set<Coordinate> addRange(String rangeName, String topLeftCellId, String rightBottomCellId);
     void deleteRange(String rangeName);
 
-    void updateCell(String cellId, String value);
+    void updateCell(String cellId, String value, String username);
     void updateListsOfDependencies(Coordinate coord);
-    void updateCellDetails(String cellId, String value);
-    void updateCellEffectiveValue(String cellId);
+    void updateCellDetails(String cellId, String value, String username);
+    void updateCellEffectiveValue(String cellId,String username);
 
     boolean isCellExist(String cellID);
 

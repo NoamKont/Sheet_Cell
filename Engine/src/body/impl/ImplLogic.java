@@ -59,7 +59,7 @@ public class ImplLogic implements Logic,Serializable  {
     }
 
 
-    public void updateCell(String cellId, String value){
+    public void updateCell(String cellId, String value, String username) {
         Sheet oldVersion = null;
         Sheet currentVersion = mainSheet.get(mainSheet.size() - 1);
 
@@ -78,7 +78,7 @@ public class ImplLogic implements Logic,Serializable  {
 
             mainSheet.add(mainSheet.indexOf(currentVersion), oldVersion);
             currentVersion.setUpdateCellCount(0);
-            currentVersion.updateCell(cellId, value);
+            currentVersion.updateCell(cellId, value, username);
 
 
         } catch (IOException | ClassNotFoundException e) {
@@ -155,14 +155,14 @@ public class ImplLogic implements Logic,Serializable  {
             res.setVersion(0);
             cellId = stlCell.getColumn() + String.valueOf(stlCell.getRow());
             try{
-                res.updateCellDetails(cellId,stlCell.getSTLOriginalValue());
+                res.updateCellDetails(cellId,stlCell.getSTLOriginalValue(),owner);
                 res.updateListsOfDependencies(new CoordinateImpl(cellId));
             }catch (Exception e){
                 String errorMessage = "Can't Upload new Sheet!, " + e.getMessage() + " in cell ID: " + cellId;
                 throw new IllegalArgumentException(errorMessage);
             }
         }
-        res.updateCellEffectiveValue(cellId);
+        res.updateCellEffectiveValue(cellId,owner);
         return res;
     }
 
@@ -249,7 +249,8 @@ public class ImplLogic implements Logic,Serializable  {
 
             analysVersion = (Sheet) inStream.readObject();
 
-            analysVersion.updateCell(cellId, value);
+            //TODO: check if it fill appear in the sheet
+            analysVersion.updateCell(cellId, value, owner);
             return new ImplSheetDTO(analysVersion);
 
         } catch (IOException | ClassNotFoundException e) {

@@ -117,7 +117,7 @@ public enum MainMenu implements Menu {
                 System.out.println("Please enter the new Value:");
                 String enterdValue = scanner.nextLine();
                 try {
-                    logic.updateCell(enterdCell, enterdValue);
+                    logic.updateCell(enterdCell, enterdValue,"admin");
                     printCell(logic.getCell(enterdCell),true);
                     break;
                 } catch (ClassCastException  e) {

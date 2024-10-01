@@ -15,14 +15,16 @@ public class CellDTO {
     private EffectiveValue effectiveValue;
     private List<Coordinate> cellsDependsOnThem = new ArrayList<>();
     private List<Coordinate> cellsDependsOnHim =new ArrayList<>();
+    private String updateBy;
 
-    public CellDTO(String id, int lastVersionUpdate, String originalValue, EffectiveValue effectiveValue,List<Coordinate> cellsDependsOnThem, List<Coordinate> cellsDependsOnHim) {
+    public CellDTO(String id, int lastVersionUpdate, String originalValue, EffectiveValue effectiveValue,List<Coordinate> cellsDependsOnThem, List<Coordinate> cellsDependsOnHim, String updateBy) {
         this.Id = id;
         this.lastVersionUpdate = lastVersionUpdate;
         this.originalValue = originalValue;
         this.effectiveValue = effectiveValue;
         this.cellsDependsOnThem = cellsDependsOnThem;
         this.cellsDependsOnHim = cellsDependsOnHim;
+        this.updateBy = updateBy;
     }
     public CellDTO(Cell cell) {
         this.Id = cell.getId();
@@ -31,6 +33,7 @@ public class CellDTO {
         this.effectiveValue = cell.getEffectiveValue();
         this.cellsDependsOnThem = cell.getCellsDependsOnThem();
         this.cellsDependsOnHim = cell.getCellsDependsOnHim();
+        this.updateBy = cell.getUpdateBy();
 
     }
     public String getId() {
@@ -44,5 +47,6 @@ public class CellDTO {
     public Object getOriginalEffectiveValue() {return effectiveValue;}
     public List<Coordinate> getCellsDependsOnThem() {return cellsDependsOnThem;}
     public List<Coordinate> getCellsDependsOnHim() {return cellsDependsOnHim;}
+    public String getUpdateBy() {return updateBy;}
 
 }

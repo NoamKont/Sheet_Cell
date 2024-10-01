@@ -235,7 +235,7 @@ public class AppController {
 
     public void updateCell(String input){
         try{
-            logic.updateCell(selectedCell.idProperty().getValue(), input);
+            logic.updateCell(selectedCell.idProperty().getValue(), input,"admin");
             uiSheet.updateSheet(logic.getSheet());
             selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
             selectedCell.updateUICell(selectedCellProperty.get());

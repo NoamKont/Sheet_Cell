@@ -14,7 +14,7 @@ public interface Logic {
 
     void creatNewSheet(String path)throws JAXBException, FileNotFoundException, IOException;
 
-    void updateCell(String cellId, String value);
+    void updateCell(String cellId, String value, String username);
 
     CellDTO getCell(String cellID);
     int getRowsNumber();

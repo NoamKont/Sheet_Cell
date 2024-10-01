@@ -18,6 +18,7 @@ public class UICell {
     private ObjectProperty<Label> cellLabel = new SimpleObjectProperty<>();
     private UIGridPart row;
     private UIGridPart column;
+    private StringProperty updateBy = new SimpleStringProperty();
 
 
 
@@ -26,6 +27,7 @@ public class UICell {
         lastVersionUpdate.setValue(Cell.getLastVersionUpdate());
         originalValue.setValue(Cell.getOriginalValue());
         effectiveValue.setValue(Cell.getOriginalEffectiveValue().toString());
+        updateBy.setValue(Cell.getUpdateBy());
         if(Cell.getCellsDependsOnThem() == null){
             cellsDependsOnThem = new SimpleListProperty<>();
         }
@@ -58,6 +60,7 @@ public class UICell {
         cellsDependsOnThem.set(FXCollections.observableArrayList(uiCell.cellsDependsOnThem));
         cellsDependsOnHim.set(FXCollections.observableArrayList(uiCell.cellsDependsOnHim));
         cellLabel.set(uiCell.cellLabel.get());
+        updateBy.setValue(uiCell.updateBy.getValue());
     }
 
     public void updateUICell(CellDTO Cell) {
@@ -65,7 +68,7 @@ public class UICell {
         lastVersionUpdate.setValue(Cell.getLastVersionUpdate());
         originalValue.setValue(Cell.getOriginalValue());
         effectiveValue.setValue(Cell.getOriginalEffectiveValue().toString());
-
+        updateBy.setValue(Cell.getUpdateBy());
         if(Cell.getCellsDependsOnThem() == null){
             cellsDependsOnThem = new SimpleListProperty<>();
         }
@@ -96,6 +99,9 @@ public class UICell {
     }
     public StringProperty effectiveValueProperty() {
         return effectiveValue;
+    }
+    public StringProperty updateByProperty() {
+        return updateBy;
     }
 
     public ListProperty<Coordinate> cellsDependsOnThemProperty() {

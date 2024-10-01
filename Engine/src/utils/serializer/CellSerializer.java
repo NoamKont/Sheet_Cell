@@ -21,6 +21,7 @@ public class CellSerializer implements JsonSerializer<Cell> {
         jsonObject.add("effectiveValue", context.serialize(src.getEffectiveValue()));  // Handle effectiveValue
         jsonObject.add("cellsDependsOnThem", context.serialize(src.getCellsDependsOnThem()));  // Serialize the list
         jsonObject.add("cellsDependsOnHim", context.serialize(src.getCellsDependsOnHim()));  // Serialize the list
+        jsonObject.addProperty("updateBy", src.getUpdateBy());
         return jsonObject;
     }
 }

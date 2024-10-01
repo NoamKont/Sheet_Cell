@@ -89,6 +89,9 @@ public class HeaderComponentController implements Initializable {
         newestSheet = s;
         updateVersionBtn.setDisable(false);
         notification.setVisible(true);
+
+        actionLine.setDisable(true);
+        updateValueBtn.setDisable(true);
     }
 
     @Override
@@ -119,19 +122,20 @@ public class HeaderComponentController implements Initializable {
         actionLine.clear();
     }
 
-    public void bindModuleToUI(UICell selectedCell, BooleanProperty isFileLoaded){
+    public void bindModuleToUI(UICell selectedCell, BooleanProperty isWriterPermission){
         IdViewer.textProperty().bind(selectedCell.idProperty());
         originalValueViewer.textProperty().bind(selectedCell.originalValueProperty());
         StringExpression sb = Bindings.concat("Last Update Version: ", selectedCell.lastVersionUpdateProperty());
         lastCellVersionUpdateViewer.textProperty().bind(sb);
         StringExpression usernameHelloText = Bindings.concat("Hello ", mainController.usernameProperty(), "!");
         usernameLabel.textProperty().bind(usernameHelloText);
-        dynamicAnalysisBtn.disableProperty().bind(isFileLoaded.not());
-        versionSelectorMenu.disableProperty().bind(isFileLoaded.not());
-        IdViewer.disableProperty().bind(isFileLoaded.not());
-        originalValueViewer.disableProperty().bind(isFileLoaded.not());
-        updateValueBtn.disableProperty().bind(isFileLoaded.not());
-        actionLine.disableProperty().bind(isFileLoaded.not());
+        userUpdateCellLabel.textProperty().bind(Bindings.concat("Cell Update By: ", selectedCell.updateByProperty()));
+        dynamicAnalysisBtn.disableProperty().bind(isWriterPermission.not());
+        versionSelectorMenu.disableProperty().bind(isWriterPermission.not());
+        IdViewer.disableProperty().bind(isWriterPermission.not());
+        originalValueViewer.disableProperty().bind(isWriterPermission.not());
+        updateValueBtn.disableProperty().bind(isWriterPermission.not());
+        actionLine.disableProperty().bind(isWriterPermission.not());
 
     }
 

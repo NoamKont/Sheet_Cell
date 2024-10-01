@@ -21,8 +21,7 @@ public class VersionSheetServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //returning JSON objects
-        System.out.println("VersionSheetServlet: doGet");
+        //returning JSON objects, not HTML
         try (PrintWriter out = response.getWriter()) {
             response.setContentType("application/json");
 

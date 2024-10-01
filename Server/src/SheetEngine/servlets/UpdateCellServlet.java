@@ -40,7 +40,7 @@ public class UpdateCellServlet extends HttpServlet {
                 if (sheetsManager.isSheetExists(sheetName)) {
                     Logic sheetEngine = sheetsManager.getSheet(sheetName);
                     try {
-                        sheetEngine.updateCell(cellId, value);
+                        sheetEngine.updateCell(cellId, value,username);
                         getServletContext().getRequestDispatcher("/sheetslist/sheet").include(request, response);
 
                     } catch (Exception e) {

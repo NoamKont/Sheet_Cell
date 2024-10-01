@@ -26,6 +26,7 @@ public class CellDeserializer implements JsonDeserializer<Cell> {
         //res.setEffectiveValue(context.deserialize(json.getAsJsonObject().get("effectiveValue"), ImplLogic.class));
         res.setDependsOnHim(context.deserialize(json.getAsJsonObject().get("cellsDependsOnHim"), new TypeToken<List<Coordinate>>(){}.getType()));
         res.setDependsOnThem(context.deserialize(json.getAsJsonObject().get("cellsDependsOnThem"), new TypeToken<List<Coordinate>>(){}.getType()));
+        res.setUpdateBy(json.getAsJsonObject().get("updateBy").getAsString());
 
         // Assuming you want to deserialize into ImplLogic
         return res;

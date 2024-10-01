@@ -169,11 +169,12 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
-    public void updateCellDetails(String cellId, String value){
+    public void updateCellDetails(String cellId, String value, String username) {
         Coordinate currCoord = new CoordinateImpl(cellId);
         checkValidBounds(currCoord);
         activeCells.putIfAbsent(currCoord, new ImplCell(cellId));
         Cell cell = activeCells.get(currCoord);
+        cell.setUpdateBy(username);
 
         currCoord = cell.getCoordinate();
 
@@ -188,7 +189,7 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
-    public void updateCellEffectiveValue(String cellId){
+    public void updateCellEffectiveValue(String cellId, String username) {
         Set<Coordinate> neighbors = graph.listOfAccessibleVertex(new CoordinateImpl(cellId));
         List<Coordinate> topologicalSorted = graph.topologicalSort();
 
@@ -198,6 +199,7 @@ public class ImplSheet implements Sheet, Serializable  {
 
             if(neighbors.contains(coord) && !coord.equals(new CoordinateImpl(cellId))){
                 currCell.setLastVersionUpdate(sheetVersion);
+                currCell.setUpdateBy(username);
                 countUpdateCell++;
             }
             String value = currCell.getOriginalValue();
@@ -358,9 +360,9 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
-    public void updateCell(String cellId, String value) {
-        updateCellDetails(cellId, value);
-        updateCellEffectiveValue(cellId);
+    public void updateCell(String cellId, String value, String username) {
+        updateCellDetails(cellId, value, username);
+        updateCellEffectiveValue(cellId, username);
     }
 
     @Override

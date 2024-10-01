@@ -53,7 +53,7 @@ public class AppController {
     private ObjectProperty<UICell> selectedCellProperty = new SimpleObjectProperty<>();
     private ObjectProperty<UIGridPart> selectedRowOrColumn = new SimpleObjectProperty<>();
     private StringProperty selectedRange = new SimpleStringProperty();
-    private BooleanProperty isFileOpen = new SimpleBooleanProperty(false);
+    private BooleanProperty isWriterPermission = new SimpleBooleanProperty(false);
     private ProgressBar progressBar = new ProgressBar(100);
     private Label statusLabel = new Label("Status: Idle");
 
@@ -63,16 +63,19 @@ public class AppController {
 
     @FXML
     private ScrollPane headerComponent;
+
     @FXML
     private HeaderComponentController headerComponentController;
 
     @FXML
     private GridPane rangeComponent;
+
     @FXML
     private RangeComponentController rangeComponentController;
 
     @FXML
     private VBox commandComponent;
+
     @FXML
     private CommandComponentController commandComponentController;
 
@@ -326,6 +329,8 @@ public class AppController {
                         SheetDTO updateSheet = GSON_INSTANCE.fromJson(responseBody, SheetDTO.class);
                         Platform.runLater(() -> {
                             uiSheet.updateSheet(updateSheet);
+                            selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
+                            selectedCell.updateUICell(selectedCellProperty.get());
                         });
                     }
                     else {
@@ -357,8 +362,7 @@ public class AppController {
 
     private void bindModuleToUI() {
         // Bind the UI to the module
-        bodyComponent.getLeft().disableProperty().bind(isFileOpen.not());
-        headerComponentController.bindModuleToUI(selectedCell, isFileOpen);
+        headerComponentController.bindModuleToUI(selectedCell, isWriterPermission);
     }
 
     public ScrollPane creatSheetComponent(UISheet Sheet, boolean isActive) {
@@ -677,8 +681,8 @@ public class AppController {
     }
 
 
-    public BooleanProperty isFileOpenProperty() {
-        return isFileOpen;
+    public BooleanProperty isWriterPermissionProperty() {
+        return isWriterPermission;
     }
 
     public void changeMode(String mode) {
@@ -769,7 +773,8 @@ public class AppController {
                     rangeMapListener();
                     versionSelectorMenuListener();
                     uiSheet.updateSheet(sheet);
-                    isFileOpen.set(true);
+
+                    //isFileOpen.set(true);
                     System.out.println("Sheet Created");
                     setMainPanelTo(bodyComponent);
                     createViewSheet();
