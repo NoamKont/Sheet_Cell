@@ -57,6 +57,9 @@ public class AppController {
     private ProgressBar progressBar = new ProgressBar(100);
     private Label statusLabel = new Label("Status: Idle");
 
+    private Timer timer;
+    private TimerTask listRefresher;
+
 
     @FXML
     private ScrollPane headerComponent;
@@ -235,8 +238,7 @@ public class AppController {
 //                        updateMessage("Uploading " + i + "%");
 //                    }
 
-                // Create a Sheet
-                // Create the request body
+                // Create the request body for new Sheet
                 RequestBody body = new FormBody.Builder()
                         .add("FilePath", filePath)
                         .build();
@@ -246,6 +248,13 @@ public class AppController {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
                         System.out.println("Response is Failed");
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("Error in creating new Sheet");
+                            alert.setContentText(e.getMessage());
+                            alert.showAndWait();
+                        });
                     }
 
                     @Override
@@ -254,6 +263,12 @@ public class AppController {
                         String rawBody = response.body().string();
                         if (response.isSuccessful()) {
                             System.out.println("Response is successful");
+                            Platform.runLater(() -> {
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("Success");
+                                alert.setHeaderText("Sheet Created Successfully");
+                                alert.showAndWait();
+                            });
 
                         } else {
                             Platform.runLater(() -> {
@@ -718,6 +733,7 @@ public class AppController {
     public void switchToDashboard() {
         setMainPanelTo(dashboardComponent);
         dashboardController.startListRefresher();
+        cancelTimerTask();
     }
 
     public void switchToSheetView(String sheetName) {
@@ -764,13 +780,20 @@ public class AppController {
     }
 
     private void startSimultaneityChangesRefresher() {
-        TimerTask listRefresher = new SimultaneityChangesRefresher(
+        listRefresher = new SimultaneityChangesRefresher(
                 uiSheet.getSheetName(),
                 uiSheet.sheetVersionProperty(),
                 headerComponentController::newVersionExist
         );
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.schedule(listRefresher, 0, REFRESH_RATE);
+    }
+
+    public void cancelTimerTask() {
+        if (listRefresher != null && timer != null) {
+            listRefresher.cancel();
+            timer.cancel();
+        }
     }
 
    public void updateSheet(SheetDTO sheet) {

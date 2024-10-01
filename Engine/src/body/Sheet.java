@@ -20,10 +20,10 @@ public interface Sheet {
     Map<Coordinate, Cell> getActiveCells();
     Map<String, Range> getAllRanges();
     Set<Cell> getRangeCells(String rangeName);
-    String getOwner();
+    String getUsername();
     Graph getGraph();
 
-    void setOwner(String owner);
+    void setUsername(String username);
     void setVersion(int version);
     void setUpdateCellCount(int countUpdateCell);
     void setGraph(Graph graph);

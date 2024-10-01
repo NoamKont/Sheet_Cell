@@ -22,7 +22,7 @@ public class SheetSerializer implements JsonSerializer<Sheet> {
         jsonObject.add("graph", context.serialize(src.getGraph()));
         jsonObject.addProperty("countUpdateCell", src.getCountUpdateCell());
         jsonObject.add("rangeMap", context.serialize(src.getAllRanges()));
-        jsonObject.addProperty("username", src.getOwner());
+        jsonObject.addProperty("username", src.getUsername());
 
         return jsonObject;
     }

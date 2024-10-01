@@ -26,8 +26,10 @@ public class SheetsManager {
 
         Logic newSheet = new ImplLogic();
         newSheet.setOwner("Noam");
+        newSheet.getPermissionManager().addPermission("Moshe","WRITE","APPROVED");
         Logic newSheet1 = new ImplLogic();
         newSheet1.setOwner("Moshe");
+        newSheet1.getPermissionManager().addPermission("Noam","READER","APPROVED");
         try{
             newSheet.creatNewSheet("C:\\Users\\Noam\\Downloads\\Ex2 example\\grades.xml");
             newSheet1.creatNewSheet("C:\\Users\\Noam\\Downloads\\Ex2 example\\insurance.xml");

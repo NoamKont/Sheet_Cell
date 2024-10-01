@@ -34,7 +34,7 @@ public class ImplSheet implements Sheet, Serializable  {
     private Graph graph;
     private int countUpdateCell = 0;
     private Map<String, Range> rangeMap = new HashMap<>();
-    private String owner;
+    private String username;
 
 
     public ImplSheet(String sheetName, int thickness, int width, int row, int col) {
@@ -50,13 +50,13 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
-    public String getOwner() {
-        return owner;
+    public String getUsername() {
+        return username;
     }
 
     @Override
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override

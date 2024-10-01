@@ -1,6 +1,9 @@
 package body.permission;
 
 
+import javafx.scene.control.Label;
+
+import java.security.Permission;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,31 +15,42 @@ of the user of this class to handle the synchronization of isUserExists with oth
 public class PermissionManager {
 
     // Holds the permissions of the users "User:Permission"
-    private final Map<String,String> permissions;
+
+    //private final Map<String,String> permissions;
+    private final Map<String, PermissionInfo> permissions;
 
     public PermissionManager() {
         permissions = new HashMap<>();
     }
 
-    public synchronized void addPermission(String user,String permission){
+    public synchronized void addPermission(String user,String permission, String status){
         if(permissions.containsKey(user)){
-            permissions.replace(user,permission);
+            permissions.replace(user,new PermissionInfo(user, permission, status));
         }else {
-            permissions.put(user, permission);
+            PermissionInfo permissionInfo = new PermissionInfo(user, permission, status);
+            permissions.put(user, permissionInfo);
         }
     }
 
-    public synchronized void removeSheet(String user){
+    public synchronized void removePermission(String user){
         permissions.remove(user);
 
     }
 
-    public synchronized Map<String, String> getPermissions() {
+    public synchronized Map<String, PermissionInfo> getPermissions() {
         return permissions;
     }
 
     public boolean isPermissionExists(String user) {
         return permissions.containsKey(user);
 
+    }
+
+    public String getUserPermissionStatus(String user){
+        return permissions.get(user).getPermissionStatus();
+    }
+
+    public String getUserPermissionType(String user){
+        return permissions.get(user).getPermissionType();
     }
 }

@@ -73,6 +73,12 @@ public class HeaderComponentController implements Initializable {
     @FXML
     private StackPane notification;
 
+    @FXML
+    private Button back2DashBtn;
+
+    @FXML
+    private Label userUpdateCellLabel;
+
     private SheetDTO newestSheet;
 
     public void setMainController(AppController mainController) {
@@ -94,29 +100,16 @@ public class HeaderComponentController implements Initializable {
             notification.setVisible(false);
             mainController.updateSheet(newestSheet);
         });
+
+        back2DashBtn.setOnAction(e -> {
+            mainController.switchToDashboard();
+        });
     }
 
     @FXML
     void ModeChangePressed(ActionEvent event) {
         String mode = modeComboBox.getValue();
         mainController.changeMode(mode);
-    }
-
-    @FXML
-    private void clickedOnBtnUpload(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("XML Files", "*.xml"));
-
-        File selectedFile = fileChooser.showOpenDialog(null);
-        if(selectedFile != null){
-            System.out.println("File selected: " + selectedFile.getName());
-            mainController.createSheet(selectedFile.getAbsolutePath());
-            pathView.visibleProperty().bind(mainController.isFileOpenProperty());
-            pathView.setText(selectedFile.getAbsolutePath());
-
-        }
     }
 
     @FXML
@@ -131,7 +124,7 @@ public class HeaderComponentController implements Initializable {
         originalValueViewer.textProperty().bind(selectedCell.originalValueProperty());
         StringExpression sb = Bindings.concat("Last Update Version: ", selectedCell.lastVersionUpdateProperty());
         lastCellVersionUpdateViewer.textProperty().bind(sb);
-        StringExpression usernameHelloText = Bindings.concat("Hello ", mainController.usernameProperty());
+        StringExpression usernameHelloText = Bindings.concat("Hello ", mainController.usernameProperty(), "!");
         usernameLabel.textProperty().bind(usernameHelloText);
         dynamicAnalysisBtn.disableProperty().bind(isFileLoaded.not());
         versionSelectorMenu.disableProperty().bind(isFileLoaded.not());

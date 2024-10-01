@@ -2,6 +2,7 @@ package client.component.dashboard;
 
 import client.component.dashboard.sideBar.DashCommandsController;
 import client.component.main.MainMenu.AppController;
+import body.permission.PermissionInfo;
 import client.component.main.UIbody.SheetInfo;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -9,7 +10,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -32,13 +32,22 @@ public class DashboardController {
     private Label usernameLabel;
 
     @FXML
-    private TableView<SheetInfo> availableSheets;
+    private TableView<PermissionInfo> permissionTable;
 
     @FXML
-    private TableView<?> permissionTable;
+    private TableColumn<PermissionInfo, String> usernameCol;
+
+    @FXML
+    private TableColumn<PermissionInfo, String> perTypeCol;
+
+    @FXML
+    private TableColumn<PermissionInfo, String> perStatusCol;
 
     @FXML
     private BorderPane bodyComponent;
+
+    @FXML
+    private TableView<SheetInfo> availableSheets;
 
     @FXML
     private TableColumn<SheetInfo, String> ownerCol;
@@ -64,11 +73,19 @@ public class DashboardController {
         sheetNameCol.setCellValueFactory(new PropertyValueFactory<>("sheetName"));
         sheetSizeCol.setCellValueFactory(new PropertyValueFactory<>("sheetSize"));
         permissionCol.setCellValueFactory(new PropertyValueFactory<>("permission"));
+
+        usernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
+        perTypeCol.setCellValueFactory(new PropertyValueFactory<>("permissionType"));
+        perStatusCol.setCellValueFactory(new PropertyValueFactory<>("permissionStatus"));
+
          if(commandsComponent != null){
             commandsComponentController.setDashController(this);
         }
-
-
+         availableSheets.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+             if (newSelection != null) {
+                 updatePermissionsList(newSelection.getPermissionInfo());
+             }
+         });
     }
 
     @FXML
@@ -85,6 +102,14 @@ public class DashboardController {
         }
     }
 
+    private void updatePermissionsList(List<PermissionInfo> permissionsInfo) {
+        Platform.runLater(() -> {
+            ObservableList<PermissionInfo> items = permissionTable.getItems();
+            items.clear();
+            items.addAll(permissionsInfo);
+        });
+    }
+
     private void updateSheetsList(List<SheetInfo> sheetsInfo) {
         Platform.runLater(() -> {
             ObservableList<SheetInfo> items = availableSheets.getItems();
@@ -92,14 +117,14 @@ public class DashboardController {
             items.addAll(sheetsInfo);
         });
     }
-
     public void startListRefresher() {
         TimerTask listRefresher = new SheetsListRefresher(
                 autoUpdate,
                 this::updateSheetsList,
-                availableSheets.getItems());
+                availableSheets.getItems(),
+                appController.getUsername());
         Timer timer = new Timer();
-        timer.schedule(listRefresher, REFRESH_RATE, REFRESH_RATE);
+        timer.schedule(listRefresher, 0, REFRESH_RATE);
     }
 
     public void sheetChosen() {

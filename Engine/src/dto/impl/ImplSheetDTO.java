@@ -19,7 +19,7 @@ public class ImplSheetDTO implements SheetDTO {
 
     @Override
     public String getOwner() {
-        return currSheet.getOwner();
+        return currSheet.getUsername();
     }
 
     @Override

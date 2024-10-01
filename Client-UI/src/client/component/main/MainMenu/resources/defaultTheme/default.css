@@ -61,7 +61,7 @@
     -fx-border-color: #3498db;         /* Border color */
     -fx-border-radius: 10px;           /* Rounded corners */
     -fx-border-width: 2px;             /* Border thickness */
-    -fx-padding: 5px;                  /* Padding between text and border */
+    -fx-padding: 3px;                  /* Padding between text and border */
     -fx-end-margin: 3px;
     -fx-start-margin: 3px;
     -fx-background-color: transparent; /* Keep background transparent */     /* Text color */

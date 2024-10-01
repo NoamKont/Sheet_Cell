@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Set;
 
+import static SheetEngine.constants.Constants.GSON_INSTANCE;
+
 @WebServlet(name = "SheetsListServlet", urlPatterns = {"/sheetslist"})
 public class SheetsListServlet extends HttpServlet {
 
@@ -35,22 +37,10 @@ public class SheetsListServlet extends HttpServlet {
         //returning JSON objects, not HTML
         response.setContentType("application/json");
         try (PrintWriter out = response.getWriter()) {
-            //Gson gson = new Gson();
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(CoordinateImpl.class, new CoordinateSerializer())
-                    .registerTypeAdapter(Coordinate.class, new CoordinateDeserializer())
-                    .registerTypeAdapter(ImplCell.class, new CellSerializer())
-                    .registerTypeAdapter(Cell.class, new CellDeserializer())
-                    .registerTypeAdapter(Logic.class, new LogicDeserializer())
-                    .registerTypeAdapter(RangeImpl.class,new RangeSerializer())
-                    .registerTypeAdapter(Range.class, new RangeDeserializer())
-                    .registerTypeAdapter(Graph.class, new GraphSerializer())
-                    .registerTypeAdapter(CellDTO.class, new DTOCellDeserializer())
-                    .registerTypeAdapter(SheetDTO.class, new DTOSheetDeserializer())
-                    .create();
+
             SheetsManager sheetManager = ServletUtils.getSheetManager(getServletContext());
             Set<Logic> sheetList = sheetManager.getSheets();
-            String json = gson.toJson(sheetList);
+            String json = GSON_INSTANCE.toJson(sheetList);
             out.println(json);
             out.flush();
         }
