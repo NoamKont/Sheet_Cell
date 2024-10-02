@@ -23,7 +23,7 @@ public class PermissionManager {
         permissions = new HashMap<>();
     }
 
-    public synchronized void addPermission(String user,String permission, String status){
+    public synchronized void addPermission(String user,PermissionInfo.Permissions permission, PermissionInfo.Status status){
         if(permissions.containsKey(user)){
             permissions.replace(user,new PermissionInfo(user, permission, status));
         }else {
@@ -46,11 +46,15 @@ public class PermissionManager {
 
     }
 
+    public PermissionInfo getPermissionInfo(String user){
+        return permissions.get(user);
+    }
+
     public String getUserPermissionStatus(String user){
-        return permissions.get(user).getPermissionStatus();
+        return permissions.get(user).getPermissionStatus().toString();
     }
 
     public String getUserPermissionType(String user){
-        return permissions.get(user).getPermissionType();
+        return permissions.get(user).getPermissionType().toString();
     }
 }

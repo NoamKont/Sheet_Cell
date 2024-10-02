@@ -53,6 +53,7 @@ public class Constants {
     public final static String FILTER_SHEET = FULL_SERVER_PATH + "/utils/filter";
     public final static String DYNAMIC_SHEET = FULL_SERVER_PATH + "/utils/dynamic";
     public static final String GET_VALUES_FROM_COLUMN =FULL_SERVER_PATH +  "/utils/getValuesFromColumn";
+    public static final String GET_PERMISSION = FULL_SERVER_PATH + "/permission";
 
     public static final String SIMULTANEITY = FULL_SERVER_PATH + "/simultaneity";
 

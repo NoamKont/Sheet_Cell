@@ -1,11 +1,31 @@
 package body.permission;
 
 public class PermissionInfo {
-    private String username;
-    private String permissionType;
-    private String permissionStatus;
 
-    public PermissionInfo(String username, String permissionType, String permissionStatus) {
+    public enum Permissions {
+        READER,
+        WRITER,
+        OWNER;
+        public String toString() {
+            return name();
+        }
+    }
+    public enum Status {
+        PENDING,
+        APPROVED,
+        REJECTED;
+        public String toString() {
+            return name();
+        }
+    }
+
+
+    private String username;
+    private Permissions permissionType;
+    private Status permissionStatus;
+
+
+    public PermissionInfo(String username, Permissions permissionType, Status permissionStatus) {
         this.username = username;
         this.permissionType = permissionType;
         this.permissionStatus = permissionStatus;
@@ -15,11 +35,11 @@ public class PermissionInfo {
         return username;
     }
 
-    public String getPermissionType() {
+    public Permissions getPermissionType() {
         return permissionType;
     }
 
-    public String getPermissionStatus() {
+    public Status getPermissionStatus() {
         return permissionStatus;
     }
 }

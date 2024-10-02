@@ -3,6 +3,7 @@ package body.Sheets;
 import body.Logic;
 import body.Sheet;
 import body.impl.ImplLogic;
+import body.permission.PermissionInfo;
 import dto.SheetDTO;
 import jakarta.xml.bind.JAXBException;
 
@@ -11,6 +12,9 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import static body.permission.PermissionInfo.Permissions.*;
+import static body.permission.PermissionInfo.Status.*;
 
 /*
 Adding and retrieving users is synchronized and in that manner - these actions are thread safe
@@ -26,10 +30,10 @@ public class SheetsManager {
 
         Logic newSheet = new ImplLogic();
         newSheet.setOwner("Noam");
-        newSheet.getPermissionManager().addPermission("Moshe","WRITE","APPROVED");
+        newSheet.getPermissionManager().addPermission("Moshe", WRITER, APPROVED);
         Logic newSheet1 = new ImplLogic();
         newSheet1.setOwner("Moshe");
-        newSheet1.getPermissionManager().addPermission("Noam","READER","APPROVED");
+        newSheet1.getPermissionManager().addPermission("Noam", READER, APPROVED);
         try{
             newSheet.creatNewSheet("C:\\Users\\Noam\\Downloads\\Ex2 example\\grades.xml");
             newSheet1.creatNewSheet("C:\\Users\\Noam\\Downloads\\Ex2 example\\insurance.xml");

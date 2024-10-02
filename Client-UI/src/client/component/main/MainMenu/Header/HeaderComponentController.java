@@ -130,10 +130,11 @@ public class HeaderComponentController implements Initializable {
         StringExpression usernameHelloText = Bindings.concat("Hello ", mainController.usernameProperty(), "!");
         usernameLabel.textProperty().bind(usernameHelloText);
         userUpdateCellLabel.textProperty().bind(Bindings.concat("Cell Update By: ", selectedCell.updateByProperty()));
-        dynamicAnalysisBtn.disableProperty().bind(isWriterPermission.not());
-        versionSelectorMenu.disableProperty().bind(isWriterPermission.not());
-        IdViewer.disableProperty().bind(isWriterPermission.not());
-        originalValueViewer.disableProperty().bind(isWriterPermission.not());
+
+        //dynamicAnalysisBtn.disableProperty().bind(isWriterPermission.not());
+        //versionSelectorMenu.disableProperty().bind(isWriterPermission.not());
+        //IdViewer.disableProperty().bind(isWriterPermission.not());
+        //originalValueViewer.disableProperty().bind(isWriterPermission.not());
         updateValueBtn.disableProperty().bind(isWriterPermission.not());
         actionLine.disableProperty().bind(isWriterPermission.not());
 

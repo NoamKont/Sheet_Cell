@@ -6,6 +6,7 @@ import body.Coordinate;
 import body.Logic;
 import body.impl.CoordinateImpl;
 import body.impl.ImplLogic;
+import body.permission.PermissionInfo;
 import client.component.dashboard.DashboardController;
 import client.component.main.MainMenu.Header.HeaderComponentController;
 import client.component.login.LoginController;
@@ -38,6 +39,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+import static body.permission.PermissionInfo.Permissions.*;
+import static body.permission.PermissionInfo.Status.*;
 import static client.util.Constants.GSON_INSTANCE;
 import static client.util.Constants.REFRESH_RATE;
 
@@ -773,12 +776,58 @@ public class AppController {
                     rangeMapListener();
                     versionSelectorMenuListener();
                     uiSheet.updateSheet(sheet);
-
+                    checkUserPermission(sheetName);
                     //isFileOpen.set(true);
                     System.out.println("Sheet Created");
                     setMainPanelTo(bodyComponent);
                     createViewSheet();
                     startSimultaneityChangesRefresher();
+                });
+            }
+        });
+    }
+
+    private void checkUserPermission(String sheetName){
+        //noinspection ConstantConditions
+        String finalUrl = HttpUrl
+                .parse(Constants.GET_PERMISSION)
+                .newBuilder()
+                .addQueryParameter("sheetName", sheetName)
+                .build()
+                .toString();
+
+        System.out.println("New request is launched for: " + finalUrl);
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println("Response is Failed");
+            }
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                System.out.println("got response");
+                String jsonPermissionInfo = response.body().string();
+                PermissionInfo permission = GSON_INSTANCE.fromJson(jsonPermissionInfo, PermissionInfo.class);
+                Platform.runLater(() -> {
+                    if(permission == null){
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("Error in getting permission");
+                            alert.setContentText("No Permission to User: " + getUsername());
+                            alert.showAndWait();
+                        });
+                    }
+                    else {
+                        if (permission.getPermissionStatus().equals(APPROVED)) {
+                            if (!permission.getPermissionType().equals(READER)) {
+                                isWriterPermission.set(true);
+                            }else {
+                                isWriterPermission.set(false);
+                            }
+                        } else {
+                            isWriterPermission.set(false);
+                        }
+                    }
                 });
             }
         });

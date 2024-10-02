@@ -10,13 +10,13 @@ public class SheetInfo {
     private String sheetOwner;
     private String sheetName;
     private String sheetSize;
-    private String permission;
+    private PermissionInfo.Permissions permission;
     private int rows;
     private int columns;
     private List<PermissionInfo> permissionInfo;
 
 
-    public SheetInfo(String sheetOwner, String sheetName, int rows, int columns, String permission, List<PermissionInfo> permissionInfo) {
+    public SheetInfo(String sheetOwner, String sheetName, int rows, int columns, PermissionInfo.Permissions permission, List<PermissionInfo> permissionInfo) {
         this.sheetOwner = sheetOwner;
         this.sheetName = sheetName;
         this.rows = rows;
@@ -59,7 +59,7 @@ public class SheetInfo {
         return columns;
     }
     public String getPermission() {
-        return permission;
+        return permission.toString();
     }
     public String getSheetSize() {
         return rows + "x" + columns;

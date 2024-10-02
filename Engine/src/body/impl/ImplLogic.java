@@ -4,6 +4,7 @@ import body.Cell;
 import body.Coordinate;
 import body.Logic;
 import body.Sheet;
+import body.permission.PermissionInfo;
 import body.permission.PermissionManager;
 import dto.SheetDTO;
 import dto.impl.CellDTO;
@@ -24,6 +25,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static body.permission.PermissionInfo.Permissions.*;
+import static body.permission.PermissionInfo.Status.*;
 
 
 public class ImplLogic implements Logic,Serializable  {
@@ -96,7 +100,7 @@ public class ImplLogic implements Logic,Serializable  {
         STLSheet res = creatGeneratedObject(inputStream);
 
         Sheet newSheet = STLSheet2Sheet(res);
-        permissionManager.addPermission(owner,"OWNER","APPROVED");
+        permissionManager.addPermission(owner, OWNER, APPROVED);
         newSheet.setUsername(owner);
         mainSheet.clear();
         mainSheet.add(newSheet);
