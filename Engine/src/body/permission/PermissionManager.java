@@ -16,7 +16,7 @@ public class PermissionManager {
 
     // Holds the permissions of the users "User:Permission"
 
-    //private final Map<String,String> permissions;
+    private String sheetName;
     private final Map<String, PermissionInfo> permissions;
 
     public PermissionManager() {
@@ -25,9 +25,9 @@ public class PermissionManager {
 
     public synchronized void addPermission(String user,PermissionInfo.Permissions permission, PermissionInfo.Status status){
         if(permissions.containsKey(user)){
-            permissions.replace(user,new PermissionInfo(user, permission, status));
+            permissions.replace(user,new PermissionInfo(user, permission, status, sheetName));
         }else {
-            PermissionInfo permissionInfo = new PermissionInfo(user, permission, status);
+            PermissionInfo permissionInfo = new PermissionInfo(user, permission, status, sheetName);
             permissions.put(user, permissionInfo);
         }
     }
@@ -56,5 +56,9 @@ public class PermissionManager {
 
     public String getUserPermissionType(String user){
         return permissions.get(user).getPermissionType().toString();
+    }
+
+    public void setSheetName(String sheetName) {
+        this.sheetName = sheetName;
     }
 }

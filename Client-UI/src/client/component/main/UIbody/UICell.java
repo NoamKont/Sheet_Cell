@@ -27,20 +27,22 @@ public class UICell {
         lastVersionUpdate.setValue(Cell.getLastVersionUpdate());
         originalValue.setValue(Cell.getOriginalValue());
         effectiveValue.setValue(Cell.getOriginalEffectiveValue().toString());
-        updateBy.setValue(Cell.getUpdateBy());
-        if(Cell.getCellsDependsOnThem() == null){
-            cellsDependsOnThem = new SimpleListProperty<>();
-        }
-        else{
-            cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
-        }
-        if(Cell.getCellsDependsOnHim() == null){
-            cellsDependsOnHim = new SimpleListProperty<>();
-        }
-        else{
-            cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
-
-        }
+        updateBy.setValue(Cell.getUpdateBy()!= null ? Cell.getUpdateBy() : "");
+        cellsDependsOnThem.set(Cell.getCellsDependsOnThem() != null ? FXCollections.observableArrayList(Cell.getCellsDependsOnThem()) : new SimpleListProperty<>());
+        cellsDependsOnHim.set(Cell.getCellsDependsOnHim() != null ? FXCollections.observableArrayList(Cell.getCellsDependsOnHim()) : new SimpleListProperty<>());
+//        if(Cell.getCellsDependsOnThem() == null){
+//            cellsDependsOnThem = new SimpleListProperty<>();
+//        }
+//        else{
+//            cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
+//        }
+//        if(Cell.getCellsDependsOnHim() == null){
+//            cellsDependsOnHim = new SimpleListProperty<>();
+//        }
+//        else{
+//            cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
+//
+//        }
         initCellLabel();
 
     }
@@ -60,7 +62,8 @@ public class UICell {
         cellsDependsOnThem.set(FXCollections.observableArrayList(uiCell.cellsDependsOnThem));
         cellsDependsOnHim.set(FXCollections.observableArrayList(uiCell.cellsDependsOnHim));
         cellLabel.set(uiCell.cellLabel.get());
-        updateBy.setValue(uiCell.updateBy.getValue());
+        updateBy.setValue(uiCell.updateBy.getValue() != null ? uiCell.updateBy.getValue() : "");
+//        updateBy.setValue(uiCell.updateBy.getValue());
     }
 
     public void updateUICell(CellDTO Cell) {
@@ -69,19 +72,22 @@ public class UICell {
         originalValue.setValue(Cell.getOriginalValue());
         effectiveValue.setValue(Cell.getOriginalEffectiveValue().toString());
         updateBy.setValue(Cell.getUpdateBy());
-        if(Cell.getCellsDependsOnThem() == null){
-            cellsDependsOnThem = new SimpleListProperty<>();
-        }
-        else{
-            cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
-        }
-        if(Cell.getCellsDependsOnHim() == null){
-            cellsDependsOnHim = new SimpleListProperty<>();
-        }
-        else{
-            cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
+        cellsDependsOnThem.set(Cell.getCellsDependsOnThem() != null ? FXCollections.observableArrayList(Cell.getCellsDependsOnThem()) : new SimpleListProperty<>());
+        cellsDependsOnHim.set(Cell.getCellsDependsOnHim() != null ? FXCollections.observableArrayList(Cell.getCellsDependsOnHim()) : new SimpleListProperty<>());
 
-        }
+//        if(Cell.getCellsDependsOnThem() == null){
+//            cellsDependsOnThem = new SimpleListProperty<>();
+//        }
+//        else{
+//            cellsDependsOnThem.set(FXCollections.observableArrayList(Cell.getCellsDependsOnThem()));
+//        }
+//        if(Cell.getCellsDependsOnHim() == null){
+//            cellsDependsOnHim = new SimpleListProperty<>();
+//        }
+//        else{
+//            cellsDependsOnHim.set(FXCollections.observableArrayList(Cell.getCellsDependsOnHim()));
+//
+//        }
     }
 
     public void setCellLabel(Label label){
@@ -130,6 +136,13 @@ public class UICell {
         return column;
     }
 
+    private void initCellLabel() {
+        Label label = new Label();
+        label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        label.setAlignment(javafx.geometry.Pos.CENTER);
+        cellLabel.set(label);
+    }
+
     public void clearCell() {
         id.setValue("");
         lastVersionUpdate.setValue(0);
@@ -137,11 +150,6 @@ public class UICell {
         effectiveValue.setValue("");
         cellsDependsOnThem.set(FXCollections.observableArrayList());
         cellsDependsOnHim.set(FXCollections.observableArrayList());
-    }
-    private void initCellLabel() {
-        Label label = new Label();
-        label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        label.setAlignment(javafx.geometry.Pos.CENTER);
-        cellLabel.set(label);
+        updateBy.setValue("");
     }
 }

@@ -10,6 +10,7 @@ import dto.SheetDTO;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -79,6 +80,7 @@ public class HeaderComponentController implements Initializable {
     @FXML
     private Label userUpdateCellLabel;
 
+    private BooleanProperty newVersionAvilable = new SimpleBooleanProperty(false);
     private SheetDTO newestSheet;
 
     public void setMainController(AppController mainController) {
@@ -90,8 +92,7 @@ public class HeaderComponentController implements Initializable {
         updateVersionBtn.setDisable(false);
         notification.setVisible(true);
 
-        actionLine.setDisable(true);
-        updateValueBtn.setDisable(true);
+        newVersionAvilable.set(true);
     }
 
     @Override
@@ -101,6 +102,7 @@ public class HeaderComponentController implements Initializable {
         updateVersionBtn.setOnAction(e -> {
             updateVersionBtn.setDisable(true);
             notification.setVisible(false);
+            newVersionAvilable.set(false);
             mainController.updateSheet(newestSheet);
         });
 
@@ -135,8 +137,8 @@ public class HeaderComponentController implements Initializable {
         //versionSelectorMenu.disableProperty().bind(isWriterPermission.not());
         //IdViewer.disableProperty().bind(isWriterPermission.not());
         //originalValueViewer.disableProperty().bind(isWriterPermission.not());
-        updateValueBtn.disableProperty().bind(isWriterPermission.not());
-        actionLine.disableProperty().bind(isWriterPermission.not());
+        updateValueBtn.disableProperty().bind(isWriterPermission.not().or(newVersionAvilable));
+        actionLine.disableProperty().bind(isWriterPermission.not().or(newVersionAvilable));
 
     }
 

@@ -25,7 +25,6 @@ public class mainClient extends Application {
         Scene scene = new Scene(root, 1010, 680);
 
         controller.setScene(scene);
-        controller.setStage(primaryStage);
 
         scene.getStylesheets().add(getClass().getResource("main/MainMenu/resources/defaultTheme/default.css").toExternalForm());
 

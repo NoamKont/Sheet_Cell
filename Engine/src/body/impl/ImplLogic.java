@@ -100,6 +100,7 @@ public class ImplLogic implements Logic,Serializable  {
         STLSheet res = creatGeneratedObject(inputStream);
 
         Sheet newSheet = STLSheet2Sheet(res);
+        permissionManager.setSheetName(newSheet.getSheetName());
         permissionManager.addPermission(owner, OWNER, APPROVED);
         newSheet.setUsername(owner);
         mainSheet.clear();

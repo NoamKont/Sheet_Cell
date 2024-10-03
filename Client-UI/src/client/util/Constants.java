@@ -54,6 +54,7 @@ public class Constants {
     public final static String DYNAMIC_SHEET = FULL_SERVER_PATH + "/utils/dynamic";
     public static final String GET_VALUES_FROM_COLUMN =FULL_SERVER_PATH +  "/utils/getValuesFromColumn";
     public static final String GET_PERMISSION = FULL_SERVER_PATH + "/permission";
+    public static final String ADD_PERMISSION = FULL_SERVER_PATH + "/permission/add";
 
     public static final String SIMULTANEITY = FULL_SERVER_PATH + "/simultaneity";
 

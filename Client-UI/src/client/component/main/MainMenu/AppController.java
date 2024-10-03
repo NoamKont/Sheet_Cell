@@ -48,7 +48,6 @@ import static client.util.Constants.REFRESH_RATE;
 public class AppController {
 
     private StringProperty username = new SimpleStringProperty();
-    private Stage stage;
     private Scene scene;
     private final Logic logic = new ImplLogic();
     private UISheet uiSheet = new UISheet();
@@ -201,11 +200,6 @@ public class AppController {
 
     public void setScene(Scene scene) {
         this.scene = scene;
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-
     }
 
     public void setUsername(String username) {
@@ -844,6 +838,8 @@ public class AppController {
     }
 
     public void cancelTimerTask() {
+
+        //cancel the timer task of simultaneous changes refresher
         if (listRefresher != null && timer != null) {
             listRefresher.cancel();
             timer.cancel();

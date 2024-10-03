@@ -30,6 +30,7 @@ public class UserManager {
     }
 
     public boolean isUserExists(String username) {
-        return usersSet.contains(username);
+        return usersSet.stream().anyMatch(user -> user.equalsIgnoreCase(username));
+//        return usersSet.contains(username);
     }
 }

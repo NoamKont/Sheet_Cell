@@ -1,4 +1,4 @@
-package client.component.main.UIbody;
+package body.Sheets;
 
 import body.permission.PermissionInfo;
 import dto.SheetDTO;
@@ -6,24 +6,27 @@ import dto.SheetDTO;
 import java.util.List;
 import java.util.Objects;
 
+import static body.permission.PermissionInfo.Permissions.*;
+
 public class SheetInfo {
     private String sheetOwner;
     private String sheetName;
     private String sheetSize;
-    private PermissionInfo.Permissions permission;
+    private PermissionInfo.Permissions userPermission;
+    private PermissionInfo.Status userStatus;
     private int rows;
     private int columns;
-    private List<PermissionInfo> permissionInfo;
+    private List<PermissionInfo> AllUsersPermissionInfo;
 
 
-    public SheetInfo(String sheetOwner, String sheetName, int rows, int columns, PermissionInfo.Permissions permission, List<PermissionInfo> permissionInfo) {
+    public SheetInfo(String sheetOwner, String sheetName, int rows, int columns, PermissionInfo.Permissions permission, List<PermissionInfo> AllUsersPermissionInfo) {
         this.sheetOwner = sheetOwner;
         this.sheetName = sheetName;
         this.rows = rows;
         this.columns = columns;
-        this.permission = permission;
+        this.userPermission = permission;
         this.sheetSize = getSheetSize();
-        this.permissionInfo = permissionInfo;
+        this.AllUsersPermissionInfo = AllUsersPermissionInfo;
     }
     public SheetInfo(SheetDTO sheetDTO){
         this.sheetOwner = sheetDTO.getOwner();
@@ -33,19 +36,28 @@ public class SheetInfo {
         //this.permission = sheetDTO.getPermission();
         this.sheetSize = getSheetSize();
     }
-    public SheetInfo(SheetDTO sheetDTO, List<PermissionInfo> permissionInfo, String username){
+    public SheetInfo(SheetDTO sheetDTO, List<PermissionInfo> AllUsersPermissionInfo, String username){
         this.sheetOwner = sheetDTO.getOwner();
         this.sheetName = sheetDTO.getSheetName();
         this.rows = sheetDTO.getRowCount();
         this.columns = sheetDTO.getColumnCount();
         this.sheetSize = getSheetSize();
-        this.permissionInfo = permissionInfo;
-        for(PermissionInfo permissionInfo1 : permissionInfo){
-            if(permissionInfo1.getUsername().equals(username)){
-                this.permission = permissionInfo1.getPermissionType();
+        this.AllUsersPermissionInfo = AllUsersPermissionInfo;
+        setUserPermission(AllUsersPermissionInfo, username);
+    }
+
+    private void setUserPermission(List<PermissionInfo> AllUsersPermissionInfo, String username) {
+        for(PermissionInfo permissionInfo : AllUsersPermissionInfo){
+            if(permissionInfo.getUsername().equals(username)){
+                this.userPermission = permissionInfo.getPermissionType();
+                this.userStatus = permissionInfo.getPermissionStatus();
             }
         }
+        if(this.userPermission == null){
+            this.userPermission = NO_PERMISSION;
+        }
     }
+
     public String getSheetOwner() {
         return sheetOwner;
     }
@@ -58,18 +70,22 @@ public class SheetInfo {
     public int getColumns() {
         return columns;
     }
-    public String getPermission() {
-        return permission.toString();
+    public String getUserPermission() {
+        return userPermission.toString();
+    }
+    public String getUserStatus() {
+        return userStatus.toString();
     }
     public String getSheetSize() {
         return rows + "x" + columns;
     }
-    public List<PermissionInfo> getPermissionInfo() {
-        return permissionInfo;
+
+    public List<PermissionInfo> getAllUsersPermissionInfo() {
+        return AllUsersPermissionInfo;
     }
 
-    public void setPermissionInfo(List<PermissionInfo> permissionInfo) {
-        this.permissionInfo = permissionInfo;
+    public void setAllUsersPermissionInfo(List<PermissionInfo> allUsersPermissionInfo) {
+        this.AllUsersPermissionInfo = allUsersPermissionInfo;
     }
 
     @Override
@@ -80,7 +96,8 @@ public class SheetInfo {
         return Objects.equals(sheetName, that.sheetName) &&
                 Objects.equals(sheetOwner, that.sheetOwner)&&
                 Objects.equals(sheetSize, that.sheetSize)&&
-                Objects.equals(permission, that.permission);
+                Objects.equals(userPermission, that.userPermission)&&
+                Objects.equals(AllUsersPermissionInfo, that.AllUsersPermissionInfo);
     }
 
     @Override
