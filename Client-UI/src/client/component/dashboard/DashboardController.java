@@ -192,43 +192,8 @@ public class DashboardController {
         }
     }
 
-
-    public void requestBtnPressed() {
-        //TODO its hard coded for now to "READER","Pending"
-
-        //noinspection ConstantConditions
-        String finalUrl = HttpUrl
-                .parse(Constants.ADD_PERMISSION)
-                .newBuilder()
-                .addQueryParameter("sheetName", selectedSheetName.get())
-                .addQueryParameter("permission", "READER")
-                .addQueryParameter("status", "PENDING")
-                .build()
-                .toString();
-
-        HttpClientUtil.runAsync(finalUrl, new Callback(){
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String responseBody = response.body().string();
-                if(response.isSuccessful()) {
-                    System.out.println("Request send successful");
-                }
-                else {
-                    Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Error in sending request");
-                        alert.setContentText(responseBody);
-                        alert.showAndWait();
-                    });
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                System.out.println("Response is Failed");
-            }
-        });
+    public String getUsername() {
+        return appController.getUsername();
     }
+
 }

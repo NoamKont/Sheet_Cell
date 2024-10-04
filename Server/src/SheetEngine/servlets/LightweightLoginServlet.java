@@ -60,7 +60,6 @@ public class LightweightLoginServlet extends HttpServlet {
                     else {
                         //add the new user to the users list
                         userManager.addUser(usernameFromParameter);
-                        //TODO if needed I can add this user READER permission to all Sheets
 
                         //set the username in a session so it will be available on each request
                         //the true parameter means that if a session object does not exists yet

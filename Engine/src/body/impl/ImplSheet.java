@@ -571,12 +571,6 @@ public class ImplSheet implements Sheet, Serializable  {
         return graph;
     }
 
-    @Override
-    public String getPermission() {
-        //TODO !!!!
-        return null;
-    }
-
     private void validInputBracket(String input){
         if(input.charAt(0) == '{') {
             if(!isValidBracket(input)){

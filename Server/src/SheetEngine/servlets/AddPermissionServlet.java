@@ -28,12 +28,13 @@ public class AddPermissionServlet extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
             String sheetName = request.getParameter("sheetName");
+            String userRequest = request.getParameter("userName");
             synchronized (this){
                 if(sheetsManager.isSheetExists(sheetName)){
                     Logic sheetEngine = sheetsManager.getSheet(sheetName);
                     PermissionInfo.Permissions permission = PermissionInfo.Permissions.valueOf(request.getParameter("permission"));
                     PermissionInfo.Status status = PermissionInfo.Status.valueOf(request.getParameter("status"));
-                    sheetEngine.getPermissionManager().addPermission(username,permission,status);
+                    sheetEngine.getPermissionManager().addPermission(userRequest,permission,status);
                     response.setStatus(HttpServletResponse.SC_OK);
                 }
                 else{

@@ -52,10 +52,6 @@ public class ImplSheetDTO implements SheetDTO {
         return currSheet.getColumnCount();
     }
 
-    @Override
-    public String getPermission() {
-        return currSheet.getPermission();
-    }
 
     @Override
     public EffectiveValue getEfectivevalueCell(Coordinate coordinate) {

@@ -46,6 +46,4 @@ public interface Sheet {
 
     void checkValidBounds(Coordinate coordinate);
 
-
-    String getPermission();
 }

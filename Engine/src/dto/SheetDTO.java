@@ -18,7 +18,6 @@ public interface SheetDTO {
     int getWidth();
     int getRowCount();
     int getColumnCount();
-    String getPermission();
     EffectiveValue getEfectivevalueCell(Coordinate coordinate);
     Map<Coordinate, CellDTO> getActiveCells();
     Map<String, Range> getAllRanges();
