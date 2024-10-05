@@ -3,9 +3,7 @@ package client.component.main.MainMenu;
 
 
 import body.Coordinate;
-import body.Logic;
 import body.impl.CoordinateImpl;
-import body.impl.ImplLogic;
 import body.permission.PermissionInfo;
 import client.component.dashboard.DashboardController;
 import client.component.main.MainMenu.Header.HeaderComponentController;
@@ -35,6 +33,7 @@ import javafx.stage.Stage;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -45,11 +44,10 @@ import static client.util.Constants.GSON_INSTANCE;
 import static client.util.Constants.REFRESH_RATE;
 
 
-public class AppController {
+public class AppController implements Closeable {
 
     private StringProperty username = new SimpleStringProperty();
     private Scene scene;
-    private final Logic logic = new ImplLogic();
     private UISheet uiSheet = new UISheet();
     private final UICell selectedCell = new UICell();
     private ObjectProperty<UICell> selectedCellProperty = new SimpleObjectProperty<>();
@@ -81,7 +79,7 @@ public class AppController {
     @FXML
     private CommandComponentController commandComponentController;
 
-    private BorderPane loginComponent;
+    private AnchorPane loginComponent;
     private LoginController loginController;
 
     private Parent dashboardComponent;
@@ -92,7 +90,7 @@ public class AppController {
 
     @FXML
     public void initialize() {
-        loadChatRoomPage();
+        loadDashboardPage();
         bodyComponent.getLeft().getStyleClass().add("left-menu");
         bodyComponent.getTop().getStyleClass().add("top-menu");
 
@@ -259,7 +257,6 @@ public class AppController {
 
                     @Override
                     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                        System.out.println("got response");
                         String rawBody = response.body().string();
                         if (response.isSuccessful()) {
                             System.out.println("Response is successful");
@@ -283,20 +280,6 @@ public class AppController {
                     }
                 });
 
-//                    Platform.runLater(() -> {
-//                        selectedCell.clearCell();
-//                        if (logic.getSheet() == null) {
-//                            bodyComponent.setCenter(null);
-//                            return;
-//                        }
-//                        uiSheet = new UISheet(logic.getSheet()); //set the module
-//                        rangeMapListener();
-//                        versionSelectorMenuListener();
-//                        uiSheet.updateSheet(logic.getSheet());
-//                        createViewSheet();
-//                        isFileOpen.set(true);
-//                        System.out.println("Sheet Created");
-//                    });
                 return null;
             }
         };
@@ -588,7 +571,6 @@ public class AppController {
     }
 
     public int getColumnsNumber() {
-        //return logic.getColumnsNumber();
         return uiSheet.getColumnsNumber();
     }
 
@@ -642,10 +624,9 @@ public class AppController {
         });
     }
 
-//TODO: if graph not needed may delete this method
     public List<String> getValuesFromColumnsAsList(Integer columnIndex, int top, int bottom) {
         try {
-            return logic.getSheet().getValuesFromColumn(columnIndex, top, bottom);
+            return uiSheet.getValuesFromColumn(columnIndex, top, bottom);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -676,7 +657,6 @@ public class AppController {
     public UICell getSelectedCell() {
         return selectedCell;
     }
-
 
     public BooleanProperty isWriterPermissionProperty() {
         return isWriterPermission;
@@ -714,7 +694,7 @@ public class AppController {
         }
     }
 
-    private void loadChatRoomPage() {
+    private void loadDashboardPage() {
         URL loginPageUrl = getClass().getResource("/client/component/dashboard/Dash.fxml");
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -732,6 +712,7 @@ public class AppController {
     }
 
     public void switchToDashboard() {
+        dashboardController.setUserName(getUsername());
         setMainPanelTo(dashboardComponent);
         dashboardController.startListRefresher();
         cancelTimerTask();
@@ -754,7 +735,6 @@ public class AppController {
             }
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                System.out.println("got response");
                 String jsonSheetDTO = response.body().string();
                 SheetDTO sheet = GSON_INSTANCE.fromJson(jsonSheetDTO, SheetDTO.class);
                 if (sheet == null) {
@@ -781,6 +761,10 @@ public class AppController {
         });
     }
 
+    public void switchToLogin() {
+        setMainPanelTo(loginComponent);
+    }
+
     private void checkUserPermission(String sheetName){
         //noinspection ConstantConditions
         String finalUrl = HttpUrl
@@ -798,7 +782,6 @@ public class AppController {
             }
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                System.out.println("got response");
                 String jsonPermissionInfo = response.body().string();
                 PermissionInfo permission = GSON_INSTANCE.fromJson(jsonPermissionInfo, PermissionInfo.class);
                 Platform.runLater(() -> {
@@ -838,7 +821,6 @@ public class AppController {
     }
 
     public void cancelTimerTask() {
-
         //cancel the timer task of simultaneous changes refresher
         if (listRefresher != null && timer != null) {
             listRefresher.cancel();
@@ -856,5 +838,11 @@ public class AppController {
 
     public Object usernameProperty() {
         return username;
+    }
+
+    @Override
+    public void close() throws IOException {
+        cancelTimerTask();
+        dashboardController.close();
     }
 }

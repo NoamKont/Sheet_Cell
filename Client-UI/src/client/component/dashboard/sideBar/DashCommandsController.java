@@ -12,17 +12,19 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.control.Label;
+import javafx.stage.FileChooser;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,6 +32,9 @@ import java.util.ResourceBundle;
 import static client.util.Constants.GSON_INSTANCE;
 
 public class DashCommandsController implements Initializable {
+
+    @FXML
+    private Label usernameLabel;
 
     @FXML
     private Button requestBtn;
@@ -109,6 +114,7 @@ public class DashCommandsController implements Initializable {
         URL url = getClass().getResource("request/PermissionRequest.fxml");
         fxmlLoader.setLocation(url);
         HBox root = fxmlLoader.load(url.openStream());
+        root.getStyleClass().add("request");
         PermissionRequestController permissionRequestController = fxmlLoader.getController();
         permissionRequestController.setUserNameLabel(permissionInfo.getUsername());
         permissionRequestController.setSheetName(permissionInfo.getSheetName());
@@ -122,5 +128,24 @@ public class DashCommandsController implements Initializable {
     public void clearRequests() {
         requestsGrid.getChildren().clear();
         numberOfRequests = 0;
+    }
+
+    @FXML
+    void uploadFilePressed(ActionEvent event) {
+        dashController.uploadFile();
+    }
+
+    @FXML
+    void exitPressed(ActionEvent event) {
+        dashController.logoutUser();
+        Platform.exit();
+    }
+
+    @FXML
+    void logoutPressed(ActionEvent event) {
+        dashController.logoutUser();
+    }
+    public void setUserNameLabel(String format) {
+        usernameLabel.setText(format);
     }
 }

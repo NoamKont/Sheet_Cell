@@ -2,38 +2,65 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<GridPane fx:id="commandsComponent" minWidth="190.0" vgap="8.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.component.dashboard.sideBar.DashCommandsController">
+<GridPane id="commandGridPane" fx:id="commandsComponent" minWidth="190.0" styleClass="sidebar" stylesheets="@../../main/MainMenu/resources/defaultTheme/default.css" vgap="5.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.component.dashboard.sideBar.DashCommandsController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints minHeight="-Infinity" prefHeight="50.0" vgrow="NEVER" />
-      <RowConstraints minHeight="-Infinity" prefHeight="50.0" vgrow="NEVER" />
+      <RowConstraints minHeight="-Infinity" prefHeight="160.0" vgrow="NEVER" />
       <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="NEVER" />
    </rowConstraints>
    <children>
-      <Button fx:id="viewSheetBtn" mnemonicParsing="false" onAction="#viewSheetPressed" text="View Sheet" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-      <Button fx:id="requestBtn" mnemonicParsing="false" onAction="#requestBtnPressed" text="Request Premission" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-      <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="170.0" prefHeight="400.0" prefWidth="170.0" GridPane.rowIndex="2">
+      <VBox alignment="CENTER" spacing="15.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+         <children>
+            <Label id="usernameLabel" fx:id="usernameLabel" text="Hello" textFill="#2262c6">
+               <font>
+                  <Font name="Berlin Sans FB" size="24.0" />
+               </font></Label>
+            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#uploadFilePressed" styleClass="dashBtn" text="Upload File" />
+            <Button fx:id="viewSheetBtn" mnemonicParsing="false" onAction="#viewSheetPressed" styleClass="dashBtn" text="View Sheet" />
+            <Button fx:id="requestBtn" mnemonicParsing="false" onAction="#requestBtnPressed" styleClass="dashBtn" text="Request Premission" />
+         </children>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+      </VBox>
+      <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="170.0" prefHeight="400.0" prefWidth="170.0" GridPane.rowIndex="1">
          <content>
-            <GridPane fx:id="requestsGrid">
+            <GridPane fx:id="requestsGrid" vgap="8.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints minHeight="60.0" prefHeight="30.0" vgrow="NEVER" />
-                  <RowConstraints minHeight="60.0" prefHeight="30.0" vgrow="NEVER" />
+                <RowConstraints minHeight="60.0" vgrow="NEVER" />
               </rowConstraints>
+               <padding>
+                  <Insets top="7.0" />
+               </padding>
             </GridPane>
          </content>
+         <padding>
+            <Insets top="5.0" />
+         </padding>
       </ScrollPane>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+         <children>
+            <Button id="logout" minWidth="60.0" mnemonicParsing="false" onAction="#logoutPressed" styleClass="dashBtn" text="Logout" />
+            <Button layoutX="10.0" layoutY="10.0" minWidth="60.0" mnemonicParsing="false" onAction="#exitPressed" styleClass="exit" text="Exit" />
+         </children>
+      </HBox>
    </children>
    <padding>
-      <Insets top="5.0" />
+      <Insets top="15.0" />
    </padding>
 </GridPane>

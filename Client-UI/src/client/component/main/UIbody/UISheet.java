@@ -11,9 +11,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Label;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class UISheet {
 
@@ -149,6 +147,37 @@ public class UISheet {
     }
     public String getSheetName() {
         return sheetName;
+    }
+
+    public List<String> getValuesFromColumn(Integer columnIndex, int top, int bottom) {
+        List<String> values = new ArrayList<>();
+        if(top > bottom){
+            throw new IllegalArgumentException("Top value can't be bigger than bottom value");
+        }
+
+        List<Map.Entry<Coordinate, UICell>> sortedCells = new ArrayList<>();
+
+        // Collect cells that match the column and row criteria
+        for (Map.Entry<Coordinate, UICell> entry : activeCells.entrySet()) {
+            Coordinate coordinate = entry.getKey();
+            UICell cell = entry.getValue();
+
+            if (coordinate.getColumn() == columnIndex && coordinate.getRow() >= top && coordinate.getRow() <= bottom) {
+                sortedCells.add(entry);
+            }
+        }
+
+        // Sort the list by row in ascending order
+        sortedCells.sort(Comparator.comparingInt(entry -> entry.getKey().getRow()));
+
+        // Add the sorted values to the list
+        for (Map.Entry<Coordinate, UICell> entry : sortedCells) {
+            values.add(entry.getValue().effectiveValueProperty().getValue());
+        }
+
+
+        return values;
+
     }
 }
 

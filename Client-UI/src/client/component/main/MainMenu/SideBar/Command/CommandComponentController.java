@@ -95,7 +95,7 @@ public class CommandComponentController implements Initializable {
         popupStage.initModality(Modality.APPLICATION_MODAL);
         popupStage.setTitle("Graph");
         FXMLLoader fxmlLoader = new FXMLLoader();
-        URL url = getClass().getResource("/MainMenu/VisualUtils/graph.fxml");
+        URL url = getClass().getResource("/client/component/main/MainMenu/VisualUtils/clientGraph.fxml");
         fxmlLoader.setLocation(url);
         Parent root = fxmlLoader.load(url.openStream());
         GraphMakerController controller = fxmlLoader.getController();

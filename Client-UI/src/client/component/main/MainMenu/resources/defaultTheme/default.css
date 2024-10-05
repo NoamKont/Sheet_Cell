@@ -8,6 +8,8 @@
     -fx-border-style: solid;
     -fx-border-radius: 0px;
 }
+
+
 .root{
     -fx-font-weight: Normal;
     -fx-font-size: 12px;
@@ -84,3 +86,42 @@
     -fx-background-color: #1abc9c;    /* Background color when button is clicked */
 }
 
+.button.exit {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 5px;
+    -fx-background-radius: 10px;   /* Rounded corners */
+    -fx-border-radius: 10px;
+}
+.button.exit:hover {
+    -fx-background-color: #c12b1a;    /* Background color when hovering */
+}
+
+.sidebar{
+    -fx-background-color: #2262C6;
+    -fx-background-radius: 0px 60px 0px 0px;
+    -fx-background-insets: 50px 0px 0px 0px;
+}
+
+.dashBtn{
+    -fx-background-color: white;
+    -fx-text-fill: #2262c6;
+    -fx-font-size: 13px;
+    -fx-padding: 5px 25px;
+    -fx-background-radius: 10px;   /* Rounded corners */
+    -fx-border-radius: 10px;
+}
+
+.dashBtn:hover {
+    -fx-background-color: #cccccc;    /* Background color when hovering */
+}
+.dashBtn:pressed {
+    -fx-background-color: #003366 ;    /* Background color when button is clicked */
+}
+.request{
+    -fx-background-color: white;
+    -fx-text-fill: #2262c6;
+    -fx-font-size: 12px;
+    -fx-background-radius: 10px;   /* Rounded corners */
+}

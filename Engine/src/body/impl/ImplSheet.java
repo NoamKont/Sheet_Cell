@@ -323,6 +323,7 @@ public class ImplSheet implements Sheet, Serializable  {
 
     @Override
     public List<String> getValuesFromColumn(Integer columnIndex, int top, int bottom) {
+
         List<String> values = new ArrayList<>();
         if(top > bottom){
             throw new IllegalArgumentException("Top value can't be bigger than bottom value");
@@ -392,8 +393,8 @@ public class ImplSheet implements Sheet, Serializable  {
                 return (new Number(input));
             }catch (NumberFormatException error){
 
-                if(input.toUpperCase().equals("TRUE") || input.toUpperCase().equals("FALSE")){
-                    return (new Bool(input));
+                if(input.trim().toUpperCase().equals("TRUE") || input.trim().toUpperCase().equals("FALSE")){
+                    return (new Bool(input.trim()));
                 }
                 return (new Str(input));
             }

@@ -1,0 +1,10 @@
+.root{
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-padding: 5px;
+    -fx-background-radius: 10px;   /* Rounded corners */
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+}

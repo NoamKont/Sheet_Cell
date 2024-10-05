@@ -36,6 +36,7 @@ public class Constants {
     private final static String FULL_SERVER_PATH = BASE_URL + CONTEXT_PATH;
 
     public final static String LOGIN_PAGE = FULL_SERVER_PATH + "/login";
+    public final static String LOGOUT = FULL_SERVER_PATH + "/logout";
     public final static String USERS_LIST = FULL_SERVER_PATH + "/userslist";
     public final static String SHEETS_LIST = FULL_SERVER_PATH + "/sheetslist";
 
@@ -50,7 +51,7 @@ public class Constants {
     public final static String SORT_SHEET = FULL_SERVER_PATH + "/utils/sort";
     public final static String FILTER_SHEET = FULL_SERVER_PATH + "/utils/filter";
     public final static String DYNAMIC_SHEET = FULL_SERVER_PATH + "/utils/dynamic";
-    public static final String GET_VALUES_FROM_COLUMN =FULL_SERVER_PATH +  "/utils/getValuesFromColumn";
+    public static final String GET_VALUES_FROM_COLUMN = FULL_SERVER_PATH +  "/utils/getValuesFromColumn";
     public static final String GET_PERMISSION = FULL_SERVER_PATH + "/permission";
     public static final String ADD_PERMISSION = FULL_SERVER_PATH + "/permission/add";
 
@@ -58,24 +59,16 @@ public class Constants {
 
 
 
-    public final static String LOGOUT = FULL_SERVER_PATH + "/chat/logout";
 
     public final static String SEND_CHAT_LINE = FULL_SERVER_PATH + "/pages/chatroom/sendChat";
     public final static String CHAT_LINES_LIST = FULL_SERVER_PATH + "/chat";
 
     // GSON instance
     public final static Gson GSON_INSTANCE = new GsonBuilder()
-                        .registerTypeAdapter(CoordinateImpl .class, new CoordinateSerializer())
                         .registerTypeAdapter(Coordinate .class, new CoordinateDeserializer())
-                        .registerTypeAdapter(ImplCell .class, new CellSerializer())
                         .registerTypeAdapter(Cell .class, new CellDeserializer())
-                        .registerTypeAdapter(ImplSheet .class, new SheetSerializer())
-                        .registerTypeAdapter(Sheet .class, new SheetDeserializer())
-                        .registerTypeAdapter(Logic .class, new LogicDeserializer())
-                        .registerTypeAdapter(RangeImpl .class,new RangeSerializer())
+                        //.registerTypeAdapter(Logic .class, new LogicDeserializer())
                         .registerTypeAdapter(Range .class, new RangeDeserializer())
-                        .registerTypeAdapter(Graph .class, new GraphSerializer())
-                        .registerTypeAdapter(CellDTO .class, new DTOCellDeserializer())
                         .registerTypeAdapter(SheetDTO .class, new DTOSheetDeserializer())
                         .create();
 }

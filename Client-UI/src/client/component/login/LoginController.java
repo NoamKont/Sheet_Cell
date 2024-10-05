@@ -91,6 +91,11 @@ public class LoginController {
         });
     }
 
+    @FXML
+    void exitBtnPressed(ActionEvent event) {
+        Platform.exit();
+    }
+
     public void setAppMainController(AppController MainController) {
         this.mainController = MainController;
     }

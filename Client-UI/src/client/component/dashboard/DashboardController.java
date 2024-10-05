@@ -23,10 +23,10 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.HttpUrl;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -37,12 +37,9 @@ import static body.permission.PermissionInfo.Permissions.*;
 import static body.permission.PermissionInfo.Status.PENDING;
 import static client.util.Constants.REFRESH_RATE;
 
-public class DashboardController {
+public class DashboardController implements Closeable {
 
     private AppController appController;
-
-    @FXML
-    private Label usernameLabel;
 
     @FXML
     private TableView<PermissionInfo> permissionTable;
@@ -83,6 +80,7 @@ public class DashboardController {
     private TimerTask listRefresher;
 
     private StringProperty selectedSheetName = new SimpleStringProperty();
+    private StringProperty userName = new SimpleStringProperty();
 
     @FXML
     public void initialize() {
@@ -113,20 +111,6 @@ public class DashboardController {
          });
     }
 
-    @FXML
-    void uploadFilePressed(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("XML Files", "*.xml"));
-
-        File selectedFile = fileChooser.showOpenDialog(null);
-        if(selectedFile != null){
-            System.out.println("File selected: " + selectedFile.getName());
-            appController.createSheet(selectedFile.getAbsolutePath());
-        }
-    }
-
     private void updatePermissionsList(List<PermissionInfo> permissionsInfo) {
         Platform.runLater(() -> {
             ObservableList<PermissionInfo> items = permissionTable.getItems();
@@ -143,6 +127,7 @@ public class DashboardController {
 
         });
     }
+
     private void updateRequestsList(List<PermissionInfo> requestsInfo) {
         Platform.runLater(() -> {
             commandsComponentController.clearRequests();
@@ -155,6 +140,7 @@ public class DashboardController {
             }
         });
     }
+
     public void startListRefresher() {
         listRefresher = new SheetsListRefresher(
                 autoUpdate,
@@ -179,6 +165,7 @@ public class DashboardController {
 
     public void setAppMainController(AppController appController) {
         this.appController = appController;
+
     }
 
     public TableView<SheetInfo> getAvailableSheets() {
@@ -193,7 +180,60 @@ public class DashboardController {
     }
 
     public String getUsername() {
-        return appController.getUsername();
+        return userName.getValue();
     }
 
+    public void setUserName(String userName) {
+        this.userName.setValue(userName);
+        commandsComponentController.setUserNameLabel(String.format("Hello %s!", userName));
+    }
+    public void logoutUser(){
+        try {
+            close();
+            HttpClientUtil.runAsync(Constants.LOGOUT, new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Logout request ended with failure...");
+                        alert.setContentText("Please try again.");
+                        alert.showAndWait();
+                    });
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    if (response.isSuccessful() || response.isRedirect()) {
+                        HttpClientUtil.removeCookiesOf(Constants.BASE_DOMAIN);
+                        Platform.runLater(() -> {
+                            appController.switchToLogin();
+                        });
+                    }
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void close() throws IOException {
+        availableSheets.getItems().clear();
+        permissionTable.getItems().clear();
+        cancelTimerTask();
+    }
+
+    public void uploadFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("XML Files", "*.xml"));
+
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if(selectedFile != null){
+            System.out.println("File selected: " + selectedFile.getName());
+            appController.createSheet(selectedFile.getAbsolutePath());
+        }
+    }
 }

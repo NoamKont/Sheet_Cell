@@ -15,7 +15,7 @@ import java.io.PrintWriter;
 
 import static SheetEngine.constants.Constants.*;
 
-@WebServlet(name = "VersionSheetServlet", urlPatterns = {"/simultaneity"})
+@WebServlet(name = "VersionRefresherSheetServlet", urlPatterns = {"/simultaneity"})
 public class VersionRefresherServlet extends HttpServlet {
 
     @Override

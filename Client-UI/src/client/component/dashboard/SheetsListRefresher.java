@@ -1,7 +1,7 @@
 package client.component.dashboard;
 
 
-import body.Logic;
+
 import body.permission.PermissionInfo;
 import body.Sheets.SheetInfo;
 import client.util.Constants;
@@ -65,7 +65,6 @@ public class SheetsListRefresher extends TimerTask {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                System.out.println("got response");
                 String jsonArrayOfUsersNames = response.body().string();
 
                 List<SheetInfo> sheetInfo = GSON_INSTANCE.fromJson(jsonArrayOfUsersNames, new TypeToken<List<SheetInfo>>(){}.getType());

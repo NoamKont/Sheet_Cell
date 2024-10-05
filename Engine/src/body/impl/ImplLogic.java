@@ -254,7 +254,6 @@ public class ImplLogic implements Logic,Serializable  {
 
             analysVersion = (Sheet) inStream.readObject();
 
-            //TODO: check if it fill appear in the sheet
             analysVersion.updateCell(cellId, value, owner);
             return new ImplSheetDTO(analysVersion);
 
