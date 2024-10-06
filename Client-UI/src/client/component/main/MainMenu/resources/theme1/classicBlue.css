@@ -86,4 +86,14 @@
 .button:pressed {
     -fx-background-color: #1abc9c;    /* Background color when button is clicked */
 }
-
+#Back2Dash{
+    -fx-background-color: #1abc9c;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 5px;
+    -fx-background-radius: 10px;   /* Rounded corners */
+    -fx-border-radius: 10px;
+}
+#Back2Dash:hover{
+    -fx-background-color: #16a085;
+}

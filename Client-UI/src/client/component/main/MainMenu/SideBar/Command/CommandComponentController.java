@@ -13,6 +13,7 @@ import client.util.http.HttpClientUtil;
 import com.google.gson.JsonObject;
 import dto.SheetDTO;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -282,13 +283,6 @@ public class CommandComponentController implements Initializable {
                 });
             }
         });
-//
-//
-//        UISheet filterSheet = mainController.filterSheet(topLeft, bottomRight, values, columns);
-//        updateStyleSheet(filterSheet);
-//        ScrollPane popupLayout = mainController.creatSheetComponent(filterSheet, false);
-//        Scene popupSortedSheet = new Scene(popupLayout, 900, 500);
-//        popupStage.setScene(popupSortedSheet);
     }
 
     private void updateStyleSheet(UISheet newSheet) {
@@ -317,11 +311,6 @@ public class CommandComponentController implements Initializable {
     public Spinner<Integer> getWidthSpinner() {
         return widthSpinner;
     }
-
-//    public Set<String> getValuesFromColumn(Integer columnIndex, int top, int bottom) {
-//        return mainController.getValuesFromColumnsAsSet(columnIndex , top, bottom);
-//    }
-
     public ColorPicker getBackgroundColorPicker() {
         return backgroundColorPicker;
     }
@@ -332,5 +321,8 @@ public class CommandComponentController implements Initializable {
         return mainController.getSheetName();
     }
 
+    public void bindModuleToUI(BooleanProperty isWriterPermission) {
+
+    }
 }
 

@@ -21,12 +21,12 @@
       <RowConstraints maxHeight="44.0" minHeight="34.0" prefHeight="41.0" vgrow="NEVER" />
    </rowConstraints>
    <children>
-      <Button fx:id="deleteRangeBtn" disable="true" mnemonicParsing="false" onAction="#deleteRangeAction" text="Delete Range" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+      <Button fx:id="deleteRangeBtn" disable="true" mnemonicParsing="false" onAction="#deleteRangeAction" styleClass="mainButton" text="Delete Range" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
          <GridPane.margin>
             <Insets bottom="10.0" left="5.0" right="5.0" />
          </GridPane.margin>
       </Button>
-      <Button fx:id="addRange" alignment="CENTER" mnemonicParsing="false" onAction="#addRangeToSheet" text="add new Range" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+      <Button fx:id="addRange" alignment="CENTER" mnemonicParsing="false" onAction="#addRangeToSheet" styleClass="mainButton" text="add new Range" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
          <GridPane.margin>
             <Insets bottom="10.0" left="5.0" right="5.0" />
          </GridPane.margin>
@@ -46,7 +46,7 @@
             <Insets top="10.0" />
          </GridPane.margin>
       </ListView>
-      <Button fx:id="clearOptionBtn" alignment="CENTER" mnemonicParsing="false" onAction="#clearOptionChoosen" prefWidth="87.0" text="Clear" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+      <Button fx:id="clearOptionBtn" alignment="CENTER" mnemonicParsing="false" onAction="#clearOptionChoosen" prefWidth="87.0" styleClass="mainButton" text="Clear" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
          <GridPane.margin>
             <Insets left="5.0" right="5.0" />
          </GridPane.margin>

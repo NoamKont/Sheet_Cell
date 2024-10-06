@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane id="commandGridPane" fx:id="commandsComponent" minWidth="190.0" styleClass="sidebar" stylesheets="@../../main/MainMenu/resources/defaultTheme/default.css" vgap="5.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.component.dashboard.sideBar.DashCommandsController">
+<GridPane id="commandGridPane" fx:id="commandsComponent" minWidth="190.0" styleClass="sidebar" stylesheets="@../../main/MainMenu/resources/dash.css" vgap="5.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.component.dashboard.sideBar.DashCommandsController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -23,7 +23,7 @@
    <children>
       <VBox alignment="CENTER" spacing="15.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
          <children>
-            <Label id="usernameLabel" fx:id="usernameLabel" text="Hello" textFill="#2262c6">
+            <Label id="usernameLabel" fx:id="usernameLabel" text="Hello" textFill="#2c67f2">
                <font>
                   <Font name="Berlin Sans FB" size="24.0" />
                </font></Label>

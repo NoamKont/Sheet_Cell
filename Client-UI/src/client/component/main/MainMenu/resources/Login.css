@@ -1,0 +1,30 @@
+
+#loginBtn{
+    -fx-background-color: linear-gradient(to Right, #508ce1, #2c67f2);
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-background-radius: 10px;   /* Rounded corners */
+    -fx-border-radius: 10px;
+}
+
+#loginBtn:hover {
+    -fx-background-color: #133d80;    /* Background color when hovering */
+}
+#loginBtn:pressed {
+    -fx-background-color: #003366 ;    /* Background color when button is clicked */
+}
+#welcomeBody {
+    -fx-background-color: linear-gradient(to Right, #508ce1, #2c67f2);
+}
+.exit {
+
+    -fx-background-color: linear-gradient(to Top, #e74c3c, #c11706);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 5px;
+    -fx-background-radius: 10px;   /* Rounded corners */
+    -fx-border-radius: 10px;
+}
+.exit:hover {
+    -fx-background-color: #c12b1a;    /* Background color when hovering */
+}

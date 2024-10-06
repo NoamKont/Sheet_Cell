@@ -2,6 +2,7 @@ package client.component.main.MainMenu.SideBar.Range;
 
 
 import client.component.main.MainMenu.AppController;
+import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -91,5 +92,13 @@ public class RangeComponentController implements Initializable {
 
     public ListView<String> getRangeListView(){
         return rangeListView;
+    }
+
+    public void bindModuleToUI(BooleanProperty isWriterPermission) {
+        TopLeft.disableProperty().bind(isWriterPermission.not());
+        BottomRight.disableProperty().bind(isWriterPermission.not());
+        rangeNameBox.disableProperty().bind(isWriterPermission.not());
+        addRange.disableProperty().bind(isWriterPermission.not());
+        deleteRangeBtn.disableProperty().bind(isWriterPermission.not());
     }
 }

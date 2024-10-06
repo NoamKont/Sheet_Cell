@@ -3,6 +3,7 @@ package client.component.dashboard.sideBar;
 import body.impl.CoordinateImpl;
 import body.permission.PermissionInfo;
 import client.component.dashboard.DashboardController;
+import client.component.dashboard.sideBar.addRequest.addRequestController;
 import client.component.dashboard.sideBar.request.PermissionRequestController;
 import client.util.Constants;
 import client.util.http.HttpClientUtil;
@@ -12,12 +13,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -27,6 +30,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static client.util.Constants.GSON_INSTANCE;
@@ -56,15 +61,37 @@ public class DashCommandsController implements Initializable {
 
     @FXML
     void requestBtnPressed(ActionEvent event) {
-        //TODO its hard coded for now to "READER","Pending"
+        Stage popupStage = new Stage();
+        // Set the pop-up window to be modal (blocks interaction with other windows)
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setTitle("New Permission Request");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL url = getClass().getResource("/client/component/dashboard/sideBar/addRequest/addRequestPopup.fxml");
+        fxmlLoader.setLocation(url);
+        try {
+            AnchorPane root = fxmlLoader.load(url.openStream());
+            addRequestController addRequestController = fxmlLoader.getController();
+            addRequestController.setDashCommandsController(this);
+            addRequestController.setStage(popupStage);
+            Scene popupScene = new Scene(root, 400, 200);
+            popupStage.setScene(popupScene);
+            popupStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void sendPermissionRequest(String sheetName, String permissionType, String status) {
         //noinspection ConstantConditions
         String finalUrl = HttpUrl
                 .parse(Constants.ADD_PERMISSION)
                 .newBuilder()
-                .addQueryParameter("sheetName", dashController.getSelectedSheetName())
+                .addQueryParameter("sheetName", sheetName)
                 .addQueryParameter("userName",dashController.getUsername())
-                .addQueryParameter("permission", "READER")
-                .addQueryParameter("status", "PENDING")
+                .addQueryParameter("permission", permissionType)
+                .addQueryParameter("status", status)
                 .build()
                 .toString();
 
@@ -92,7 +119,6 @@ public class DashCommandsController implements Initializable {
                 System.out.println("Response is Failed");
             }
         });
-
     }
 
     @FXML
@@ -143,9 +169,14 @@ public class DashCommandsController implements Initializable {
 
     @FXML
     void logoutPressed(ActionEvent event) {
+        viewSheetBtn.setDisable(true);
         dashController.logoutUser();
     }
     public void setUserNameLabel(String format) {
         usernameLabel.setText(format);
+    }
+
+    public List<String> getSheetNames() {
+        return dashController.getSheetNames();
     }
 }

@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.component.login.LoginController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../main/MainMenu/resources/Login.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.component.login.LoginController">
    <children>
-      <AnchorPane layoutY="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: linear-gradient(to bottom, #4C787E, #356272);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane id="welcomeBody" layoutY="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="90.0" layoutY="65.0" prefHeight="178.0" prefWidth="220.0" text="WELCOME!" AnchorPane.bottomAnchor="157.0" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="65.0">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="90.0" layoutY="65.0" prefHeight="178.0" prefWidth="220.0" text="WELCOME!" AnchorPane.bottomAnchor="157.0" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="290.0" AnchorPane.topAnchor="65.0">
                <font>
                   <Font size="36.0" />
                </font>
@@ -20,17 +20,17 @@
          </children>
       </AnchorPane>
       <AnchorPane layoutX="400.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="400.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <padding>
-            <Insets left="5.0" right="5.0" />
-         </padding>
          <children>
-            <VBox alignment="CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox alignment="CENTER" spacing="50.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Enter Name" />
-                  <TextField fx:id="userNameTextField" />
+                  <TextField fx:id="userNameTextField">
+                     <VBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </VBox.margin></TextField>
                   <VBox alignment="CENTER" spacing="10.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#loginBtnPressed" prefHeight="43.0" prefWidth="65.0" text="Login" />
+                        <Button id="loginBtn" mnemonicParsing="false" onAction="#loginBtnPressed" prefHeight="43.0" prefWidth="65.0" text="Login" />
                         <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#exitBtnPressed" prefHeight="43.0" prefWidth="65.0" styleClass="exit" text="Exit" />
                      </children>
                   </VBox>

@@ -33,6 +33,10 @@ public class PermissionRequestController {
     @FXML
     private Label userNameLabel;
 
+    @FXML
+    private Label sheetLabel;
+
+    private String userName;
     private String sheetName;
     private PermissionInfo.Permissions userPermission;
 
@@ -44,7 +48,7 @@ public class PermissionRequestController {
                 .parse(Constants.ADD_PERMISSION)
                 .newBuilder()
                 .addQueryParameter("sheetName", sheetName)
-                .addQueryParameter("userName", userNameLabel.getText())
+                .addQueryParameter("userName", userName)
                 .addQueryParameter("permission", userPermission.toString())
                 .addQueryParameter("status", "APPROVED")
                 .build()
@@ -83,7 +87,7 @@ public class PermissionRequestController {
                 .parse(Constants.ADD_PERMISSION)
                 .newBuilder()
                 .addQueryParameter("sheetName", sheetName)
-                .addQueryParameter("userName", userNameLabel.getText())
+                .addQueryParameter("userName", userName)
                 .addQueryParameter("permission", userPermission.toString())
                 .addQueryParameter("status", "REJECTED")
                 .build()
@@ -116,14 +120,16 @@ public class PermissionRequestController {
     }
 
     public void setUserNameLabel(String userName) {
-        userNameLabel.setText(userName);
+        this.userName = userName;
         userNameFirstLatterLabel.setText(userName.substring(0,1).toUpperCase());
     }
     public void setUserPermission(PermissionInfo.Permissions permissionType) {
         this.userPermission = permissionType;
+        userNameLabel.setText(userName + " ask " + "\"" + permissionType.toString() + "\"");
     }
 
     public void setSheetName(String sheetName) {
         this.sheetName = sheetName;
+        sheetLabel.setText("For Sheet: " + "\"" + sheetName + "\"" );
     }
 }

@@ -17,6 +17,7 @@ public class SheetInfo {
     private int rows;
     private int columns;
     private List<PermissionInfo> AllUsersPermissionInfo;
+    private List<PermissionInfo> acceptedPermissionInfo;
 
 
     public SheetInfo(String sheetOwner, String sheetName, int rows, int columns, PermissionInfo.Permissions permission, List<PermissionInfo> AllUsersPermissionInfo) {
@@ -36,21 +37,26 @@ public class SheetInfo {
         //this.permission = sheetDTO.getPermission();
         this.sheetSize = getSheetSize();
     }
-    public SheetInfo(SheetDTO sheetDTO, List<PermissionInfo> AllUsersPermissionInfo, String username){
+    public SheetInfo(SheetDTO sheetDTO, List<PermissionInfo> AllUsersPermissionInfo,List<PermissionInfo> acceptedPermissionInfo ,String username){
         this.sheetOwner = sheetDTO.getOwner();
         this.sheetName = sheetDTO.getSheetName();
         this.rows = sheetDTO.getRowCount();
         this.columns = sheetDTO.getColumnCount();
         this.sheetSize = getSheetSize();
         this.AllUsersPermissionInfo = AllUsersPermissionInfo;
+        this.acceptedPermissionInfo = acceptedPermissionInfo;
         setUserPermission(AllUsersPermissionInfo, username);
     }
 
     private void setUserPermission(List<PermissionInfo> AllUsersPermissionInfo, String username) {
         for(PermissionInfo permissionInfo : AllUsersPermissionInfo){
             if(permissionInfo.getUsername().equals(username)){
-                this.userPermission = permissionInfo.getPermissionType();
-                this.userStatus = permissionInfo.getPermissionStatus();
+                if(permissionInfo.getPermissionStatus() != PermissionInfo.Status.APPROVED){
+                   setUserPermission(acceptedPermissionInfo, username);
+                }else{
+                    this.userPermission = permissionInfo.getPermissionType();
+                    this.userStatus = permissionInfo.getPermissionStatus();
+                }
             }
         }
         if(this.userPermission == null){

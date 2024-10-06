@@ -54,7 +54,8 @@ public class SheetsListServlet extends HttpServlet {
             List<SheetInfo> sheetInfo = new ArrayList<>();
             for (Logic logic : sheetList) {
                 List<PermissionInfo> permissionInfo = logic.getPermissionManager().getPermissions().values().stream().toList();
-                sheetInfo.add(new SheetInfo(logic.getSheet(), permissionInfo, username));
+                List<PermissionInfo> acceptedPermissionInfo = logic.getPermissionManager().getAcceptedPermissions().values().stream().toList();
+                sheetInfo.add(new SheetInfo(logic.getSheet(), permissionInfo, acceptedPermissionInfo,username));
             }
 
             //String json = GSON_INSTANCE.toJson(sheetList);

@@ -7,7 +7,7 @@ public class PermissionInfo {
     public enum Permissions {
         NO_PERMISSION{
             public String toString() {
-                return "NO PERMISSION";
+                return "NONE";
             }
         },
         READER,

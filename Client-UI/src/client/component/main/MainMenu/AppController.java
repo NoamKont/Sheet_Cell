@@ -59,7 +59,7 @@ public class AppController implements Closeable {
 
     private Timer timer;
     private TimerTask listRefresher;
-
+    private String skinMode = "Default";
 
     @FXML
     private ScrollPane headerComponent;
@@ -343,6 +343,8 @@ public class AppController implements Closeable {
     private void bindModuleToUI() {
         // Bind the UI to the module
         headerComponentController.bindModuleToUI(selectedCell, isWriterPermission);
+        commandComponentController.bindModuleToUI(isWriterPermission);
+        rangeComponentController.bindModuleToUI(isWriterPermission);
     }
 
     public ScrollPane creatSheetComponent(UISheet Sheet, boolean isActive) {
@@ -663,6 +665,7 @@ public class AppController implements Closeable {
     }
 
     public void changeMode(String mode) {
+        skinMode = mode;
         scene.getStylesheets().clear();
         switch (mode) {
             case "Classic Blue":
@@ -712,6 +715,8 @@ public class AppController implements Closeable {
     }
 
     public void switchToDashboard() {
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(getClass().getResource("resources/dash.css").toExternalForm());
         dashboardController.setUserName(getUsername());
         setMainPanelTo(dashboardComponent);
         dashboardController.startListRefresher();
@@ -745,6 +750,7 @@ public class AppController implements Closeable {
                 }
 
                 Platform.runLater(() -> {
+                    changeMode(skinMode);
                     uiSheet = new UISheet(sheet); //set the module
                     selectedCell.clearCell();
                     rangeMapListener();
@@ -762,6 +768,8 @@ public class AppController implements Closeable {
     }
 
     public void switchToLogin() {
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(getClass().getResource("resources/Login.css").toExternalForm());
         setMainPanelTo(loginComponent);
     }
 

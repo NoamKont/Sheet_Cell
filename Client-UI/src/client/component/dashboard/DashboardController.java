@@ -34,6 +34,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static body.permission.PermissionInfo.Permissions.*;
+import static body.permission.PermissionInfo.Status.APPROVED;
 import static body.permission.PermissionInfo.Status.PENDING;
 import static client.util.Constants.REFRESH_RATE;
 
@@ -102,7 +103,7 @@ public class DashboardController implements Closeable {
              if (newSelection != null) {
                  selectedSheetName.setValue(newSelection.getSheetName());
                  updatePermissionsList(newSelection.getAllUsersPermissionInfo());
-                 if(newSelection.getUserPermission().equals(NO_PERMISSION.toString())||newSelection.getUserStatus().equals(PENDING.toString())){
+                 if(newSelection.getUserPermission().equals(NO_PERMISSION.toString())){
                      commandsComponentController.getViewSheetBtn().setDisable(true);
                  }else {
                      commandsComponentController.getViewSheetBtn().setDisable(false);
@@ -187,7 +188,11 @@ public class DashboardController implements Closeable {
         this.userName.setValue(userName);
         commandsComponentController.setUserNameLabel(String.format("Hello %s!", userName));
     }
+
     public void logoutUser(){
+        permissionTable.getItems().clear();
+        availableSheets.getSelectionModel().clearSelection();
+        availableSheets.getItems().clear();
         try {
             close();
             HttpClientUtil.runAsync(Constants.LOGOUT, new Callback() {
@@ -235,5 +240,12 @@ public class DashboardController implements Closeable {
             System.out.println("File selected: " + selectedFile.getName());
             appController.createSheet(selectedFile.getAbsolutePath());
         }
+    }
+
+    public List<String> getSheetNames() {
+        return availableSheets.getItems().stream()
+                .filter(sheetInfo -> !(sheetInfo.getUserPermission()).equals(PermissionInfo.Permissions.OWNER.toString()))
+                .map(SheetInfo::getSheetName)
+                .toList();
     }
 }

@@ -1,0 +1,28 @@
+#AcceptBtn{
+    -fx-background-color: #5ce65c;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 10px;   /* Rounded corners */
+    -fx-border-radius: 10px;
+}
+#AcceptBtn:hover {
+    -fx-background-color: #4db34d;    /* Background color when hovering */
+}
+#AcceptBtn:pressed {
+    -fx-background-color: #3da33d;    /* Background color when button is clicked */
+}
+#DenyBtn{
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 10px;   /* Rounded corners */
+    -fx-border-radius: 10px;
+}
+#DenyBtn:hover {
+    -fx-background-color: #c12b1a;    /* Background color when hovering */
+}
+#DenyBtn:pressed {
+    -fx-background-color: #b21a09;    /* Background color when button is clicked */
+}
