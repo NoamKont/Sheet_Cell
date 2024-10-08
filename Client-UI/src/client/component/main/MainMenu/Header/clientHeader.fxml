@@ -46,7 +46,7 @@
                   <Label fx:id="lastCellVersionUpdateViewer" alignment="CENTER" focusTraversable="false" prefHeight="217.0" prefWidth="365.0" text="Last Cell Version" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                   <AnchorPane GridPane.columnIndex="1" GridPane.columnSpan="3">
                      <children>
-                        <Label fx:id="pathView" focusTraversable="false" layoutX="14.0" layoutY="8.0" styleClass="header-label" text="full path" textFill="#1900f8" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Label fx:id="pathView" focusTraversable="false" layoutX="14.0" layoutY="8.0" styleClass="header-label" text="full path" textFill="#1900f8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>

@@ -35,6 +35,7 @@ public class ImplSheet implements Sheet, Serializable  {
     private int countUpdateCell = 0;
     private Map<String, Range> rangeMap = new HashMap<>();
     private String username;
+    private String filePath;
 
 
     public ImplSheet(String sheetName, int thickness, int width, int row, int col) {
@@ -110,6 +111,11 @@ public class ImplSheet implements Sheet, Serializable  {
     @Override
     public int getVersion() {
         return sheetVersion;
+    }
+
+    @Override
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     @Override
@@ -565,6 +571,11 @@ public class ImplSheet implements Sheet, Serializable  {
         if(coordinate.getRow() > row || coordinate.getColumn() > col){
             throw new IllegalArgumentException("Cell: " + coordinate.toString() + " is out of bounds");
         }
+    }
+
+    @Override
+    public String getFilePath() {
+        return filePath;
     }
 
     @Override

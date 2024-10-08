@@ -23,6 +23,7 @@ public class ImplSheetDTO implements SheetDTO {
     private int countUpdateCell;
     private Map<String, Range> rangeMap = new HashMap<>();
     private String username;
+    private String filePath;
 
 //    public ImplSheetDTO(Sheet sheet) {
 //        this.currSheet = sheet;
@@ -38,6 +39,7 @@ public class ImplSheetDTO implements SheetDTO {
         this.graph = sheet.getGraph();
         this.countUpdateCell = sheet.getCountUpdateCell();
         this.rangeMap = sheet.getAllRanges();
+        this.filePath = sheet.getFilePath();
 
         for (Map.Entry<Coordinate, Cell> entry : sheet.getActiveCells().entrySet()) {
             Coordinate coordinate = entry.getKey();
@@ -99,6 +101,11 @@ public class ImplSheetDTO implements SheetDTO {
     @Override
     public Map<String, Range> getAllRanges() {
         return rangeMap;
+    }
+
+    @Override
+    public String getFilePath() {
+        return filePath;
     }
 
     @Override

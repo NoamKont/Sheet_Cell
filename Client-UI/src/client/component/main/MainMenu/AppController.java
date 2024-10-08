@@ -54,8 +54,7 @@ public class AppController implements Closeable {
     private ObjectProperty<UIGridPart> selectedRowOrColumn = new SimpleObjectProperty<>();
     private StringProperty selectedRange = new SimpleStringProperty();
     private BooleanProperty isWriterPermission = new SimpleBooleanProperty(false);
-    private ProgressBar progressBar = new ProgressBar(100);
-    private Label statusLabel = new Label("Status: Idle");
+    private final StringProperty filePath = new SimpleStringProperty();
 
     private Timer timer;
     private TimerTask listRefresher;
@@ -223,70 +222,50 @@ public class AppController implements Closeable {
         });
     }
 
-    public void createSheet(String filePath) {
-//        VBox uploadStatus = new VBox(progressBar, statusLabel);
-//        uploadStatus.setAlignment(Pos.CENTER); // Center the VBox contents
-//        uploadStatus.setPrefSize(400, 250);
-//        bodyComponent.setCenter(uploadStatus);
-        Task<Void> uploadTask = new Task<Void>() {
+    public void createSheet(String path) {
+        // Create the request body for new Sheet
+        RequestBody body = new FormBody.Builder()
+                .add("FilePath", path)
+                .build();
+
+
+        HttpClientUtil.runPostAsync(body, Constants.NEW_SHEET, new Callback() {
             @Override
-            protected Void call() throws Exception {
-//                    for(int i = 0; i <= 100; i++){
-//                        Thread.sleep(15);
-//                        updateProgress(i, 100);
-//                        updateMessage("Uploading " + i + "%");
-//                    }
-
-                // Create the request body for new Sheet
-                RequestBody body = new FormBody.Builder()
-                        .add("FilePath", filePath)
-                        .build();
-
-
-                HttpClientUtil.runPostAsync(body, Constants.NEW_SHEET, new Callback() {
-                    @Override
-                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        System.out.println("Response is Failed");
-                        Platform.runLater(() -> {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Error");
-                            alert.setHeaderText("Error in creating new Sheet");
-                            alert.setContentText(e.getMessage());
-                            alert.showAndWait();
-                        });
-                    }
-
-                    @Override
-                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                        String rawBody = response.body().string();
-                        if (response.isSuccessful()) {
-                            System.out.println("Response is successful");
-                            Platform.runLater(() -> {
-                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                alert.setTitle("Success");
-                                alert.setHeaderText("Sheet Created Successfully");
-                                alert.showAndWait();
-                            });
-
-                        } else {
-                            Platform.runLater(() -> {
-                                Alert alert = new Alert(Alert.AlertType.ERROR);
-                                alert.setTitle("Error");
-                                alert.setHeaderText("Error in creating new Sheet");
-                                alert.setContentText(rawBody);
-                                alert.showAndWait();
-                            });
-
-                        }
-                    }
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println("Response is Failed");
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Error in creating new Sheet");
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
                 });
-
-                return null;
             }
-        };
-        progressBar.progressProperty().bind(uploadTask.progressProperty());
-        statusLabel.textProperty().bind(uploadTask.messageProperty());
-        new Thread(uploadTask).start();
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String rawBody = response.body().string();
+                if (response.isSuccessful()) {
+                    System.out.println("Response is successful");
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Success");
+                        alert.setHeaderText("Sheet Created Successfully");
+                        alert.showAndWait();
+                    });
+
+                } else {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Error in creating new Sheet");
+                        alert.setContentText(rawBody);
+                        alert.showAndWait();
+                    });
+
+                }
+            }
+        });
     }
 
     public void updateCell(String input) {
@@ -343,7 +322,7 @@ public class AppController implements Closeable {
 
     private void bindModuleToUI() {
         // Bind the UI to the module
-        headerComponentController.bindModuleToUI(selectedCell, isWriterPermission);
+        headerComponentController.bindModuleToUI(selectedCell, isWriterPermission, filePath);
         commandComponentController.bindModuleToUI(isWriterPermission);
         rangeComponentController.bindModuleToUI(isWriterPermission,headerComponentController.getNewVersionAvailable());
     }
@@ -751,6 +730,7 @@ public class AppController implements Closeable {
                 }
 
                 Platform.runLater(() -> {
+                    filePath.set(sheet.getFilePath());
                     changeMode(skinMode);
                     uiSheet = new UISheet(sheet); //set the module
                     selectedCell.clearCell();

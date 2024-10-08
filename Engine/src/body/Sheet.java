@@ -27,6 +27,7 @@ public interface Sheet {
     void setVersion(int version);
     void setUpdateCellCount(int countUpdateCell);
     void setGraph(Graph graph);
+    void setFilePath(String filePath);
 
     Set<Coordinate> addRange(String rangeName, String topLeftCellId, String rightBottomCellId);
     void deleteRange(String rangeName);
@@ -46,4 +47,6 @@ public interface Sheet {
 
     void checkValidBounds(Coordinate coordinate);
 
+    String getFilePath();
 }
+

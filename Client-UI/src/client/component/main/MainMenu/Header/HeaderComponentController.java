@@ -11,6 +11,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -121,7 +122,7 @@ public class HeaderComponentController implements Initializable {
         actionLine.clear();
     }
 
-    public void bindModuleToUI(UICell selectedCell, BooleanProperty isWriterPermission){
+    public void bindModuleToUI(UICell selectedCell, BooleanProperty isWriterPermission, StringProperty path){
         IdViewer.textProperty().bind(selectedCell.idProperty());
         originalValueViewer.textProperty().bind(selectedCell.originalValueProperty());
         StringExpression sb = Bindings.concat("Last Update Version: ", selectedCell.lastVersionUpdateProperty());
@@ -129,6 +130,7 @@ public class HeaderComponentController implements Initializable {
         StringExpression usernameHelloText = Bindings.concat("Hello ", mainController.usernameProperty(), "!");
         usernameLabel.textProperty().bind(usernameHelloText);
         userUpdateCellLabel.textProperty().bind(Bindings.concat("Cell Update By: ", selectedCell.updateByProperty()));
+        pathView.textProperty().bind(path);
 
         //dynamicAnalysisBtn.disableProperty().bind(isWriterPermission.not());
         //versionSelectorMenu.disableProperty().bind(isWriterPermission.not());
