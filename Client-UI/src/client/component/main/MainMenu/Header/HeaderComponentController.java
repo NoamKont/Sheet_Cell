@@ -21,15 +21,12 @@ import javafx.scene.control.*;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 
 public class HeaderComponentController implements Initializable {
 
@@ -80,7 +77,7 @@ public class HeaderComponentController implements Initializable {
     @FXML
     private Label userUpdateCellLabel;
 
-    private BooleanProperty newVersionAvilable = new SimpleBooleanProperty(false);
+    private BooleanProperty newVersionAvailable = new SimpleBooleanProperty(false);
     private SheetDTO newestSheet;
 
     public void setMainController(AppController mainController) {
@@ -92,7 +89,7 @@ public class HeaderComponentController implements Initializable {
         updateVersionBtn.setDisable(false);
         notification.setVisible(true);
 
-        newVersionAvilable.set(true);
+        newVersionAvailable.set(true);
     }
 
     @Override
@@ -102,7 +99,7 @@ public class HeaderComponentController implements Initializable {
         updateVersionBtn.setOnAction(e -> {
             updateVersionBtn.setDisable(true);
             notification.setVisible(false);
-            newVersionAvilable.set(false);
+            newVersionAvailable.set(false);
             mainController.updateSheet(newestSheet);
         });
 
@@ -137,8 +134,9 @@ public class HeaderComponentController implements Initializable {
         //versionSelectorMenu.disableProperty().bind(isWriterPermission.not());
         //IdViewer.disableProperty().bind(isWriterPermission.not());
         //originalValueViewer.disableProperty().bind(isWriterPermission.not());
-        updateValueBtn.disableProperty().bind(isWriterPermission.not().or(newVersionAvilable));
-        actionLine.disableProperty().bind(isWriterPermission.not().or(newVersionAvilable));
+
+        updateValueBtn.disableProperty().bind(isWriterPermission.not().or(newVersionAvailable));
+        actionLine.disableProperty().bind(isWriterPermission.not().or(newVersionAvailable));
 
     }
 
@@ -210,5 +208,8 @@ public class HeaderComponentController implements Initializable {
 
     }
 
+    public BooleanProperty getNewVersionAvailable() {
+        return newVersionAvailable;
+    }
 }
 

@@ -94,11 +94,11 @@ public class RangeComponentController implements Initializable {
         return rangeListView;
     }
 
-    public void bindModuleToUI(BooleanProperty isWriterPermission) {
-        TopLeft.disableProperty().bind(isWriterPermission.not());
-        BottomRight.disableProperty().bind(isWriterPermission.not());
-        rangeNameBox.disableProperty().bind(isWriterPermission.not());
-        addRange.disableProperty().bind(isWriterPermission.not());
-        deleteRangeBtn.disableProperty().bind(isWriterPermission.not());
+    public void bindModuleToUI(BooleanProperty isWriterPermission, BooleanProperty newSheetAvailable) {
+        TopLeft.disableProperty().bind(isWriterPermission.not().or(newSheetAvailable));
+        BottomRight.disableProperty().bind(isWriterPermission.not().or(newSheetAvailable));
+        rangeNameBox.disableProperty().bind(isWriterPermission.not().or(newSheetAvailable));
+        addRange.disableProperty().bind(isWriterPermission.not().or(newSheetAvailable));
+        deleteRangeBtn.disableProperty().bind(isWriterPermission.not().or(newSheetAvailable));
     }
 }

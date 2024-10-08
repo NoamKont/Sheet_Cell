@@ -172,6 +172,7 @@ public class DashCommandsController implements Initializable {
         viewSheetBtn.setDisable(true);
         dashController.logoutUser();
     }
+
     public void setUserNameLabel(String format) {
         usernameLabel.setText(format);
     }

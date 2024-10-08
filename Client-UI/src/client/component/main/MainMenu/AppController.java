@@ -60,6 +60,7 @@ public class AppController implements Closeable {
     private Timer timer;
     private TimerTask listRefresher;
     private String skinMode = "Default";
+    private BooleanProperty newAvilableVersion = new SimpleBooleanProperty(false);
 
     @FXML
     private ScrollPane headerComponent;
@@ -344,7 +345,7 @@ public class AppController implements Closeable {
         // Bind the UI to the module
         headerComponentController.bindModuleToUI(selectedCell, isWriterPermission);
         commandComponentController.bindModuleToUI(isWriterPermission);
-        rangeComponentController.bindModuleToUI(isWriterPermission);
+        rangeComponentController.bindModuleToUI(isWriterPermission,headerComponentController.getNewVersionAvailable());
     }
 
     public ScrollPane creatSheetComponent(UISheet Sheet, boolean isActive) {
@@ -756,8 +757,8 @@ public class AppController implements Closeable {
                     rangeMapListener();
                     versionSelectorMenuListener();
                     uiSheet.updateSheet(sheet);
-                    checkUserPermission(sheetName);
-                    //isFileOpen.set(true);
+                    updatePermission(sheetName);
+                    //checkUserPermission(sheetName);
                     System.out.println("Sheet Created");
                     setMainPanelTo(bodyComponent);
                     createViewSheet();
@@ -771,6 +772,19 @@ public class AppController implements Closeable {
         scene.getStylesheets().clear();
         scene.getStylesheets().add(getClass().getResource("resources/Login.css").toExternalForm());
         setMainPanelTo(loginComponent);
+    }
+
+    private void updatePermission(String sheetName) {
+        dashboardController.getAvailableSheets().getItems().stream()
+                .filter(sheetInfo -> sheetInfo.getSheetName().equals(sheetName))
+                .findFirst()
+                .ifPresent(sheetInfo -> {
+                    if(sheetInfo.getUserPermission().equals(READER.toString())){
+                        isWriterPermission.set(false);
+                    }else {
+                        isWriterPermission.set(true);
+                    }
+                });
     }
 
     private void checkUserPermission(String sheetName){

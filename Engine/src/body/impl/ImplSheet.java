@@ -130,7 +130,7 @@ public class ImplSheet implements Sheet, Serializable  {
     @Override
     public Set<Coordinate> addRange(String rangeName, String topLeftCellId, String rightBottomCellId) {
         if(rangeMap.containsKey(rangeName)){
-            throw new IllegalArgumentException("Range name already exist");
+            throw new IllegalArgumentException("Range name: " + rangeName +" already exist in the sheet");
         }
         else{
             Range range = new RangeImpl(rangeName, topLeftCellId, rightBottomCellId, this);

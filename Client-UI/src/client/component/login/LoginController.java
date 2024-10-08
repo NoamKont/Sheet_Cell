@@ -82,8 +82,8 @@ public class LoginController {
                     });
                 } else {
                     Platform.runLater(() -> {
-                        mainController.setUsername(userName);
-                        System.out.println("here I should go to dashboard");
+                        String s = userName.substring(0, 1).toUpperCase() + userName.substring(1).toLowerCase();
+                        mainController.setUsername(s);
                         mainController.switchToDashboard();
                     });
                 }
