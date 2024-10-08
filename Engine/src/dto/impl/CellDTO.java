@@ -10,6 +10,7 @@ import java.util.List;
 
 public class CellDTO {
     private String Id;
+    private Coordinate coordinate;
     private int lastVersionUpdate;
     private String originalValue;
     private String effectiveValue;
@@ -29,6 +30,7 @@ public class CellDTO {
     }
     public CellDTO(Cell cell) {
         this.Id = cell.getId();
+        this.coordinate = cell.getCoordinate();
         this.lastVersionUpdate = cell.getLastVersionUpdate();
         this.originalValue = cell.getOriginalValue();
         this.effectiveValue = cell.getEffectiveValue().toString();
@@ -40,12 +42,14 @@ public class CellDTO {
     public String getId() {
         return Id;
     }
+    public Coordinate getCoordinate() {
+        return coordinate;
+    }
     public int getLastVersionUpdate() {
         return lastVersionUpdate;
     }
     public String getOriginalValue() {return originalValue;}
     public String getEffectiveValue() {return effectiveValue;}
-//    public Object getEffectiveValue() {return effectiveValue.getValue();}
     public Object getOriginalEffectiveValue() {return effectiveValue;}
     public List<Coordinate> getCellsDependsOnThem() {return cellsDependsOnThem;}
     public List<Coordinate> getCellsDependsOnHim() {return cellsDependsOnHim;}

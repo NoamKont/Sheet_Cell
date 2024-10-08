@@ -80,9 +80,10 @@ public class ImplLogic implements Logic,Serializable  {
 
             oldVersion = (Sheet) inStream.readObject();
 
-            mainSheet.add(mainSheet.indexOf(currentVersion), oldVersion);
             currentVersion.setUpdateCellCount(0);
             currentVersion.updateCell(cellId, value, username);
+
+            mainSheet.add(mainSheet.indexOf(currentVersion), oldVersion);
 
 
         } catch (IOException | ClassNotFoundException e) {

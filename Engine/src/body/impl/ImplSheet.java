@@ -175,6 +175,12 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
+    public void updateCell(String cellId, String value, String username) {
+        updateCellDetails(cellId, value, username);
+        updateCellEffectiveValue(cellId, username);
+    }
+
+    @Override
     public void updateCellDetails(String cellId, String value, String username) {
         Coordinate currCoord = new CoordinateImpl(cellId);
         checkValidBounds(currCoord);
@@ -185,13 +191,13 @@ public class ImplSheet implements Sheet, Serializable  {
         currCoord = cell.getCoordinate();
 
         graph.addVertex(currCoord);
-        sheetVersion = sheetVersion + 1;
+//        sheetVersion = sheetVersion + 1;
         graph.removeEntryEdges(currCoord);
         Expression currExpression = stringToExpression(value,currCoord);
         cell.setOriginalValue(currExpression.toString());
         cell.setExpression(currExpression);
-        cell.setLastVersionUpdate(sheetVersion);
-        countUpdateCell++;
+//        cell.setLastVersionUpdate(sheetVersion);
+//        countUpdateCell++;
     }
 
     @Override
@@ -203,7 +209,7 @@ public class ImplSheet implements Sheet, Serializable  {
             Cell currCell = activeCells.get(coord);
             //Cell currCell = getCellByCoordinate(coord);
 
-            if(neighbors.contains(coord) && !coord.equals(new CoordinateImpl(cellId))){
+            if(neighbors.contains(coord)){
                 currCell.setLastVersionUpdate(sheetVersion);
                 currCell.setUpdateBy(username);
                 countUpdateCell++;
@@ -214,6 +220,7 @@ public class ImplSheet implements Sheet, Serializable  {
             currCell.setEffectiveValue(currCell.getExpression().evaluate());
             updateListsOfDependencies(currCell.getCoordinate());
         }
+        sheetVersion = sheetVersion + 1;
     }
 
     @Override
@@ -268,7 +275,6 @@ public class ImplSheet implements Sheet, Serializable  {
         }
         return 0; // Rows are equal if all compared columns have the same values
     }
-
     private boolean filterRow(List<Cell> row, List<List<String>> value, List<Integer> columns) {
         boolean res = false;
         for(int Index = 0; Index < columns.size(); Index++){
@@ -284,6 +290,7 @@ public class ImplSheet implements Sheet, Serializable  {
         }
         return res;
     }
+
     @Override
     public Sheet filterSheet(String topLeft, String bottomRight, List<List<String>> value, List<String> columns) {
         Sheet filterSheet = new ImplSheet(sheetName, thickness, width, row, col);
@@ -364,12 +371,6 @@ public class ImplSheet implements Sheet, Serializable  {
     private boolean cellInRange(Coordinate coordinate, Coordinate topLeftCoord, Coordinate bottomRightCoord) {
         return coordinate.getRow() >= topLeftCoord.getRow() && coordinate.getRow() <= bottomRightCoord.getRow() &&
                 coordinate.getColumn() >= topLeftCoord.getColumn() && coordinate.getColumn() <= bottomRightCoord.getColumn();
-    }
-
-    @Override
-    public void updateCell(String cellId, String value, String username) {
-        updateCellDetails(cellId, value, username);
-        updateCellEffectiveValue(cellId, username);
     }
 
     @Override

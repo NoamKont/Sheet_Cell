@@ -13,6 +13,7 @@ public interface Range extends EffectiveValue {
     String getTopLeftCellId();
     String getRightBottomCellId();
     Set<Cell> getRangeCells();
+    Sheet getSheet();
 
     void setRangeName(String rangeName);
     void setSheet(Sheet sheet);

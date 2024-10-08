@@ -10,8 +10,10 @@ import body.impl.ImplCell;
 import body.impl.ImplSheet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.RangeDTO;
 import dto.SheetDTO;
 import dto.impl.CellDTO;
+import dto.impl.ImplRangeDTO;
 import expression.Range.api.Range;
 import expression.Range.impl.RangeImpl;
 import utils.deserializer.*;
@@ -19,10 +21,7 @@ import utils.serializer.*;
 
 public class Constants {
     public static final String USERNAME = "username";
-    public static final String USER_NAME_ERROR = "username_error";
 
-    public static final String CHAT_PARAMETER = "userstring";
-    public static final String CHAT_VERSION_PARAMETER = "chatversion";
     
     public static final int INT_PARAMETER_ERROR = Integer.MIN_VALUE;
 
@@ -35,10 +34,11 @@ public class Constants {
             .registerTypeAdapter(ImplSheet.class, new SheetSerializer())
             .registerTypeAdapter(Sheet.class, new SheetDeserializer())
             .registerTypeAdapter(Logic.class, new LogicDeserializer())
-            .registerTypeAdapter(RangeImpl.class,new RangeSerializer())
             .registerTypeAdapter(Range.class, new RangeDeserializer())
             .registerTypeAdapter(Graph.class, new GraphSerializer())
             .registerTypeAdapter(CellDTO.class, new DTOCellDeserializer())
             .registerTypeAdapter(SheetDTO.class, new DTOSheetDeserializer())
+            .registerTypeAdapter(RangeDTO.class, new DTORangeDeserializer())
+            .registerTypeAdapter(ImplRangeDTO.class,new RangeSerializer())
             .create();
 }

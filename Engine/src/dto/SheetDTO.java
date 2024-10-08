@@ -20,7 +20,7 @@ public interface SheetDTO {
     int getColumnCount();
     String getEfectivevalueCell(Coordinate coordinate);
     Map<Coordinate, CellDTO> getActiveCells();
-    Map<String, Range> getAllRanges();
+    Map<String, RangeDTO> getAllRanges();
     String getFilePath();
 
     List<String> getValuesFromColumn(Integer columnIndex, int top, int bottom);

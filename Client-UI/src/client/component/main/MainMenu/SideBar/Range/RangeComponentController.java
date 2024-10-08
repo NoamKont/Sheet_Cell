@@ -3,6 +3,7 @@ package client.component.main.MainMenu.SideBar.Range;
 
 import client.component.main.MainMenu.AppController;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -39,6 +40,8 @@ public class RangeComponentController implements Initializable {
     @FXML
     private ListView<String> rangeListView;
 
+    private BooleanProperty deleteBtnDisable = new SimpleBooleanProperty(true);
+
     @FXML
     void addRangeToSheet(ActionEvent event) {
             mainController.addRangeToSheet(rangeNameBox.getText(),TopLeft.getText(), BottomRight.getText());
@@ -66,10 +69,12 @@ public class RangeComponentController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         rangeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue != null){
-                deleteRangeBtn.setDisable(false);
+                //deleteRangeBtn.setDisable(false);
+                deleteBtnDisable.set(false);
             }
             else{
-                deleteRangeBtn.setDisable(true);
+                //deleteRangeBtn.setDisable(true);
+                deleteBtnDisable.set(true);
             }
 
         });
@@ -99,6 +104,6 @@ public class RangeComponentController implements Initializable {
         BottomRight.disableProperty().bind(isWriterPermission.not().or(newSheetAvailable));
         rangeNameBox.disableProperty().bind(isWriterPermission.not().or(newSheetAvailable));
         addRange.disableProperty().bind(isWriterPermission.not().or(newSheetAvailable));
-        deleteRangeBtn.disableProperty().bind(isWriterPermission.not().or(newSheetAvailable));
+        deleteRangeBtn.disableProperty().bind(isWriterPermission.not().or(newSheetAvailable).or(deleteBtnDisable));
     }
 }

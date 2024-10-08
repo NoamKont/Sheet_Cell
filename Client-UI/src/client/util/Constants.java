@@ -10,6 +10,7 @@ import body.impl.ImplCell;
 import body.impl.ImplSheet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.RangeDTO;
 import dto.SheetDTO;
 import dto.impl.CellDTO;
 import expression.Range.api.Range;
@@ -68,7 +69,7 @@ public class Constants {
                         .registerTypeAdapter(Coordinate .class, new CoordinateDeserializer())
                         .registerTypeAdapter(Cell .class, new CellDeserializer())
                         //.registerTypeAdapter(Logic .class, new LogicDeserializer())
-                        .registerTypeAdapter(Range .class, new RangeDeserializer())
                         .registerTypeAdapter(SheetDTO .class, new DTOSheetDeserializer())
+                        .registerTypeAdapter(RangeDTO .class, new DTORangeDeserializer())
                         .create();
 }

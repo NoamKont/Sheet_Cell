@@ -288,13 +288,22 @@ public class CommandComponentController implements Initializable {
     private void updateStyleSheet(UISheet newSheet) {
         UISheet currentSheet = mainController.getUiSheet();
         Map<Coordinate, UICell> activeCellsOfNewSheet = newSheet.getActiveCells();
-        activeCellsOfNewSheet.forEach((coordinate, cell) -> {
-            Label oldLabel = currentSheet.getCell(new CoordinateImpl(cell.idProperty().get())).getCellLabel();
-            Label newLabel = cell.getCellLabel();
-            if(oldLabel != null){
-                copyCellStyle(oldLabel, newLabel);
-            }
-        });
+        activeCellsOfNewSheet.entrySet().stream()
+                .filter(entry -> entry.getValue().originalValueProperty().isNull().not().get())
+                .forEach(entry -> {
+                    Label oldLabel = currentSheet.getCell(new CoordinateImpl(entry.getValue().idProperty().get())).getCellLabel();
+                    Label newLabel = entry.getValue().getCellLabel();
+                    if(oldLabel != null){
+                        copyCellStyle(oldLabel, newLabel);
+                    }
+                });
+//                .forEach((coordinate, cell) -> {
+//            Label oldLabel = currentSheet.getCell(new CoordinateImpl(cell.idProperty().get())).getCellLabel();
+//            Label newLabel = cell.getCellLabel();
+//            if(oldLabel != null){
+//                copyCellStyle(oldLabel, newLabel);
+//            }
+//        });
     }
 
     public void copyCellStyle(Label labelSrc, Label labelDest) {

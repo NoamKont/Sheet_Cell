@@ -32,11 +32,7 @@ public class RangeImpl implements Range, Serializable{
         }
 
     }
-    public RangeImpl(String rangeName, String topLeftCellId, String rightBottomCellId) {
-        this.rangeName = rangeName;
-        this.topLeftCellId = topLeftCellId.toUpperCase();
-        this.rightBottomCellId = rightBottomCellId.toUpperCase();
-    }
+
     @Override
     public String getRangeName() {
         return this.rangeName;
@@ -55,6 +51,11 @@ public class RangeImpl implements Range, Serializable{
     @Override
     public Set<Cell> getRangeCells() {
         return rangeCells;
+    }
+
+    @Override
+    public Sheet getSheet() {
+        return sheet;
     }
 
     @Override
@@ -84,6 +85,7 @@ public class RangeImpl implements Range, Serializable{
         }
         return true;
     }
+
     private void checkTopLeftIsBeforeRightBottom(Coordinate topLeftCellId, Coordinate rightBottomCellId) {
         if(topLeftCellId.getRow() > rightBottomCellId.getRow() || topLeftCellId.getColumn() > rightBottomCellId.getColumn()){
             throw new IllegalArgumentException("Top left cell is not before right bottom cell");

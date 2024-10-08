@@ -3,6 +3,7 @@ package dto.impl;
 import body.Coordinate;
 import body.Sheet;
 import body.impl.Graph;
+import dto.RangeDTO;
 import dto.SheetDTO;
 import expression.Range.api.Range;
 import expression.api.EffectiveValue;
@@ -21,13 +22,11 @@ public class ImplSheetDTO implements SheetDTO {
     private Map<Coordinate, CellDTO> activeCells = new HashMap<>();
     private Graph graph;
     private int countUpdateCell;
-    private Map<String, Range> rangeMap = new HashMap<>();
+    private Map<String, RangeDTO> rangeMap = new HashMap<>();
     private String username;
     private String filePath;
 
-//    public ImplSheetDTO(Sheet sheet) {
-//        this.currSheet = sheet;
-//    }
+
     public ImplSheetDTO(Sheet sheet) {
         this.sheetVersion = sheet.getVersion();
         this.sheetName = sheet.getSheetName();
@@ -38,8 +37,11 @@ public class ImplSheetDTO implements SheetDTO {
         this.username = sheet.getUsername();
         this.graph = sheet.getGraph();
         this.countUpdateCell = sheet.getCountUpdateCell();
-        this.rangeMap = sheet.getAllRanges();
         this.filePath = sheet.getFilePath();
+        for(Map.Entry<String, Range> entry : sheet.getAllRanges().entrySet()){
+            rangeMap.put(entry.getKey(), new ImplRangeDTO(entry.getValue()));
+        }
+//        this.rangeMap = sheet.getAllRanges();
 
         for (Map.Entry<Coordinate, Cell> entry : sheet.getActiveCells().entrySet()) {
             Coordinate coordinate = entry.getKey();
@@ -99,7 +101,7 @@ public class ImplSheetDTO implements SheetDTO {
     }
 
     @Override
-    public Map<String, Range> getAllRanges() {
+    public Map<String, RangeDTO> getAllRanges() {
         return rangeMap;
     }
 

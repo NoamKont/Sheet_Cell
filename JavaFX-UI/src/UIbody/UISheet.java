@@ -3,6 +3,7 @@ package UIbody;
 
 import body.Coordinate;
 import body.impl.CoordinateImpl;
+import dto.RangeDTO;
 import dto.SheetDTO;
 import dto.impl.CellDTO;
 import expression.Range.api.Range;
@@ -34,7 +35,7 @@ public class UISheet {
         //sheetVersion.setValue(sheetDTO.getVersion());
 
         //range map and add the all ranges as entry
-        for (Map.Entry<String, Range> entry : sheetDTO.getAllRanges().entrySet()) {
+        for (Map.Entry<String, RangeDTO> entry : sheetDTO.getAllRanges().entrySet()) {
             if(!ranges.containsKey(entry.getKey())){
                 ranges.put(entry.getKey(), entry.getValue().getCellCoordinates());
 
@@ -70,7 +71,7 @@ public class UISheet {
 
         //RESET range map and add the all ranges as entry
         ranges.clear();
-        for (Map.Entry<String, Range> entry : sheetDTO.getAllRanges().entrySet()) {
+        for (Map.Entry<String, RangeDTO> entry : sheetDTO.getAllRanges().entrySet()) {
             if(!ranges.containsKey(entry.getKey())){
                 ranges.put(entry.getKey(), entry.getValue().getCellCoordinates());
             }
