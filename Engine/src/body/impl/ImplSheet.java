@@ -34,6 +34,8 @@ public class ImplSheet implements Sheet, Serializable  {
     private Graph graph;
     private int countUpdateCell = 0;
     private Map<String, Range> rangeMap = new HashMap<>();
+    private String username;
+    private String filePath;
 
 
     public ImplSheet(String sheetName, int thickness, int width, int row, int col) {
@@ -46,6 +48,16 @@ public class ImplSheet implements Sheet, Serializable  {
         this.row = row;
         this.col = col;
         this.graph = new Graph();
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -102,6 +114,11 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    @Override
     public void setVersion(int version) {
         this.sheetVersion = version;
     }
@@ -112,9 +129,14 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
+    public void setGraph(Graph graph) {
+        this.graph = graph;
+    }
+
+    @Override
     public Set<Coordinate> addRange(String rangeName, String topLeftCellId, String rightBottomCellId) {
         if(rangeMap.containsKey(rangeName)){
-            throw new IllegalArgumentException("Range name already exist");
+            throw new IllegalArgumentException("Range name: " + rangeName +" already exist in the sheet");
         }
         else{
             Range range = new RangeImpl(rangeName, topLeftCellId, rightBottomCellId, this);
@@ -152,43 +174,53 @@ public class ImplSheet implements Sheet, Serializable  {
         }
     }
 
-
     @Override
-    public void updateCellDitels(String cellId, String value){
-        Coordinate currCoord = new CoordinateImpl(cellId);
-        checkValidBounds(currCoord);
-        activeCells.putIfAbsent(currCoord, new ImplCell(cellId));
-        graph.addVertex(currCoord);
-        sheetVersion = sheetVersion + 1;
-        graph.removeEntryEdges(currCoord);
-        Cell cell = activeCells.get(currCoord);
-
-        //why we need it?
-        //cell.setEffectiveValue(null);
-        Expression currExpression = stringToExpression(value,currCoord);
-        cell.setOriginalValue(currExpression.toString());
-        cell.setExpression(currExpression);
-        cell.setLastVersionUpdate(sheetVersion);
-        countUpdateCell++;
+    public void updateCell(String cellId, String value, String username) {
+        updateCellDetails(cellId, value, username);
+        updateCellEffectiveValue(cellId, username);
     }
 
     @Override
-    public void updateCellEffectiveValue(String cellId){
+    public void updateCellDetails(String cellId, String value, String username) {
+        Coordinate currCoord = new CoordinateImpl(cellId);
+        checkValidBounds(currCoord);
+        activeCells.putIfAbsent(currCoord, new ImplCell(cellId));
+        Cell cell = activeCells.get(currCoord);
+        cell.setUpdateBy(username);
+
+        currCoord = cell.getCoordinate();
+
+        graph.addVertex(currCoord);
+//        sheetVersion = sheetVersion + 1;
+        graph.removeEntryEdges(currCoord);
+        Expression currExpression = stringToExpression(value,currCoord);
+        cell.setOriginalValue(currExpression.toString());
+        cell.setExpression(currExpression);
+//        cell.setLastVersionUpdate(sheetVersion);
+//        countUpdateCell++;
+    }
+
+    @Override
+    public void updateCellEffectiveValue(String cellId, String username) {
         Set<Coordinate> neighbors = graph.listOfAccessibleVertex(new CoordinateImpl(cellId));
         List<Coordinate> topologicalSorted = graph.topologicalSort();
 
         for(Coordinate coord : topologicalSorted){
             Cell currCell = activeCells.get(coord);
-            if(neighbors.contains(coord) && !coord.equals(new CoordinateImpl(cellId))){
+            //Cell currCell = getCellByCoordinate(coord);
+
+            if(neighbors.contains(coord)){
                 currCell.setLastVersionUpdate(sheetVersion);
+                currCell.setUpdateBy(username);
                 countUpdateCell++;
             }
             String value = currCell.getOriginalValue();
-            Expression currExpression = stringToExpression(value,coord);
+            Expression currExpression = stringToExpression(value,currCell.getCoordinate());
             currCell.setExpression(currExpression);
             currCell.setEffectiveValue(currCell.getExpression().evaluate());
-            updateListsOfDependencies(coord);
+            updateListsOfDependencies(currCell.getCoordinate());
         }
+        sheetVersion = sheetVersion + 1;
     }
 
     @Override
@@ -243,7 +275,6 @@ public class ImplSheet implements Sheet, Serializable  {
         }
         return 0; // Rows are equal if all compared columns have the same values
     }
-
     private boolean filterRow(List<Cell> row, List<List<String>> value, List<Integer> columns) {
         boolean res = false;
         for(int Index = 0; Index < columns.size(); Index++){
@@ -259,6 +290,7 @@ public class ImplSheet implements Sheet, Serializable  {
         }
         return res;
     }
+
     @Override
     public Sheet filterSheet(String topLeft, String bottomRight, List<List<String>> value, List<String> columns) {
         Sheet filterSheet = new ImplSheet(sheetName, thickness, width, row, col);
@@ -304,6 +336,7 @@ public class ImplSheet implements Sheet, Serializable  {
 
     @Override
     public List<String> getValuesFromColumn(Integer columnIndex, int top, int bottom) {
+
         List<String> values = new ArrayList<>();
         if(top > bottom){
             throw new IllegalArgumentException("Top value can't be bigger than bottom value");
@@ -341,16 +374,10 @@ public class ImplSheet implements Sheet, Serializable  {
     }
 
     @Override
-    public void updateCell(String cellId, String value) {
-        updateCellDitels(cellId, value);
-        updateCellEffectiveValue(cellId);
-    }
-
-    @Override
     public void updateListsOfDependencies(Coordinate coord) {
             Cell cell = activeCells.get(coord);
-            cell.setDependsOnHim(graph.getNeighbors(coord));
-            cell.setDependsOnThem(graph.getSources(coord));
+            cell.setDependsOnHim(graph.getNeighbors(cell.getCoordinate()));
+            cell.setDependsOnThem(graph.getSources(cell.getCoordinate()));
     }
 
     private Expression stringToExpression(String input,Coordinate coordinate) {
@@ -373,8 +400,8 @@ public class ImplSheet implements Sheet, Serializable  {
                 return (new Number(input));
             }catch (NumberFormatException error){
 
-                if(input.toUpperCase().equals("TRUE") || input.toUpperCase().equals("FALSE")){
-                    return (new Bool(input));
+                if(input.trim().toUpperCase().equals("TRUE") || input.trim().toUpperCase().equals("FALSE")){
+                    return (new Bool(input.trim()));
                 }
                 return (new Str(input));
             }
@@ -547,6 +574,16 @@ public class ImplSheet implements Sheet, Serializable  {
         }
     }
 
+    @Override
+    public String getFilePath() {
+        return filePath;
+    }
+
+    @Override
+    public Graph getGraph() {
+        return graph;
+    }
+
     private void validInputBracket(String input){
         if(input.charAt(0) == '{') {
             if(!isValidBracket(input)){
@@ -615,4 +652,18 @@ public class ImplSheet implements Sheet, Serializable  {
         };
     }
 
+    public void setAllRanges(Map<String, Range> ranges) {
+        this.rangeMap = ranges;
+    }
+    public void setAllActiveCells(Map<Coordinate, Cell> activeCells) {
+        this.activeCells = activeCells;
+    }
+    public Cell getCellByCoordinate(Coordinate coordinate){
+        return activeCells.entrySet().stream()
+                .filter(entry -> entry.getValue().getCoordinate().equals(coordinate))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElseThrow();
+        //return activeCells.get(coordinate);
+    }
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.component.main.MainMenu.VisualUtils.GraphMakerController">
+   <content>
+      <AnchorPane minWidth="400.0" prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <VBox alignment="CENTER" layoutX="84.0" layoutY="39.0" spacing="40.0" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="84.0" AnchorPane.topAnchor="39.0">
+               <children>
+                  <HBox alignment="CENTER" spacing="30.0">
+                     <children>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <Label text="X-aixs column" />
+                              <ChoiceBox prefWidth="150.0" fx:id="xAxisColumn" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0">
+                           <children>
+                              <Label text="Y-aixs column" />
+                              <ChoiceBox fx:id="yAxisColumn" prefWidth="150.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" spacing="30.0">
+                     <children>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <Label text="X-axis range" />
+                              <TextField promptText="(e.g., 1:10)" fx:id="xAxisBounds" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" layoutX="11.0" layoutY="10.0">
+                           <children>
+                              <Label text="Y-axis range" />
+                              <TextField fx:id="yAxisBounds" promptText="(e.g., 1:10)" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <VBox alignment="CENTER" spacing="5.0">
+                     <children>
+                        <Label text="Graph Type" />
+                        <ChoiceBox fx:id="graphTypeChoiceBox" prefWidth="100.0" />
+                     </children>
+                  </VBox>
+                  <Button fx:id="generateBtn" mnemonicParsing="false" onAction="#generateBtnPress" prefWidth="150.0" text="Generate Graph" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </content>
+</ScrollPane>

@@ -16,7 +16,9 @@ import javafx.beans.property.*;
 import javafx.collections.MapChangeListener;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -56,8 +58,8 @@ public class AppController {
 
     @FXML
     public void initialize() {
-      bodyComponent.getLeft().getStyleClass().add("left-menu");
-      bodyComponent.getTop().getStyleClass().add("top-menu");
+        bodyComponent.getLeft().getStyleClass().add("left-menu");
+        bodyComponent.getTop().getStyleClass().add("top-menu");
 
         if(headerComponentController != null && rangeComponentController != null && commandComponentController != null){
             headerComponentController.setMainController(this);
@@ -234,7 +236,7 @@ public class AppController {
 
     public void updateCell(String input){
         try{
-            logic.updateCell(selectedCell.idProperty().getValue(), input);
+            logic.updateCell(selectedCell.idProperty().getValue(), input,"admin");
             uiSheet.updateSheet(logic.getSheet());
             selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
             selectedCell.updateUICell(selectedCellProperty.get());
@@ -438,7 +440,7 @@ public class AppController {
     public void showVersion(int i) {
         Stage popupStage = new Stage();
         try{
-            UISheet versionSheet = new UISheet(logic.getSheetbyVersion(i-1));
+            UISheet versionSheet = new UISheet(logic.getSheetbyVersion(i));
             ScrollPane popupLayout = creatSheetComponent(versionSheet,false);
             Scene popupSortedSheet = new Scene(popupLayout, 600, 400);
             popupStage.setScene(popupSortedSheet);

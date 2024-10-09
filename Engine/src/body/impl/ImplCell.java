@@ -21,6 +21,7 @@ public class ImplCell implements Cell,Serializable  {
     private EffectiveValue effectiveValue;
     private List<Coordinate> cellsDependsOnThem = new ArrayList<>();
     private List<Coordinate> cellsDependsOnHim = new ArrayList<>();
+    private String updateBy;
 
     public ImplCell(String id) {
         Id = id;
@@ -88,9 +89,20 @@ public class ImplCell implements Cell,Serializable  {
     }
 
     @Override
+    public void setUpdateBy(String username) {
+        updateBy = username;
+    }
+
+    @Override
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    @Override
     public List<Coordinate> getCellsDependsOnThem() {
         return cellsDependsOnThem;
     }
+
     @Override
     public List<Coordinate> getCellsDependsOnHim() {
         return cellsDependsOnHim;

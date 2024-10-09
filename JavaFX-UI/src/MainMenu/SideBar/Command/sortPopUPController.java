@@ -131,6 +131,7 @@ public class sortPopUPController implements Initializable {
                 GridPane.setRowIndex(cb, i);
             }
         });
+
         // Set the GridPane row and column index for both elements
         GridPane.setRowIndex(deleteBtn, numberOfColumns);
         GridPane.setColumnIndex(deleteBtn, 0);

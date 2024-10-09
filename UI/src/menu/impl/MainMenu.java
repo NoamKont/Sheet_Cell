@@ -117,7 +117,7 @@ public enum MainMenu implements Menu {
                 System.out.println("Please enter the new Value:");
                 String enterdValue = scanner.nextLine();
                 try {
-                    logic.updateCell(enterdCell, enterdValue);
+                    logic.updateCell(enterdCell, enterdValue,"admin");
                     printCell(logic.getCell(enterdCell),true);
                     break;
                 } catch (ClassCastException  e) {
@@ -159,7 +159,7 @@ public enum MainMenu implements Menu {
                         break;
                     }
                     if(option > 0 && option <= CellsPerVersion.size()){
-                        SheetDTO sheet = logic.getSheetbyVersion(option - 1);
+                        SheetDTO sheet = logic.getSheetbyVersion(option);
                         printSheet(sheet);
                         break;
 
@@ -340,9 +340,10 @@ public enum MainMenu implements Menu {
             }
             for (int j = 1; j <= currSheet.getColumnCount(); j++) {
                 Coordinate currCoord = new CoordinateImpl(i,j);
-                EffectiveValue currCell = currSheet.getEfectivevalueCell(currCoord);
+                //EffectiveValue currCell = currSheet.getEfectivevalueCell(currCoord);
+                String currCell = currSheet.getEfectivevalueCell(currCoord);
                 if(currCell != null){
-                    int cellWidth = currCell.toString().length();
+                    int cellWidth = currCell.length();
                     String tempWhiteSpace = makeWidth(currSheet.getWidth() - cellWidth);
                     System.out.print(currCell.toString().substring(0, Math.min(currSheet.getWidth(), currCell.toString().length())) + tempWhiteSpace + "|");
                 }

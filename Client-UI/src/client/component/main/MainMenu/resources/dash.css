@@ -1,0 +1,51 @@
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+.scroll-pane{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0px;
+    -fx-border-style: solid;
+    -fx-border-radius: 0px;
+}
+.root{
+    -fx-background-color: white;
+    -fx-text-fill: #2c67f2;
+}
+.sidebar{
+
+    -fx-background-color: linear-gradient(to Top Right, #508ce1, #2c67f2);
+    -fx-background-radius: 0px 60px 0px 0px;
+    -fx-background-insets: 50px 0px 0px 0px;
+}
+
+.dashBtn{
+    -fx-background-color: white;
+    -fx-text-fill: #2c67f2;
+    -fx-font-size: 13px;
+    -fx-padding: 5px 25px;
+    -fx-background-radius: 10px;   /* Rounded corners */
+    -fx-border-radius: 10px;
+}
+
+.dashBtn:hover {
+    -fx-background-color: #cccccc;    /* Background color when hovering */
+}
+.dashBtn:pressed {
+    -fx-background-color: #3a5978;    /* Background color when button is clicked */
+}
+.request{
+    -fx-background-color: white;
+    -fx-background-radius: 10px;   /* Rounded corners */
+}
+.exit {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 5px;
+    -fx-background-radius: 10px;   /* Rounded corners */
+    -fx-border-radius: 10px;
+}
+.exit:hover {
+    -fx-background-color: #c12b1a;    /* Background color when hovering */
+}

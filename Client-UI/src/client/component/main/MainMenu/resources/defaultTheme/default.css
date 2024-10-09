@@ -1,0 +1,97 @@
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+.scroll-pane{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0px;
+    -fx-border-style: solid;
+    -fx-border-radius: 0px;
+}
+.root{
+    -fx-font-weight: Normal;
+    -fx-font-size: 12px;
+}
+.single-cell:hover {
+    -fx-border-color: #dd0909;
+    -fx-border-width: 3px;
+    -fx-border-style: solid;
+    -fx-border-radius: 2px;
+}
+
+.headers-cell:hover {
+    -fx-border-color: #fb6d6d;
+    -fx-border-width: 3px;
+    -fx-border-style: solid;
+    -fx-border-radius: 2px;
+}
+
+
+#selected-cell {
+    -fx-border-color: #91b2f0;
+    -fx-border-width: 3px;
+    -fx-border-style: solid;
+    -fx-border-radius: 2px;
+}
+
+
+.depends-on-cell {
+    -fx-border-color: rgba(255, 145, 0, 0.75);
+    -fx-border-style: dotted;
+    -fx-border-width: 3px;
+    -fx-border-radius: 2px;
+}
+
+.influence-on-cell {
+    -fx-border-radius: 2px;
+    -fx-border-style: dotted;
+    -fx-border-width: 3px;
+    -fx-border-color: rgba(255, 0, 161, 0.75);
+}
+
+
+.selected-range {
+    -fx-border-color: #00FF00BF;
+    -fx-border-width: 3px;
+    -fx-border-style: dotted;
+    -fx-border-radius: 2px;
+
+}
+.header-label {
+    -fx-border-color: #3498db;         /* Border color */
+    -fx-border-radius: 10px;           /* Rounded corners */
+    -fx-border-width: 2px;             /* Border thickness */
+    -fx-padding: 3px;                  /* Padding between text and border */
+    -fx-end-margin: 3px;
+    -fx-start-margin: 3px;
+    -fx-background-color: transparent; /* Keep background transparent */     /* Text color */
+}
+
+.button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 5px;
+    -fx-background-radius: 10px;   /* Rounded corners */
+    -fx-border-radius: 10px;
+}
+
+.button:hover {
+    -fx-background-color: #2980b9;    /* Background color when hovering */
+}
+
+.button:pressed {
+    -fx-background-color: #1abc9c;    /* Background color when button is clicked */
+}
+
+#Back2Dash{
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 5px;
+    -fx-background-radius: 10px;   /* Rounded corners */
+    -fx-border-radius: 10px;
+}
+#Back2Dash:hover{
+    -fx-background-color: #c12b1a;    /* Background color when hovering */
+}

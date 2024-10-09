@@ -1,5 +1,6 @@
 package body;
 
+import body.impl.Graph;
 import expression.Range.api.Range;
 
 import java.util.List;
@@ -19,17 +20,22 @@ public interface Sheet {
     Map<Coordinate, Cell> getActiveCells();
     Map<String, Range> getAllRanges();
     Set<Cell> getRangeCells(String rangeName);
+    String getUsername();
+    Graph getGraph();
 
+    void setUsername(String username);
     void setVersion(int version);
     void setUpdateCellCount(int countUpdateCell);
+    void setGraph(Graph graph);
+    void setFilePath(String filePath);
 
     Set<Coordinate> addRange(String rangeName, String topLeftCellId, String rightBottomCellId);
     void deleteRange(String rangeName);
 
-    void updateCell(String cellId, String value);
+    void updateCell(String cellId, String value, String username);
     void updateListsOfDependencies(Coordinate coord);
-    void updateCellDitels(String cellId, String value);
-    void updateCellEffectiveValue(String cellId);
+    void updateCellDetails(String cellId, String value, String username);
+    void updateCellEffectiveValue(String cellId,String username);
 
     boolean isCellExist(String cellID);
 
@@ -40,4 +46,7 @@ public interface Sheet {
     List<String> getValuesFromColumn(Integer columnIndex,int top,int bottom);
 
     void checkValidBounds(Coordinate coordinate);
+
+    String getFilePath();
 }
+

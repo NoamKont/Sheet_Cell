@@ -4,6 +4,8 @@ import body.Cell;
 import body.Coordinate;
 import body.Logic;
 import body.Sheet;
+import body.permission.PermissionInfo;
+import body.permission.PermissionManager;
 import dto.SheetDTO;
 import dto.impl.CellDTO;
 import dto.impl.ImplSheetDTO;
@@ -24,17 +26,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import body.Coordinate;
+import static body.permission.PermissionInfo.Permissions.*;
+import static body.permission.PermissionInfo.Status.*;
 
 
 public class ImplLogic implements Logic,Serializable  {
-
+    private String owner;
     private List<Sheet> mainSheet = new ArrayList<>();
-
+    private final PermissionManager permissionManager = new PermissionManager();
 
 
     public ImplLogic() { }
 
+    public PermissionManager getPermissionManager() {
+        return permissionManager;
+    }
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+    public String getOwner() {
+        return owner;
+    }
     public CellDTO getCell(String cellID) {
         Cell temp = mainSheet.get(mainSheet.size() - 1).getCell(cellID);
         return new CellDTO(temp);
@@ -51,7 +63,7 @@ public class ImplLogic implements Logic,Serializable  {
     }
 
 
-    public void updateCell(String cellId, String value){
+    public void updateCell(String cellId, String value, String username) {
         Sheet oldVersion = null;
         Sheet currentVersion = mainSheet.get(mainSheet.size() - 1);
 
@@ -68,9 +80,10 @@ public class ImplLogic implements Logic,Serializable  {
 
             oldVersion = (Sheet) inStream.readObject();
 
-            mainSheet.add(mainSheet.indexOf(currentVersion), oldVersion);
             currentVersion.setUpdateCellCount(0);
-            currentVersion.updateCell(cellId, value);
+            currentVersion.updateCell(cellId, value, username);
+
+            mainSheet.add(mainSheet.indexOf(currentVersion), oldVersion);
 
 
         } catch (IOException | ClassNotFoundException e) {
@@ -78,6 +91,7 @@ public class ImplLogic implements Logic,Serializable  {
         }
 
     }
+
     @Override
     public void creatNewSheet(String path)throws JAXBException, FileNotFoundException {
         if(!checkPostFix(path)){
@@ -85,7 +99,12 @@ public class ImplLogic implements Logic,Serializable  {
         }
         InputStream inputStream = new FileInputStream(new File(path));
         STLSheet res = creatGeneratedObject(inputStream);
+
         Sheet newSheet = STLSheet2Sheet(res);
+        newSheet.setFilePath(path);
+        permissionManager.setSheetName(newSheet.getSheetName());
+        permissionManager.addPermission(owner, OWNER, APPROVED);
+        newSheet.setUsername(owner);
         mainSheet.clear();
         mainSheet.add(newSheet);
     }
@@ -143,14 +162,14 @@ public class ImplLogic implements Logic,Serializable  {
             res.setVersion(0);
             cellId = stlCell.getColumn() + String.valueOf(stlCell.getRow());
             try{
-                res.updateCellDitels(cellId,stlCell.getSTLOriginalValue());
+                res.updateCellDetails(cellId,stlCell.getSTLOriginalValue(),owner);
                 res.updateListsOfDependencies(new CoordinateImpl(cellId));
             }catch (Exception e){
                 String errorMessage = "Can't Upload new Sheet!, " + e.getMessage() + " in cell ID: " + cellId;
                 throw new IllegalArgumentException(errorMessage);
             }
         }
-        res.updateCellEffectiveValue(cellId);
+        res.updateCellEffectiveValue(cellId,owner);
         return res;
     }
 
@@ -179,7 +198,7 @@ public class ImplLogic implements Logic,Serializable  {
 
     @Override
     public SheetDTO getSheetbyVersion(int version) {
-        return new ImplSheetDTO(mainSheet.get(version));
+        return new ImplSheetDTO(mainSheet.get(version - 1));
     }
 
     private boolean checkPostFix(String fullPath) {
@@ -237,7 +256,7 @@ public class ImplLogic implements Logic,Serializable  {
 
             analysVersion = (Sheet) inStream.readObject();
 
-            analysVersion.updateCell(cellId, value);
+            analysVersion.updateCell(cellId, value, owner);
             return new ImplSheetDTO(analysVersion);
 
         } catch (IOException | ClassNotFoundException e) {

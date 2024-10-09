@@ -21,4 +21,7 @@ public interface Cell {
     void setEffectiveValue(EffectiveValue value);
     void setDependsOnThem(List<Coordinate> dependsOnThem);
     void setDependsOnHim(List<Coordinate> dependsOnHim);
+
+    void setUpdateBy(String username);
+    String getUpdateBy();
 }

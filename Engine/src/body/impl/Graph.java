@@ -15,6 +15,19 @@ public class Graph implements Serializable {
         this.graph_T = new HashMap<>();
     }
 
+    public Graph(Map<Coordinate, List<Coordinate>> graph, Map<Coordinate, List<Coordinate>> graph_T) {
+        this.graph = graph;
+        this.graph_T = graph_T;
+    }
+
+    public Map<Coordinate,List<Coordinate>> getGraph(){
+        return this.graph;
+    }
+
+    public Map<Coordinate,List<Coordinate>> getGraph_T(){
+        return this.graph_T;
+    }
+
     //COPY C-TOR
     public Graph(Graph other) {
         // Deep copy of the original graph
