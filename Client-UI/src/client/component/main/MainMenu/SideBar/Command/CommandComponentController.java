@@ -330,6 +330,9 @@ public class CommandComponentController implements Initializable {
         return mainController.getSheetName();
     }
 
+    public MenuButton getAlignmentBox() {
+        return alignmentBox;
+    }
     public void bindModuleToUI(BooleanProperty isWriterPermission) {
 
     }

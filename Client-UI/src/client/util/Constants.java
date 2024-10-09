@@ -24,12 +24,6 @@ public class Constants {
     public final static String LINE_SEPARATOR = System.getProperty("line.separator");
     public final static int REFRESH_RATE = 1000;
 
-    // fxml locations
-    //TODO: Change the fxml locations to the correct ones
-    public final static String MAIN_PAGE_FXML_RESOURCE_LOCATION = "/client/component/app/main/chat-app-main.fxml";
-    public final static String LOGIN_PAGE_FXML_RESOURCE_LOCATION = "/client/component/login/login.fxml";
-    public final static String CHAT_ROOM_FXML_RESOURCE_LOCATION = "/client/component/chatroom/chat-room-main.fxml";
-
     // Server resources locations
     public final static String BASE_DOMAIN = "localhost";
     private final static String BASE_URL = "http://" + BASE_DOMAIN + ":8080";
@@ -59,10 +53,6 @@ public class Constants {
     public static final String SIMULTANEITY = FULL_SERVER_PATH + "/simultaneity";
 
 
-
-
-    public final static String SEND_CHAT_LINE = FULL_SERVER_PATH + "/pages/chatroom/sendChat";
-    public final static String CHAT_LINES_LIST = FULL_SERVER_PATH + "/chat";
 
     // GSON instance
     public final static Gson GSON_INSTANCE = new GsonBuilder()

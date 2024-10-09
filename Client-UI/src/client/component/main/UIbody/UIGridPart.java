@@ -81,11 +81,19 @@ public class UIGridPart {
     public void setRowLabel(Label rowLabel) {
         this.rowLabel.set(rowLabel);
     }
-
     public void alignCells(Pos pos) {
         for (UICell cell : cells) {
             cell.getCellLabel().setAlignment(pos);
         }
+    }
+
+    public void clearRowOrColumn(){
+        isRow.setValue(null);
+        name.setValue("");
+        width.setValue(0);
+        thickness.setValue(0);
+        cells.clear();
+        rowLabel.setValue(null);
     }
 
 }

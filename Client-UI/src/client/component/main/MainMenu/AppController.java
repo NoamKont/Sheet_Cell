@@ -59,7 +59,6 @@ public class AppController implements Closeable {
     private Timer timer;
     private TimerTask listRefresher;
     private String skinMode = "Default";
-    private BooleanProperty newAvilableVersion = new SimpleBooleanProperty(false);
 
     @FXML
     private ScrollPane headerComponent;
@@ -178,6 +177,13 @@ public class AppController implements Closeable {
                 commandComponentController.getThicknessSpinner().getValueFactory().setValue(newValue.getThickness());
                 commandComponentController.getWidthSpinner().setDisable(newValue.getIsRow());
                 commandComponentController.getThicknessSpinner().setDisable(!newValue.getIsRow());
+                commandComponentController.getAlignmentBox().setDisable(false);
+            }
+            else{
+                commandComponentController.getChosenColumnRow().setText("Choose Column/Row");
+                commandComponentController.getWidthSpinner().setDisable(true);
+                commandComponentController.getThicknessSpinner().setDisable(true);
+                commandComponentController.getAlignmentBox().setDisable(true);
             }
         });
 
@@ -300,6 +306,7 @@ public class AppController implements Closeable {
                             alert.setHeaderText("Error in updating cell");
                             alert.setContentText(responseBody);
                             alert.showAndWait();
+                            getUpdatedSheet();
                         });
                     }
             }
@@ -734,6 +741,7 @@ public class AppController implements Closeable {
                     changeMode(skinMode);
                     uiSheet = new UISheet(sheet); //set the module
                     selectedCell.clearCell();
+                    selectedRowOrColumn.set(null);
                     rangeMapListener();
                     versionSelectorMenuListener();
                     uiSheet.updateSheet(sheet);
@@ -830,8 +838,10 @@ public class AppController implements Closeable {
         }
     }
 
-   public void updateSheet(SheetDTO sheet) {
+    public void updateSheet(SheetDTO sheet) {
         uiSheet.updateSheet(sheet);
+        selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
+        selectedCell.updateUICell(selectedCellProperty.get());
     }
 
     public String getSheetName() {
@@ -840,6 +850,38 @@ public class AppController implements Closeable {
 
     public Object usernameProperty() {
         return username;
+    }
+
+    public void getUpdatedSheet(){
+        //noinspection ConstantConditions
+        String finalUrl = HttpUrl
+                .parse(Constants.GET_SHEET)
+                .newBuilder()
+                .addQueryParameter("sheetName", uiSheet.getSheetName())
+                .build()
+                .toString();
+
+        System.out.println("New request is launched for: " + finalUrl);
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println("Response is Failed");
+            }
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String jsonSheetDTO = response.body().string();
+                SheetDTO sheet = GSON_INSTANCE.fromJson(jsonSheetDTO, SheetDTO.class);
+                if (sheet == null) {
+                    Platform.runLater(() -> {
+                        bodyComponent.setCenter(null);
+                    });
+                    return;
+                }
+                Platform.runLater(() -> {
+                    updateSheet(sheet);
+                });
+            }
+        });
     }
 
     @Override

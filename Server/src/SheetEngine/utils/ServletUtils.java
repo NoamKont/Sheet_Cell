@@ -43,15 +43,6 @@ public class ServletUtils {
 		return (SheetsManager) servletContext.getAttribute(SHEET_MANAGER_ATTRIBUTE_NAME);
 	}
 
-	public static Logic getEngine(ServletContext servletContext) {
-		synchronized (engineLock) {
-			if (servletContext.getAttribute(ENGINE_ATTRIBUTE_NAME) == null) {
-				servletContext.setAttribute(ENGINE_ATTRIBUTE_NAME, new ImplLogic());
-			}
-		}
-		return (Logic) servletContext.getAttribute(ENGINE_ATTRIBUTE_NAME);
-	}
-
 	public static int getIntParameter(HttpServletRequest request, String name) {
 		String value = request.getParameter(name);
 		if (value != null) {

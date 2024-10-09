@@ -5,6 +5,9 @@ import client.util.Constants;
 import client.util.http.HttpClientUtil;
 import com.google.gson.reflect.TypeToken;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -46,6 +49,9 @@ public class FilterPopUpController implements Initializable {
     @FXML
     private Button addFilterColumnBtn;
 
+    @FXML
+    private Button filterBtn;
+
     private Integer numberOfColumns2Filter = 1;
 
     private CommandComponentController commandComponentController;
@@ -53,6 +59,8 @@ public class FilterPopUpController implements Initializable {
     private Stage popupStage;
 
     private int columnsNumberInSheet;
+
+    private BooleanProperty rangeFilled = new SimpleBooleanProperty(false);
 
     @FXML
     void filterBtnClicked(ActionEvent event) {
@@ -297,8 +305,11 @@ public class FilterPopUpController implements Initializable {
         return null; // No child found at specified row and column
     }
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        rangeFilled.bind(Bindings.createBooleanBinding(() -> !topLeftText.getText().isEmpty() && !bottomRightText.getText().isEmpty(), topLeftText.textProperty(), bottomRightText.textProperty()));
+        filterBtn.disableProperty().bind(rangeFilled.not());
+        GridPaneOfColumns.disableProperty().bind(rangeFilled.not());
     }
 }

@@ -1,8 +1,12 @@
 package client.component.main.MainMenu.SideBar.Command;
 
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -10,7 +14,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class sortPopUPController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class sortPopUPController implements Initializable {
 
     @FXML
     private GridPane GridPaneOfColumns;
@@ -27,6 +34,9 @@ public class sortPopUPController {
     @FXML
     private Button addColumnBtn;
 
+    @FXML
+    private Button sortBtn;
+
     private Integer numberOfColumns = 1;
 
     private CommandComponentController commandComponentController;
@@ -34,6 +44,8 @@ public class sortPopUPController {
     private Stage popupStage;
 
     private int columnsNumber;
+
+    private BooleanProperty sortFilled = new SimpleBooleanProperty(false);
 
     public void setCommandComponentController(CommandComponentController commandComponentController) {
         this.commandComponentController = commandComponentController;
@@ -169,5 +181,12 @@ public class sortPopUPController {
             }
         }
         return null; // No child found at specified row and column
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        sortFilled.bind(Bindings.createBooleanBinding(() -> !topLeftText.getText().isEmpty() && !bottomRightText.getText().isEmpty(), topLeftText.textProperty(), bottomRightText.textProperty()));
+        sortBtn.disableProperty().bind(sortFilled.not());
+        GridPaneOfColumns.disableProperty().bind(sortFilled.not());
     }
 }

@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import static SheetEngine.utils.ServletUtils.getEngine;
 import static SheetEngine.utils.ServletUtils.getSheetManager;
 
 @WebServlet(name = "NewSheetServlet", urlPatterns = {"/sheetslist/new"})
