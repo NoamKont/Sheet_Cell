@@ -746,7 +746,6 @@ public class AppController implements Closeable {
                     versionSelectorMenuListener();
                     uiSheet.updateSheet(sheet);
                     updatePermission(sheetName);
-                    //checkUserPermission(sheetName);
                     System.out.println("Sheet Created");
                     setMainPanelTo(bodyComponent);
                     createViewSheet();
@@ -840,8 +839,10 @@ public class AppController implements Closeable {
 
     public void updateSheet(SheetDTO sheet) {
         uiSheet.updateSheet(sheet);
-        selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
-        selectedCell.updateUICell(selectedCellProperty.get());
+        if(selectedCellProperty.get() != null && selectedCell.idProperty().getValue() != null){
+            selectedCellProperty.set(uiSheet.getCell(new CoordinateImpl(selectedCell.idProperty().getValue())));
+            selectedCell.updateUICell(selectedCellProperty.get());
+        }
     }
 
     public String getSheetName() {

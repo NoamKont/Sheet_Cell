@@ -22,7 +22,7 @@ public class Constants {
 
     // global constants
     public final static String LINE_SEPARATOR = System.getProperty("line.separator");
-    public final static int REFRESH_RATE = 1000;
+    public final static int REFRESH_RATE = 500;
 
     // Server resources locations
     public final static String BASE_DOMAIN = "localhost";

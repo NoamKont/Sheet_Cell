@@ -28,22 +28,22 @@ public class SheetsManager {
     public SheetsManager() {
         sheetsSet = new HashSet<>();
 
-        //TODO delete it!!!!
-        Logic newSheet = new ImplLogic();
-        newSheet.setOwner("Noam");
-        newSheet.getPermissionManager().addPermission("Moshe", WRITER, APPROVED);
-        Logic newSheet1 = new ImplLogic();
-        newSheet1.setOwner("Moshe");
-        newSheet1.getPermissionManager().addPermission("Noam", READER, APPROVED);
-        try{
-
-            newSheet.creatNewSheet("C:\\Users\\Noam\\Downloads\\Ex2 example\\grades.xml");
-            newSheet1.creatNewSheet("C:\\Users\\Noam\\Downloads\\Ex2 example\\insurance.xml");
-            sheetsSet.add(newSheet);
-            sheetsSet.add(newSheet1);
-        }catch (JAXBException | IOException e){
-            e.printStackTrace();
-        }
+//        //TODO delete it!!!!
+//        Logic newSheet = new ImplLogic();
+//        newSheet.setOwner("Noam");
+//        newSheet.getPermissionManager().addPermission("Moshe", WRITER, APPROVED);
+//        Logic newSheet1 = new ImplLogic();
+//        newSheet1.setOwner("Moshe");
+//        newSheet1.getPermissionManager().addPermission("Noam", READER, APPROVED);
+//        try{
+//
+//            newSheet.creatNewSheet("C:\\Users\\Noam\\Downloads\\Ex2 example\\grades.xml");
+//            newSheet1.creatNewSheet("C:\\Users\\Noam\\Downloads\\Ex2 example\\insurance.xml");
+//            sheetsSet.add(newSheet);
+//            sheetsSet.add(newSheet1);
+//        }catch (JAXBException | IOException e){
+//            e.printStackTrace();
+//        }
     }
 
     public synchronized void addSheet(String path,String owner) throws JAXBException, IOException {

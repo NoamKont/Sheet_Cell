@@ -137,7 +137,7 @@ public class DashCommandsController implements Initializable {
 
     public void addRequest(PermissionInfo permissionInfo) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
-        URL url = getClass().getResource("request/PermissionRequest.fxml");
+        URL url = getClass().getResource("/client/component/dashboard/sideBar/request/permissionRequest.fxml");
         fxmlLoader.setLocation(url);
         HBox root = fxmlLoader.load(url.openStream());
         root.getStyleClass().add("request");

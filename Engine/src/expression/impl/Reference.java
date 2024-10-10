@@ -3,9 +3,6 @@ package expression.impl;
 import body.Cell;
 import expression.CellType;
 import expression.api.EffectiveValue;
-import expression.api.Expression;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 import java.io.Serializable;
 
